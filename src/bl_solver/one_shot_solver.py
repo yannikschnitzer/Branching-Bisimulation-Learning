@@ -7,83 +7,7 @@ from z3 import *
 from conditional_termination_succ_trees import *
 import matplotlib.pyplot as plt
 
-class Conditions:
-    """
-    Represents an instance of the conditions formulas for Theorem 3
-    given a fixed transition system, i.e. passing as arguments of 
-    the class constructor:
-        - the successor function;
-        - the domain constraint for the states of the given system;
-        - the classification BDT.
-    
-    Condition functions' arguments are:
-        - theta: parameters of the classification BDT, i.e. the parameters for f(theta; s);
-        - gamma: parameters of adjacency, in this case a function s.t. gamma(p, q) == 1 iff g(p) = q;
-        - eta: parameters for the ranking function;
-    Those preceding arguments are the parameters for the formulas in the paper. Follow now the formula arguments:
-        - s: the state to check te formula against
-    Now follow the classification expectations:
-        - p: the classification of s
-        - q: the classification of T(s)
-    """
-    def __init__(self, successor, domain, classify):
-        self.successor = successor
-        self.domain = domain
-        self.classify = classify
-
-    # TODO rename in condition 2 (Phi_2)
-    def condition_1(self, theta, gamma, eta, s, p, q):
-        """
-        Represents formula Phi_1 given state p and q to check, i.e. Condition 2 of Theorem 3.
-        To see what the arguments are, refer to the class' description.
-
-        Note that in this case, eta is unused since there is no ranking function
-        but it is declared to make the function definition consistent as in the paper.
-        """
-        return Implies(
-            And(self.classify(theta, s) == p, 
-                self.classify(theta, self.successor(s)) == q, 
-                self.domain(s), 
-                self.domain(self.successor(s)), 
-                (Not(p == q))
-            ), 
-            gamma(p, q) == 1
-        )
-    
-    # TODO rename in condition 1
-    def condition_2(self, theta, gamma, rank, s, p, q):
-        """
-        Represents Phi_2 given state p and q to check, i.e. Condition 3 of Theorem 3.
-        To see what the arguments are, refer to the class' description.
-        """
-        return And(
-            Implies(
-                And(gamma(p, q) == 1, 
-                    Not(p == q),
-                    self.classify(theta, s) == p, 
-                    self.domain(s), 
-                    self.domain(self.successor(s))
-                ), 
-                Or( self.classify(theta, self.successor(s)) == q,
-                    And(self.classify(theta, self.successor(s)) == p,
-                        rank(p, s) > rank(p, self.successor(s))
-                    )
-                )    
-            ),
-            # TODO not quite sure from where is this from
-            Implies(
-                And(gamma(p, q) == 1, 
-                    (p == q)
-                ), 
-                Implies(
-                    And(self.classify(theta, s) == p, 
-                        self.domain(s), 
-                        self.domain(self.successor(s))
-                    ), 
-                    self.classify(theta, self.successor(s)) == p)
-                )
-        )
-
+from bl_solver.conditions import ConditionsOneShot
 
 class One_Shot_Solver:
     """
@@ -130,7 +54,7 @@ class One_Shot_Solver:
         # Initializes the parameters to learn and verify
         self.setup_smt_parameters()
 
-        self.conditions = Conditions(self.successor, self.domain, self.classify)
+        self.conditions = ConditionsOneShot(self.successor, self.domain, self.classify)
 
         mp, ap, rank = self.solve()
         if verbose:
@@ -160,7 +84,7 @@ class One_Shot_Solver:
         """
             Condition 1 of a stutter-insensitive bisimulation - Concrete transitions imply abstract transitions
         """
-        phi_1 = self.conditions.condition_1(
+        phi_1 = self.conditions.condition_2(
             theta=self.model_params,
             gamma=self.gamma,
             eta=self.rank,
@@ -176,7 +100,7 @@ class One_Shot_Solver:
         """
             Condition 2 of a stutter-insensitive bisimulation with ranking functions - abstract transitons imply concrete transition or intra-class ranking transition
         """
-        phi_2 = self.conditions.condition_2(
+        phi_2 = self.conditions.condition_1(
             theta=self.model_params,
             gamma=self.gamma,
             rank=self.rank,

@@ -5,7 +5,7 @@
 from utils import *
 from experiment import Experiment
 from cegis_solver import CEGIS_Solver
-from one_shot_solver import One_Shot_Solver
+from bl_solver import One_Shot_Solver
 from visualization import *
 import numpy as np
 
