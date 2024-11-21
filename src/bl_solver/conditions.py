@@ -6,7 +6,7 @@ class ConditionsCEGIS:
     """
     Conditions for the well founded bisimulation.
 
-    Those functions require precomputed:
+    Those functions require:
         - partitions p and q,
         - classification of s and T(s)
         - domain formulas for s and T(s)
@@ -14,6 +14,10 @@ class ConditionsCEGIS:
         - ranking values for s and T(s)
     """
 
+    # TODO: take as argument the successor formula
+    # eg. Or(t_m_0 = m_0 + 1, t_m_0 = m_0 - 1)
+    # The classification should account for that
+    # i.e. express class_succ in terms of t_m_0
     def condition_1(p, q, class_s, class_succ, is_dom_s, is_dom_succ, p_q_adjacent):
         """
             Condition 1 for for well founded bisimulation.
@@ -24,8 +28,7 @@ class ConditionsCEGIS:
                 - class_succ (classification formula for T(s))
                 - is_dom_s (formula for s to be in the domain)
                 - is_dom_succ (formula as above)
-                - p_q_adjacent (formula returning 1 or 0) TODO avoidable? adjacency for p and q
-
+                - p_q_adjacent (formula returning 1 or 0) 
             Optimization notes:
                 - this formula evaluates always True when p == q
                 - when it is known in advance that p and q are adjacent, set p_q_adjacent=1
@@ -51,7 +54,7 @@ class ConditionsCEGIS:
                 - class_succ (classification formula for T(s))
                 - is_dom_s (formula for s to be in the domain)
                 - is_dom_succ (formula as above)
-                - p_q_adjacent (formula returning 1 or 0) TODO avoidable? adjacency for p and q
+                - p_q_adjacent (formula returning 1 or 0)
                 - rnk_s (the rank of s)
                 - rnk_succ (the rank of T(s))
 
@@ -95,7 +98,7 @@ class ConditionsOneShot:
         self.domain = domain
         self.classify = classify
 
-    def condition_2(self, theta, gamma, eta, s, p, q):
+    def condition_2(self, theta, gamma, eta, s, succ_s, p, q):
         """
         Represents formula Phi_1 given state p and q to check, i.e. Condition 2 of Theorem 3.
         To see what the arguments are, refer to the class' description.
@@ -104,31 +107,33 @@ class ConditionsOneShot:
         but it is declared to make the function definition consistent as in the paper.
         """
         return Implies(
-            And(self.classify(theta, s) == p, 
-                self.classify(theta, self.successor(s)) == q, 
+            And(self.successor(s, succ_s),
+                self.classify(theta, s) == p, 
+                self.classify(theta, succ_s) == q, 
                 self.domain(s), 
-                self.domain(self.successor(s)), 
+                self.domain(succ_s), 
                 (Not(p == q))
             ), 
             gamma(p, q) == 1
         )
     
-    def condition_1(self, theta, gamma, rank, s, p, q):
+    def condition_1(self, theta, gamma, rank, s, succ_s, p, q):
         """
         Represents Phi_2 given state p and q to check, i.e. Condition 3 of Theorem 3.
         To see what the arguments are, refer to the class' description.
         """
         return And(
             Implies(
-                And(gamma(p, q) == 1, 
+                And(self.successor(s, succ_s),
+                    gamma(p, q) == 1, 
                     Not(p == q),
                     self.classify(theta, s) == p, 
                     self.domain(s), 
-                    self.domain(self.successor(s))
+                    self.domain(succ_s)
                 ), 
-                Or( self.classify(theta, self.successor(s)) == q,
-                    And(self.classify(theta, self.successor(s)) == p,
-                        rank(p, s) > rank(p, self.successor(s))
+                Or( self.classify(theta, succ_s) == q,
+                    And(self.classify(theta, succ_s) == p,
+                        rank(p, s) > rank(p, succ_s)
                     )
                 )    
             ),
@@ -138,10 +143,11 @@ class ConditionsOneShot:
                     (p == q)
                 ), 
                 Implies(
-                    And(self.classify(theta, s) == p, 
+                    And(self.successor(s, succ_s),
+                        self.classify(theta, s) == p, 
                         self.domain(s), 
-                        self.domain(self.successor(s))
+                        self.domain(succ_s)
                     ), 
-                    self.classify(theta, self.successor(s)) == p)
+                    self.classify(theta, succ_s) == p)
                 )
         )

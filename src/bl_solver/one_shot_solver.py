@@ -89,11 +89,12 @@ class One_Shot_Solver:
             gamma=self.gamma,
             eta=self.rank,
             s=self.m,
+            succ_s=self.succ_m,
             p=self.p,
             q=self.q
         )
         solver.add(simplify(
-            ForAll([*self.m, self.p, self.q], phi_1)
+            ForAll([*self.m, *self.succ_m, self.p, self.q], phi_1)
         ))
 
     def cond_2_one_shot(self, solver):
@@ -105,11 +106,12 @@ class One_Shot_Solver:
             gamma=self.gamma,
             rank=self.rank,
             s=self.m,
+            succ_s=self.succ_m,
             p=self.p,
             q=self.q
         )
         solver.add(simplify(
-            ForAll([*self.m, self.p, self.q], phi_2)
+            ForAll([*self.m, *self.succ_m, self.p, self.q], phi_2)
         ))
 
     # TODO that can be extracted into another class to reproduce the code in CEGIS 
@@ -125,6 +127,7 @@ class One_Shot_Solver:
                 - rank_params: Real valued coefficients and constatns for the ranking function templates
         """
         self.m = [Int("m_%s" % i) for i in range(self.dim)]
+        self.succ_m = [Int("t_m_%s" % i) for i in range(self.dim)]
         self.p = Int("p")
         self.q = Int("q")
 
