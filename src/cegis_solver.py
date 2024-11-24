@@ -72,7 +72,7 @@ class CEGIS_Solver:
         partitions, adjacency_params, model_params, rank_params, m, p, q = setup_smt_parameters(num_params, num_coefficients, num_partitions, dim)
 
         self.num_partitions = len(partitions)
-        # SMT Soler
+        # SMT Solver
         s = Solver()
 
         def classify(params, x):

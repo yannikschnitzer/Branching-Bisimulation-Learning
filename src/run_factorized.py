@@ -1,4 +1,4 @@
-from bl_solver.one_shot_solver import *
+from bl_solver.bisimulation_learning import *
 
 from conditional_termination_succ_trees import successor_term_loop_1, bdt_term_loop_1
 
@@ -23,17 +23,4 @@ if __name__ == "__main__":
         num_partitions=3
     )
 
-    template = ProposedTemplate(
-        dim=transition_system.dim,
-        abstract_system=abstract_system
-    )
-
-    res, (theta, gamma, eta) = one_shot(
-        transition_system,
-        abstract_system,
-        template)
-    print(f"""
-    Found theta = {theta}
-    Found gamma = {gamma}
-    Found eta   = {eta}
-    """)
+    bisimulation_learning(transition_system, abstract_system)
