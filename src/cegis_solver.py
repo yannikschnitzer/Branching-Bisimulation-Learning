@@ -265,7 +265,7 @@ class One_Shot_Solver:
     def __init__(self, name = "One-Shot Solver"):
         self.name = name
 
-    def solve_experiment(self, exp : Experiment):
+    def solve_experiment(self, exp : Experiment, verbose = False):
         """
             One-shot solve a given experiment. 
             Returns:

@@ -35,12 +35,12 @@ def successor_term_loop_1(x):
 
     return y
 
-def nd_successor_term_loop_1(x):
-    terminated = Or(x[0] == 0, x[1] == 1)
+def nd_successor_term_loop_1(s, succ_s):
+    terminated = Or(s[0] == 0, s[1] == 1)
 
     action_1 = If(terminated, 
-        And(y[0] == x[0], y[1] == 1),
-        And(y[0] == x[0] - 1, y[1] == 0)
+        And(succ_s[0] == s[0], succ_s[1] == 1),
+        And(succ_s[0] == s[0] - 1, succ_s[1] == 0)
     )
 
     return Or(action_1)

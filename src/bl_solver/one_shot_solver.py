@@ -22,10 +22,19 @@ def one_shot(
         s=s,
         succ_s=succ_s
     )
-    print(formulas)
+
+    formulas += encode_one_shot_additional(
+        transition_system=transition_system,
+        proposed_template=proposed_template,
+        theta=model_params,
+        gamma=adjacency_params,
+        eta=ranking_params,
+        s=s,
+        succ_s=succ_s
+    )
 
     formula = ForAll([*s, *succ_s],
-        And(formulas)
+        And([simplify(phi) for phi in formulas])
     )
 
     solver = Solver()
@@ -36,3 +45,29 @@ def one_shot(
     else:
         return False, None
 
+def encode_one_shot_additional(
+    transition_system: TransitionSystem,
+    proposed_template: ProposedTemplate,
+    theta, gamma, eta, 
+    s, succ_s
+    ):
+
+    phis = []
+
+    successor = transition_system.successor
+    domain    = transition_system.domain
+    f, g, h   = proposed_template.get_template_functions()
+
+    for p in proposed_template.partitions:
+        phis.append(Implies(
+            And(g(gamma, p, p) == IntVal(1),
+                f(theta, s) == p,
+                successor(s, succ_s),
+                domain(s), 
+                domain(succ_s)
+            ), 
+            f(theta, succ_s) == p
+        ))
+    
+    return phis
+    

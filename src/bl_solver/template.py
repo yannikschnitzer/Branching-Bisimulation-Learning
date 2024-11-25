@@ -121,7 +121,7 @@ def encode_classification(
     
     return phis
                     
-def extract_solution(s: Solver, proposed_template: ProposedTemplate, verbose = True):
+def extract_solution(s: Solver, proposed_template: ProposedTemplate, verbose = False):
     """
         Extract obtained solution from the solver
     """
