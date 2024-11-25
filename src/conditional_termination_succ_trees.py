@@ -25,18 +25,7 @@ __status__ = "Experimental - Artifact Evaluation"
 #
 # Dimension: 2
 # Notes: Set valid variables in domain to bound x[1] to {0,1}
-def successor_term_loop_1(x, y):
-
-    terminated = Or(x[0] == 0, x[1] == 1)
-
-    action_1 = If(terminated, 
-        And(y[0] == x[0], y[1] == 1),
-        And(y[0] == x[0] - 1, y[1] == 0)
-    )
-
-    return Or(action_1)
-
-def successor_term_loop_1_old(x):
+def successor_term_loop_1(x):
     y = [i for i in x]
 
     valid_vars = True #And(x[0] >= -r ,x[0] <= r, x[1] >= 0,x[1] <= 1)
@@ -45,6 +34,16 @@ def successor_term_loop_1_old(x):
     y[1] = simplify(If(valid_vars, If(Or(x[0] == 0, y[1] == 1) , 1, 0), y[1])) # Variable y[1] marks whether program terminated, y[1] = 1 <-> terminated
 
     return y
+
+def nd_successor_term_loop_1(x):
+    terminated = Or(x[0] == 0, x[1] == 1)
+
+    action_1 = If(terminated, 
+        And(y[0] == x[0], y[1] == 1),
+        And(y[0] == x[0] - 1, y[1] == 0)
+    )
+
+    return Or(action_1)
 
 
 # Conditional Termination - term-loop-2

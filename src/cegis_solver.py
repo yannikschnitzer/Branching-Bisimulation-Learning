@@ -9,7 +9,6 @@ from visualization import *
 from z3 import *
 from conditional_termination_succ_trees import *
 import matplotlib.pyplot as plt
-from bl_solver import ConditionsCEGIS
 
 __author__ = "Yannik Schnitzer"
 __copyright__ = "Copyright 2024, Yannik Schnitzer"
@@ -72,7 +71,7 @@ class CEGIS_Solver:
         partitions, adjacency_params, model_params, rank_params, m, p, q = setup_smt_parameters(num_params, num_coefficients, num_partitions, dim)
 
         self.num_partitions = len(partitions)
-        # SMT Solver
+        # SMT Soler
         s = Solver()
 
         def classify(params, x):
@@ -152,37 +151,24 @@ class CEGIS_Solver:
             is_dom_succ = domain(succ)
 
             for p in range(num_partitions):
-                rnk_s = self.get_rank(p, m, rank_params)
+                rnk = self.get_rank(p, m, rank_params)
                 rnk_succ = self.get_rank(p, succ, rank_params)
                 for q in range(num_partitions):
                     adj_val = self.get_adjacency(p, q)
                     if (not p == q):
-
-                        phi_1 = ConditionsCEGIS.condition_1(
-                            p=p,
-                            q=q,
-                            class_s=classification,
-                            class_succ=class_succ,
-                            is_dom_s=is_dom,
-                            is_dom_succ=is_dom_succ,
-                            p_q_adjacent=adj_val
+                        solver.add(
+                            simplify(Implies(And(classification == p, 
+                                                            class_succ == q, is_dom, is_dom_succ), 
+                                                adj_val == 1))
                         )
-                        solver.add(simplify(phi_1))
-
-
-                        phi_2 = ConditionsCEGIS.condition_2(
-                            p=p,
-                            q=q,
-                            class_s=classification,
-                            class_succ=class_succ,
-                            is_dom_s=is_dom,
-                            is_dom_succ=is_dom_succ,
-                            p_q_adjacent=adj_val,
-                            rnk_s=rnk_s,
-                            rnk_succ=rnk_succ
+                        solver.add(
+                                simplify(
+                                        Implies(And(adj_val == 1, classification == p, is_dom, is_dom_succ), 
+                                            Or(class_succ == q,
+                                                And(class_succ == p, rnk > rnk_succ))    
+                                        ) 
+                                )
                         )
-
-                        solver.add(simplify(phi_2))
     
     def eval(self, m, x):
         """
@@ -202,28 +188,9 @@ class CEGIS_Solver:
         is_dom = domain(m)
         is_dom_succ = domain(succ)
 
-        ors = []
-        for p in range(num_partitions):
-            for q in range(num_partitions):
-                # condition_1 evaluates to true when p == q
-                # hence Not(phi) = False
-                # we can drop that from the or
-                if p != q:
-                    phi = ConditionsCEGIS.condition_1(
-                        p=p,
-                        q=q,
-                        class_s=classification,
-                        class_succ=class_succ,
-                        is_dom_s=is_dom,
-                        is_dom_succ=is_dom_succ,
-                        p_q_adjacent=adjacency_params[p][q]
-                    )
-                    ors.append(simplify(Not(phi)))
-
-        s.add(Or(ors))
-        # s.add(Or([simplify(Not(Implies(And(classification == p, 
-        #                                                 class_succ == q, is_dom, is_dom_succ, (Not(p == q))), 
-        #                                     adjacency_params[p][q] == True))) for p in range(num_partitions) for q in range(num_partitions)]))
+        s.add(Or([simplify(Not(Implies(And(classification == p, 
+                                                        class_succ == q, is_dom, is_dom_succ, (Not(p == q))), 
+                                            adjacency_params[p][q] == True))) for p in range(num_partitions) for q in range(num_partitions)]))
 
 
         if s.check() == sat:
@@ -246,36 +213,11 @@ class CEGIS_Solver:
         is_dom = domain(m)
         is_dom_succ = domain(succ)
 
-
-        ors = []
-        for p in range(num_partitions):
-            rnk_s = self.get_rank(p, m, rank_params)
-            rnk_succ = self.get_rank(p, succ, rank_params)
-            for q in range(num_partitions):
-                # condition_2 evaluates to true when p == q
-                # hence Not(phi) = False
-                # we can drop that from the or
-                # if p != q or adj_params[p][q] != False:
-                if p != q:
-                    phi = ConditionsCEGIS.condition_2(
-                        p=p,
-                        q=q,
-                        class_s=classification,
-                        class_succ=class_succ,
-                        is_dom_s=is_dom,
-                        is_dom_succ=is_dom_succ,
-                        p_q_adjacent=adj_params[p][q],
-                        rnk_s=rnk_s,
-                        rnk_succ=rnk_succ
-                    )
-                    ors.append(simplify(Not(phi)))
-
-        s.add(Or(ors))
-        # s.add(Or([simplify(Not(
-        #             Implies(And(adj_params[p][q] == True, classification == p, is_dom, is_dom_succ, Not(p == q)), 
-        #                 Or(class_succ == q,
-        #                     And(class_succ == p, self.get_rank(p, m, rank_params) > self.get_rank(p, succ, rank_params)))    
-        #             ))) for p in range(num_partitions) for q in range(num_partitions)]))
+        s.add(Or([simplify(Not(
+                    Implies(And(adj_params[p][q] == True, classification == p, is_dom, is_dom_succ, Not(p == q)), 
+                        Or(class_succ == q,
+                            And(class_succ == p, self.get_rank(p, m, rank_params) > self.get_rank(p, succ, rank_params)))    
+                    ))) for p in range(num_partitions) for q in range(num_partitions)]))
 
         if s.check() == sat:
             mod = s.model()

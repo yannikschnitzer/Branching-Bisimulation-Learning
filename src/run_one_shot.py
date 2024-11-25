@@ -12,7 +12,7 @@ if __name__ == "__main__":
 
     transition_system = TransitionSystem(
         dim=2,
-        successor=successor_term_loop_1,
+        successor=nd_successor_term_loop_1,
         domain=domain
     )
 
