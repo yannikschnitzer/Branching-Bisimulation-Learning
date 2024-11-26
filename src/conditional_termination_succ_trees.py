@@ -61,6 +61,19 @@ def successor_term_loop_2(x):
 
     return y
 
+def nd_successor_term_loop_2(s, succ_s):
+    terminated = Or(s[0] <= 0)
+
+    action_1 = And(
+        If(terminated, 
+            succ_s[0] == s[0],
+            And(succ_s[0] == s[0] + s[1])
+        ),
+        succ_s[1] == s[1]
+    )
+
+    return Or(action_1)
+
 # Conditional Termination - audio-compr
 #
 # while(0 <= l_var < 1073741824):
@@ -75,6 +88,15 @@ def successor_audio_compr(x):
     y[0] = simplify(If(valid_vars, If(Or(x[0] < 0, x[0] >= 1073741824), x[0], 2 * x[0]), y[0]))
 
     return y
+
+def nd_successor_audio_compr(s, succ_s):
+    cond = If(
+        Or(s[0] < 0, s[0] >= 1073741824),
+        succ_s[0] == s[0],
+        succ_s[0] == s[0] * 2
+    )
+
+    return Or(cond)
 
 # Conditional Termination - euclid
 #

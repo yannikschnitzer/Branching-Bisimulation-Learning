@@ -72,3 +72,30 @@ def cond_1(
         ), 
         g(gamma, p, q) == IntVal(1)
     )
+
+def conditions_deterministic_bl(
+    successor, domain, # the successor function of the TS
+    f, g, h, # the template for the abstract TS
+    theta, gamma, eta, # the parameters for the template
+    p, q, s, succ_s # the concrete values to check condition 2
+    ):
+
+    """
+    TODO 
+    c_1 = cond_1(...)
+    c_2 = cond_2(...)
+
+    return [c_1, c_2]
+    """
+    pass
+
+def conditions_branching_bl(
+    successor, domain, # the successor function of the TS
+    f, g, h, # the template for the abstract TS
+    theta, gamma, eta, # the parameters for the template
+    p, q, s, succ_s # the concrete values to check condition 2
+    ):
+    # TODO namjoshi
+    pass
+
+

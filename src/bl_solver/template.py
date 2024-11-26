@@ -1,21 +1,40 @@
 import numpy as np
 
 from utils import *
+from binary_decision_trees import *
 
 from bl_solver.conditions import *
-from bl_solver.transition_system import *
 
-class ProposedTemplate:
+class TransitionSystem:
+    def __init__(self, dim, successor, domain):
+        self.dim = dim
+        self.successor = successor
+        self.domain = domain
 
-    def __init__(self, dim, abstract_system):
+
+class QuotientSystem:
+
+    def __init__(self, 
+        dim,
+        bdt_classifier: BDTNodePoly,
+        num_params, 
+        num_coefficients, 
+        num_partitions
+        ):
         """
         Proposes a new template for a given transition system
         """
-        self.setup_smt_parameters(dim, abstract_system)
-        self.setup_adjacency()
-        # TODO setup BDT classifier
 
-    def setup_smt_parameters(self, dim, abstract_system  : AbstractSystem):
+        # configuration of wanted abstract system
+        self.num_partitions   = num_partitions
+        self.num_coefficients = num_coefficients
+        self.num_params       = num_params
+        self.bdt_classifier   = bdt_classifier
+        
+        self.setup_smt_parameters(dim)
+        self.setup_adjacency()
+
+    def setup_smt_parameters(self, dim):
         """
             Function returns the requested number of SMT parameters.
             Sets up for the current object:
@@ -27,13 +46,6 @@ class ProposedTemplate:
                 - rank_params: Real valued coefficients and constatns for the ranking function templates
         """
         # dimension of state variable
-
-        # configuration of wanted abstract system
-        self.num_partitions   = abstract_system.num_partitions
-        self.num_coefficients = abstract_system.num_coefficients
-        self.num_params       = abstract_system.num_params
-
-        self.bdt_classifier   = abstract_system.bdt_classifier
 
         self.m = [Int("m_%s" % i) for i in range(dim)]
         self.succ_m = [Int("succ_m_%s" % i) for i in range(dim)]
@@ -70,7 +82,9 @@ class ProposedTemplate:
         def g(gamma, p, q):
             return gamma[p][q]
         
+        # TODO modify dot product (take unspecified arguments)
         def h(eta, p, s):
+            # TODO check if len(eta[p]) == dim * len(s)
             return np.dot(eta[p][:-1], s) + eta[p][-1]
         
         return f, g, h
@@ -78,17 +92,18 @@ class ProposedTemplate:
 
 def encode_classification(
     transition_system: TransitionSystem,
-    proposed_template: ProposedTemplate,
+    template: QuotientSystem,
+    # TODO argument "proof_rule" function that returns formulas (so we can decide between nondet and det bl)
     theta, gamma, eta, 
     s, succ_s
     ):
 
-    f, g, h = proposed_template.get_template_functions()
+    f, g, h = template.get_template_functions()
 
     phis = []
 
-    for p in proposed_template.partitions:
-        for q in proposed_template.partitions:
+    for p in template.partitions:
+        for q in template.partitions:
             if q != p:
                 # when they are equal we can 
                 # we can omit both conditions
@@ -121,7 +136,7 @@ def encode_classification(
     
     return phis
                     
-def extract_solution(s: Solver, proposed_template: ProposedTemplate, verbose = False):
+def extract_solution(s: Solver, template: QuotientSystem, verbose = False):
     """
         Extract obtained solution from the solver
     """
@@ -129,10 +144,10 @@ def extract_solution(s: Solver, proposed_template: ProposedTemplate, verbose = F
     if verbose: print("Checking #Constraints:", len(s.assertions()))
     if verbose: print("Result:", sat)
 
-    partitions       = proposed_template.partitions
-    model_params     = proposed_template.model_params
-    adjacency_params = proposed_template.adjacency_params
-    rank_params      = proposed_template.rank_params
+    partitions       = template.partitions
+    model_params     = template.model_params
+    adjacency_params = template.adjacency_params
+    rank_params      = template.rank_params
 
     m = s.model()
     adj = [ [ m.evaluate(adjacency_params[i][j]) for j in range(len(partitions)) ] for i in range(len(partitions)) ]

@@ -1,21 +1,19 @@
 from bl_solver.template import *
-from bl_solver.transition_system import *
 
 def one_shot(
     transition_system: TransitionSystem,
-    abstract_system  : AbstractSystem,
-    proposed_template: ProposedTemplate):
+    template: QuotientSystem):
     
-    model_params     = proposed_template.model_params
-    adjacency_params = proposed_template.adjacency_params
-    ranking_params   = proposed_template.rank_params
-    s                = proposed_template.m
-    succ_s           = proposed_template.succ_m
+    model_params     = template.model_params
+    adjacency_params = template.adjacency_params
+    ranking_params   = template.rank_params
+    s                = template.m
+    succ_s           = template.succ_m
 
     # formuals contain both cond_1 and cond_2
     formulas = encode_classification(
         transition_system=transition_system,
-        proposed_template=proposed_template,
+        template=template,
         theta=model_params,
         gamma=adjacency_params,
         eta=ranking_params,
@@ -25,7 +23,7 @@ def one_shot(
 
     formulas += encode_one_shot_additional(
         transition_system=transition_system,
-        proposed_template=proposed_template,
+        template=template,
         theta=model_params,
         gamma=adjacency_params,
         eta=ranking_params,
@@ -41,13 +39,13 @@ def one_shot(
     solver.add(formula)
     res = solver.check()
     if f"{res}" == "sat":
-        return True, extract_solution(solver, proposed_template)
+        return True, extract_solution(solver, template)
     else:
         return False, None
 
 def encode_one_shot_additional(
     transition_system: TransitionSystem,
-    proposed_template: ProposedTemplate,
+    template: QuotientSystem,
     theta, gamma, eta, 
     s, succ_s
     ):
@@ -56,9 +54,9 @@ def encode_one_shot_additional(
 
     successor = transition_system.successor
     domain    = transition_system.domain
-    f, g, h   = proposed_template.get_template_functions()
+    f, g, h   = template.get_template_functions()
 
-    for p in proposed_template.partitions:
+    for p in template.partitions:
         phis.append(Implies(
             And(g(gamma, p, p) == IntVal(1),
                 f(theta, s) == p,
