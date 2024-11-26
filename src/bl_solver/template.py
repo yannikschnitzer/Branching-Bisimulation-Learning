@@ -82,7 +82,7 @@ class QuotientSystem:
         def g(gamma, p, q):
             return gamma[p][q]
         
-        # TODO modify dot product (take unspecified arguments)
+        # TODO modify dot product (take unspecified number of arguments)
         def h(eta, p, s):
             # TODO check if len(eta[p]) == dim * len(s)
             return np.dot(eta[p][:-1], s) + eta[p][-1]
