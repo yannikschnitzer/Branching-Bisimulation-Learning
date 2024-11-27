@@ -2,6 +2,8 @@ from bl_solver.one_shot_solver import *
 
 from conditional_termination_succ_trees import *
 
+from visualization import *
+
 def domain(x):
     return True
 
@@ -49,6 +51,36 @@ def term_loop_2():
 
     return transition_system, template
 
+def draw_template(gamma, t: QuotientSystem):
+
+    exp = Experiment(
+        classifier=t.bdt_classifier,
+        name="Default Name",
+        num_coefficients=t.num_coefficients,
+        num_initial=10,
+        num_params=t.num_params,
+        num_partitions=t.num_partitions,
+        successor=None,
+        dim=None,
+        domain=None
+    )
+    draw_quotient(gamma, exp)
+
+def visualize_template(theta, t: QuotientSystem):
+
+    exp = Experiment(
+        classifier=t.bdt_classifier,
+        name="Default Name",
+        num_coefficients=t.num_coefficients,
+        num_initial=10,
+        num_params=t.num_params,
+        num_partitions=t.num_partitions,
+        successor=None,
+        dim=None,
+        domain=None
+    )
+    visualize(theta, exp, 0.2, save = False)
+
 def audio_compr():
     dim = 1
 
@@ -68,18 +100,41 @@ def audio_compr():
 
     return transition_system, template
 
+def euclid():
+    ts = TransitionSystem(
+        dim=2,
+        domain=domain,
+        successor=nd_successor_euclid
+    )
+
+    qs = QuotientSystem(
+        dim=2,
+        bdt_classifier=bdt_euclid,
+        num_params=2,
+        num_coefficients=4,
+        num_partitions=3
+    )
+    return ts, qs
 
 def run(constructor):
     ts, t = constructor()
-    res, (theta, gamma, eta) = one_shot(ts, t)
-    print(f"""
-    Found theta = {theta}
-    Found gamma = {gamma}
-    Found eta   = {eta}
-    """)
+    res, params = one_shot(ts, t, allow_branching=True)
+    if res:
+        (theta, gamma, eta) = params
+        print(f"""
+        Found theta = {theta}
+        Found gamma = {gamma}
+        Found eta   = {eta}
+        """)
+
+        draw_template(gamma, t)
+        visualize_template(theta, t)
+    else:
+        print("No condition found!")
 
 if __name__ == "__main__":
     # run(term_loop_2)
-    run(audio_compr)
+    # run(audio_compr)
+    run(euclid)
 
     

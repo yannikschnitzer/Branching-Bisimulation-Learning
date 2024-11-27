@@ -1,8 +1,11 @@
 from bl_solver.template import *
+from bl_solver.conditions import *
 
 def one_shot(
     transition_system: TransitionSystem,
-    template: QuotientSystem):
+    template: QuotientSystem,
+    allow_branching = False
+    ):
     
     model_params     = template.model_params
     adjacency_params = template.adjacency_params
@@ -10,10 +13,15 @@ def one_shot(
     s                = template.m
     succ_s           = template.succ_m
 
+    proof_rules = conds_wbs_deterministic
+    if allow_branching:
+        proof_rules = conds_wbs_branching
+
     # formuals contain both cond_1 and cond_2
     formulas = encode_classification(
         transition_system=transition_system,
         template=template,
+        proof_rules=proof_rules,
         theta=model_params,
         gamma=adjacency_params,
         eta=ranking_params,
@@ -21,15 +29,15 @@ def one_shot(
         succ_s=succ_s
     )
 
-    formulas += encode_one_shot_additional(
-        transition_system=transition_system,
-        template=template,
-        theta=model_params,
-        gamma=adjacency_params,
-        eta=ranking_params,
-        s=s,
-        succ_s=succ_s
-    )
+    # formulas += encode_one_shot_additional(
+    #     transition_system=transition_system,
+    #     template=template,
+    #     theta=model_params,
+    #     gamma=adjacency_params,
+    #     eta=ranking_params,
+    #     s=s,
+    #     succ_s=succ_s
+    # )
 
     formula = ForAll([*s, *succ_s],
         And([simplify(phi) for phi in formulas])

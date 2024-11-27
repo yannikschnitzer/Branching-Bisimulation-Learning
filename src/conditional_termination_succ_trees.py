@@ -118,6 +118,16 @@ def successor_euclid(x):
 
     return y
 
+def nd_successor_euclid(s, succ_s):
+    is_succ = If(s[0] == s[1],
+        And(succ_s[0] == s[0], succ_s[1] == s[1]),
+        If(s[0] > s[1],
+            And(succ_s[0] == s[0] - s[1], succ_s[1] == s[1]),
+            And(succ_s[0] == s[0], succ_s[1] == s[1] - s[0])
+        )
+    )
+    return Or(is_succ)
+
 
 # Conditional Termination - greater
 #

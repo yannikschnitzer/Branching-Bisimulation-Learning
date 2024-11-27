@@ -93,7 +93,7 @@ class QuotientSystem:
 def encode_classification(
     transition_system: TransitionSystem,
     template: QuotientSystem,
-    # TODO argument "proof_rule" function that returns formulas (so we can decide between nondet and det bl)
+    proof_rules, # function taking all the parameters and returning a list of functions
     theta, gamma, eta, 
     s, succ_s
     ):
@@ -104,35 +104,21 @@ def encode_classification(
 
     for p in template.partitions:
         for q in template.partitions:
-            if q != p:
-                # when they are equal we can 
-                # we can omit both conditions
-                phis.append(cond_1(
-                    successor=transition_system.successor,
-                    domain=transition_system.domain,
-                    f=f,
-                    g=g,
-                    theta=theta,
-                    gamma=gamma,
-                    s=s,
-                    succ_s=succ_s,
-                    p=p,
-                    q=q
-                ))
-                phis.append(cond_2(
-                    successor=transition_system.successor,
-                    domain=transition_system.domain,
-                    f=f,
-                    g=g,
-                    h=h,
-                    theta=theta,
-                    gamma=gamma,
-                    eta=eta,
-                    s=s,
-                    succ_s=succ_s,
-                    p=p,
-                    q=q
-                ))
+            phis += proof_rules(
+                successor=transition_system.successor,
+                domain=transition_system.domain,
+                f=f,
+                g=g,
+                h=h,
+                theta=theta,
+                gamma=gamma,
+                eta=eta,
+                s=s,
+                succ_s=succ_s,
+                p=p,
+                q=q
+            )
+                
     
     return phis
                     

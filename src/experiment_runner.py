@@ -28,7 +28,7 @@ def run_experiment(exp : Experiment, benchmark_time = False, num_reps = 10, type
         mp, ap, rp = solver.solve_experiment(exp, verbose = verbose)
 
         if vis:
-            draw_quotient(ap)
+            draw_quotient(ap, exp)
             visualize(mp, exp, 0.2)
     
     if benchmark_time:

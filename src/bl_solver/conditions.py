@@ -25,7 +25,7 @@ from z3 import *
     
 """
 
-def cond_2(
+def cond_2_deterministic(
     successor, domain, # the successor function of the TS
     f, g, h, # the template for the abstract TS
     theta, gamma, eta, # the parameters for the template
@@ -50,11 +50,11 @@ def cond_2(
         )    
     )
 
-def cond_1(
+def cond_1_deterministic(
     successor, domain, # the successor function of the TS
     f, g, # h, # the template for the abstract TS
     theta, gamma, # eta, # the parameters for the template
-    p, q, s, succ_s # the concrete values to check condition 2
+    p, q, s, succ_s # the concrete values to check condition 
     ):
     """
         Represents condition 3 from theorem 3.
@@ -73,29 +73,167 @@ def cond_1(
         g(gamma, p, q) == IntVal(1)
     )
 
-def conditions_deterministic_bl(
+"""
+We define for condition 1 and 2
+    p the partition of s and w
+    q the partition of v : w-->v (it always exists since non blocking systems)
+
+So we need to assume g(gamma, p, q) == 1
+--
+
+We define for condition 3
+    p the partition of s, w and v
+    q the partition of u = u
+
+So we need to assume g(gamma, p, q) == 1
+"""
+
+def cond_1_branching(
+    successor, domain, # the successor function of the TS
+    f, g, h, # the template for the abstract TS
+    theta, gamma, eta, # the parameters for the template
+    p, q, 
+    s, succ_s # the concrete values to check condition 
+    ):
+    return Implies(
+        And(successor(s, succ_s),           # s-->u
+            f(theta, s) == p,               # s : p (s B w) 
+            g(gamma, p, q) == IntVal(1),    # w-->v : q
+            domain(s), 
+            domain(succ_s)
+        ),
+        f(theta, succ_s) == q,              # u : q (u B v)
+    )
+
+def cond_2_branching(
+    successor, domain, # the successor function of the TS
+    f, g, h, # the template for the abstract TS
+    theta, gamma, eta, # the parameters for the template
+    p, q, 
+    s, succ_s # the concrete values to check condition 
+    ):
+    return Implies(
+        And(successor(s, succ_s),               # s-->u
+            f(theta, s) == p,                   # s B w
+            Not(q == p),                        # stutter only if not self loop
+            domain(s), 
+            domain(succ_s)),
+        And(f(theta, succ_s) == p,              # u B w
+            h(eta, p, succ_s) < h(eta, p, s)    # decrease rank of u
+        )
+    )
+
+def cond_3_branching(
+    successor, domain, # the successor function of the TS
+    f, g, h, # the template for the abstract TS
+    theta, gamma, eta, # the parameters for the template
+    p, q, 
+    s, succ_s # the concrete values to check condition 
+    ):
+    return Implies(
+        And(successor(s, succ_s),               # w-->v
+            f(theta, s) == p,                   # s B w
+            g(gamma, p, q) == IntVal(1),        # u : q (we assume it exists since non blocking)
+            Not(p == q),
+            domain(s), 
+            domain(succ_s)),
+        And(f(theta, succ_s) == p,              # s B v
+            h(eta, q, succ_s) < h(eta, q, s)    # ranking condition 
+        )
+    )
+
+
+def conds_wbs_deterministic(
     successor, domain, # the successor function of the TS
     f, g, h, # the template for the abstract TS
     theta, gamma, eta, # the parameters for the template
     p, q, s, succ_s # the concrete values to check condition 2
     ):
-
     """
-    TODO 
-    c_1 = cond_1(...)
-    c_2 = cond_2(...)
-
-    return [c_1, c_2]
+    Returns the complete conditions for a well founded
+    bisimulations over a deterministic system.
     """
-    pass
+    c1 = cond_1_deterministic(
+        successor=successor,
+        domain=domain,
+        f=f,
+        g=g,
+        theta=theta,
+        gamma=gamma,
+        s=s,
+        succ_s=succ_s,
+        p=p,
+        q=q
+    )
+    c2 = cond_2_deterministic(
+        successor=successor,
+        domain=domain,
+        f=f,
+        g=g,
+        h=h,
+        theta=theta,
+        gamma=gamma,
+        eta=eta,
+        s=s,
+        succ_s=succ_s,
+        p=p,
+        q=q
+    )
+    return [c1, c2]
 
-def conditions_branching_bl(
+
+def conds_wbs_branching(
     successor, domain, # the successor function of the TS
     f, g, h, # the template for the abstract TS
     theta, gamma, eta, # the parameters for the template
     p, q, s, succ_s # the concrete values to check condition 2
     ):
-    # TODO namjoshi
-    pass
+    """
+    Returns the complete conditions for a well founded
+    bisimulations over a deterministic system.
+    """
+    c1 = cond_1_branching(
+        successor=successor,
+        domain=domain,
+        f=f,
+        g=g,
+        h=h,
+        theta=theta,
+        gamma=gamma,
+        eta=eta,
+        s=s,
+        succ_s=succ_s,
+        p=p,
+        q=q
+    )
+    c2 = cond_2_branching(
+        successor=successor,
+        domain=domain,
+        f=f,
+        g=g,
+        h=h,
+        theta=theta,
+        gamma=gamma,
+        eta=eta,
+        s=s,
+        succ_s=succ_s,
+        p=p,
+        q=q
+    )
+    c3 = cond_3_branching(
+        successor=successor,
+        domain=domain,
+        f=f,
+        g=g,
+        h=h,
+        theta=theta,
+        gamma=gamma,
+        eta=eta,
+        s=s,
+        succ_s=succ_s,
+        p=p,
+        q=q
+    )
+    return [c1, c2, c3]
 
 

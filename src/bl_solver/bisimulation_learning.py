@@ -17,14 +17,8 @@ def guess_and_check(transition_system: TransitionSystem, template: QuotientSyste
     counterexamples = []
     for _ in range(iters):
         verified, (theta, gamma, eta) = guess(transition_system, template, counterexamples)
-        print(f"""Proposed params are
-        theta = {theta}
-        gamma = {gamma}
-        eta   = {eta}
-        """)
         if verified:
             new_cexs = check(transition_system, template, theta, gamma, eta)
-            print(f"New counterexamples = {new_cexs}")
             if len(new_cexs) == 0:
                 return True, (theta, gamma, eta)
             else:
@@ -71,8 +65,6 @@ def guess(transition_system: TransitionSystem, template: QuotientSystem, counter
 def check(transition_system: TransitionSystem, template: QuotientSystem, theta, gamma, eta):
     s = template.m
     succ_s = template.succ_m
-
-    print(f"s = {s} succ_s = {succ_s}")
 
     counterexamples = []
     formulas = encode_classification(

@@ -9,6 +9,9 @@ def run(constructor):
     Adjacency params (gamma) = {gamma}
     Ranking params (theta)   = {eta}
     """)
+    draw_template(gamma, tem)
+    visualize_template(theta, tem)
 
 if __name__ == "__main__":
-    run(term_loop_2)
+    # run(audio_compr)
+    run(euclid)
