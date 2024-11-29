@@ -74,18 +74,10 @@ def cond_1_deterministic(
     )
 
 """
-We define for condition 1 and 2
-    p the partition of s and w
-    q the partition of v : w-->v (it always exists since non blocking systems)
-
-So we need to assume g(gamma, p, q) == 1
---
-
-We define for condition 3
-    p the partition of s, w and v
-    q the partition of u = u
-
-So we need to assume g(gamma, p, q) == 1
+The three conditions are:
+succ_s : p      => p -> p or h(p, succ_s) < h(p, s)
+succ_s : q != p => p -> q
+p -> q          => if succ_s : s then h(q, succ_s) < h(q, s)
 """
 
 def cond_1_branching(
@@ -98,11 +90,12 @@ def cond_1_branching(
     return Implies(
         And(successor(s, succ_s),           # s-->u
             f(theta, s) == p,               # s : p (s B w) 
-            g(gamma, p, q) == IntVal(1),    # w-->v : q
+            f(theta, succ_s) == q,          # u : q (u B v)
+            Not(p == q),
             domain(s), 
             domain(succ_s)
         ),
-        f(theta, succ_s) == q,              # u : q (u B v)
+        g(gamma, p, q) == IntVal(1),        # w-->v : q
     )
 
 def cond_2_branching(
@@ -115,10 +108,11 @@ def cond_2_branching(
     return Implies(
         And(successor(s, succ_s),               # s-->u
             f(theta, s) == p,                   # s B w
-            Not(q == p),                        # stutter only if not self loop
+            f(theta, succ_s) == p,              # u B w
             domain(s), 
             domain(succ_s)),
-        And(f(theta, succ_s) == p,              # u B w
+        Or(
+            g(gamma, p, p) == IntVal(1),        # w-->v : q
             h(eta, p, succ_s) < h(eta, p, s)    # decrease rank of u
         )
     )
@@ -137,7 +131,8 @@ def cond_3_branching(
             Not(p == q),
             domain(s), 
             domain(succ_s)),
-        And(f(theta, succ_s) == p,              # s B v
+        Implies(
+            f(theta, succ_s) == p,              # s B v
             h(eta, q, succ_s) < h(eta, q, s)    # ranking condition 
         )
     )

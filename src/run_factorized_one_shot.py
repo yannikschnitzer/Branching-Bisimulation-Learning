@@ -133,8 +133,8 @@ def run(constructor):
         print("No condition found!")
 
 if __name__ == "__main__":
-    # run(term_loop_2)
+    run(term_loop_2)
     # run(audio_compr)
-    run(euclid)
+    # run(euclid)
 
     
