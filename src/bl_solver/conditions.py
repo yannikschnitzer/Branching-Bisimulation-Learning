@@ -74,11 +74,90 @@ def cond_1_deterministic(
     )
 
 """
-The three conditions are:
-succ_s : p      => p -> p or h(p, succ_s) < h(p, s)
-succ_s : q != p => p -> q
-p -> q          => if succ_s : s then h(q, succ_s) < h(q, s)
+For (finitely) branching systems we implement only Namjoshi's conditions, 
+given s, s' and w and that s \\simeq w.
+
+We just check against the partition template and the ranking function.
+
+The adjacency can be extracted later from the template.
 """
+
+def cond_branching_no_explicit_partiton(
+    successors, domain,
+    f, h,
+    theta, eta,
+    s, succ_s, w
+    ):
+    """
+    This function encodes the condition for the branching 
+    well-founded bisimulation without taking any explicit partition,
+    over a given *global* ranking function template h, eta
+    """
+    assumptions = And(
+        domain(s),
+        domain(succ_s),
+        domain(w),
+        f(theta, s) == f(theta, w), 
+        Or([succ_s == u for u in successors(s)])
+    )
+    straight_bisimulation = Or([f(theta, succ_s) == f(theta, v) for v in successors(w)])
+    stutter_on_s = And(
+        f(theta, succ_s) == f(theta, w),
+        h(eta, succ_s, succ_s) < h(eta, s, s)
+    )
+    # i.e. there is at least one successor v of w s.t. 
+    stutter_on_w = Or([
+        And(f(theta, s) == f(theta, v), h(eta, succ_s, v) < h(eta, succ_s, w))
+            for v in successors(w)]
+    )
+    return Implies(
+        assumptions,
+        Or(straight_bisimulation, stutter_on_s, stutter_on_w)
+    )
+
+def cond_branching_explicit_partiton(
+    successors, domain,
+    f, h,
+    theta, eta,
+    c,
+    s, succ_s, w):
+    assumptions = And(
+        domain(s),
+        domain(succ_s),
+        domain(w),
+        f(theta, s) == c, 
+        f(theta, w) == c,
+        Or([succ_s == u for u in successors(s)])
+    )
+    straight_bisimulation = Or([f(theta, succ_s) == f(theta, v) for v in successors(w)])
+    stutter_on_s = And(
+        f(theta, succ_s) == c,
+        h(eta, succ_s, succ_s) < h(eta, s, s)
+    )
+    # i.e. there is at least one successor v of w s.t. 
+    stutter_on_w = Or([
+        And(f(theta, v) == c, h(eta, succ_s, v) < h(eta, succ_s, w))
+            for v in successors(w)]
+    )
+    return Implies(
+        assumptions,
+        Or(straight_bisimulation, stutter_on_s, stutter_on_w)
+    )
+
+def cond_branching_out_transition(
+    successors, domain,
+    f, g,
+    theta, gamma,
+    c, d,
+    s):
+    c_to_d = And(g(gamma, c, d) == IntVal(1), Not(c == d))
+    succ_s_in_d = Or([f(theta, succ_s) == d for succ_s in successors(s)])
+    s_goes_in_d = Exists([*s], And(f(theta, s) == c, succ_s_in_d))
+    return And(
+        Implies(c_to_d, s_goes_in_d),
+        # Implies(s_goes_in_d, c_to_d)
+    )
+    
 
 def cond_1_branching(
     successor, domain, # the successor function of the TS

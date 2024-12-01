@@ -5,11 +5,23 @@ from binary_decision_trees import *
 
 from bl_solver.conditions import *
 
-class TransitionSystem:
+class DeterminsticTransitionSystem:
     def __init__(self, dim, successor, domain):
         self.dim = dim
         self.successor = successor
         self.domain = domain
+    
+    def to_branching(self):
+        def successors(x):
+            return [self.successor(x)]
+        return BranchingTransitionSystem(self.dim, successors, self.domain)
+
+class BranchingTransitionSystem:
+    def __init__(self, dim, successors, domain):
+        self.dim = dim
+        self.successors = successors
+        self.domain = domain
+
 
 
 class QuotientSystem:
@@ -49,6 +61,8 @@ class QuotientSystem:
 
         self.m = [Int("m_%s" % i) for i in range(dim)]
         self.succ_m = [Int("succ_m_%s" % i) for i in range(dim)]
+        self.w = [Int("w_%s" % i) for i in range(dim)] # only for branching wfbs
+        self.succ_w = [Int("succ_w_%s" % i) for i in range(dim)] # only for branching wfbs
         self.p = Int("p")
         self.q = Int("q")
 
@@ -56,6 +70,9 @@ class QuotientSystem:
         self.adjacency_params = [[Bool("a_%s_%s" % (i, j)) for j in range(len(self.partitions))] for i in range(len(self.partitions))]
         self.model_params = [Real("p_%s" % i) for i in range(self.num_params)] + [Real("a_%s" % i) for i in range(self.num_coefficients)]
         self.rank_params = [[Real("u_%s_%s" % (d, i)) for d in range(dim)] + [Real("c_%s" % i)] for i in range(self.num_partitions)]
+        
+        # linear ranking function
+        self.rank_params_branching_global = [[Real("u_0_%s" % d) for d in range(dim)], [Real("u_1_%s" % d) for d in range(dim)]]
     
     def setup_adjacency(self):
         """
@@ -74,7 +91,7 @@ class QuotientSystem:
         elif i < mx and j == mx:
             return simplify(If(And(p == i, q == j), If(params[i][j],1,0), self.generate_adjacency(p,q,i+1,0,params,mx)))
  
-    def get_template_functions(self):
+    def get_template_functions(self, branching = False):
         def f(theta, s):
             classification_formula, _ = self.bdt_classifier(theta, s, self.num_params, self.partitions)
             return classification_formula
@@ -82,32 +99,28 @@ class QuotientSystem:
         def g(gamma, p, q):
             return gamma[p][q]
         
-        # TODO modify dot product (take unspecified number of arguments)
-        def h(eta, *args):
-            if len(args) == 2:
-                # deterministic bisimulation learning
-                p = args[0]
-                s = args[1]
-                return np.dot(eta[p][:-1], s) + eta[p][-1]
-            elif len(args) == 3:
-                # branching
-                p = args[0]
-                q = args[1]
-                s = args[2]
-                return np.dot(eta[p][q][:-1], s) + eta[p][q][-1]
+        def h_det(eta, p, s):
+            return np.dot(eta[p][:-1], s) + eta[p][-1]
         
-        return f, g, h
+        def h_brn(eta, s_0, s_1):
+            # TODO do we need coefficient?
+            return np.dot(eta[0], s_0) + np.dot(eta[1], s_1)
+        
+        if branching:
+            return f, g, h_brn
+        else:
+            return f, g, h_det
         
 
 def encode_classification(
-    transition_system: TransitionSystem,
+    transition_system: DeterminsticTransitionSystem,
     template: QuotientSystem,
     proof_rules, # function taking all the parameters and returning a list of functions
     theta, gamma, eta, 
     s, succ_s
     ):
 
-    f, g, h = template.get_template_functions()
+    f, g, h = template.get_template_functions(branching=False)
 
     phis = []
 
@@ -130,8 +143,66 @@ def encode_classification(
                 
     
     return phis
+
+def encode_classification_branching(
+    transition_system: BranchingTransitionSystem,
+    template: QuotientSystem,
+    theta, gamma, eta,
+    s, succ_s, w,
+    explicit_classes = False
+    ):
+    f, g, h = template.get_template_functions(branching=True)
+
+    conds = []
+    if explicit_classes:
+        print("Using explicit classes")
+        for p in template.partitions:
+            cond = cond_branching_explicit_partiton(
+                successors=transition_system.successors,
+                domain=transition_system.domain,
+                f=f, h=h,
+                theta=theta, eta=eta,
+                s=s, u=succ_s, w=w,
+                c=p
+            )
+            conds.append(cond)
+        
+    else:
+        print("Using implicit classes")
+        cond = cond_branching_no_explicit_partiton(
+            successors=transition_system.successors,
+            domain=transition_system.domain,
+            f=f, h=h,
+            theta=theta, eta=eta,
+            s=s, u=succ_s, w=w
+        )
+        conds = [cond]
+    
+    return conds
+
+def encode_transition_relation(
+    transition_system: BranchingTransitionSystem,
+    template: QuotientSystem,
+    theta, gamma, eta,
+    s, succ_s, w):
+    f, g, h = template.get_template_functions(branching=True)
+
+    conds = []
+
+    for p in template.partitions:
+        for q in template.partitions:
+            new_cond = cond_branching_out_transition(
+                successors=transition_system.successors,
+                domain=transition_system.domain,
+                f=f, g=g,
+                theta=theta, gamma=gamma,
+                c=p, d=q,
+                s=s
+            )
+            conds.append(new_cond)
+    return conds
                     
-def extract_solution(s: Solver, template: QuotientSystem, verbose = False):
+def extract_solution(s: Solver, template: QuotientSystem, verbose = False, allow_branching = False):
     """
         Extract obtained solution from the solver
     """
@@ -142,7 +213,7 @@ def extract_solution(s: Solver, template: QuotientSystem, verbose = False):
     partitions       = template.partitions
     model_params     = template.model_params
     adjacency_params = template.adjacency_params
-    rank_params      = template.rank_params
+    rank_params      = template.rank_params_branching_global if allow_branching else template.rank_params
 
     m = s.model()
     adj = [ [ m.evaluate(adjacency_params[i][j]) for j in range(len(partitions)) ] for i in range(len(partitions)) ]

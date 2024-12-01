@@ -35,16 +35,6 @@ def successor_term_loop_1(x):
 
     return y
 
-def nd_successor_term_loop_1(s, succ_s):
-    terminated = Or(s[0] == 0, s[1] == 1)
-
-    action_1 = If(terminated, 
-        And(succ_s[0] == s[0], succ_s[1] == 1),
-        And(succ_s[0] == s[0] - 1, succ_s[1] == 0)
-    )
-
-    return Or(action_1)
-
 
 # Conditional Termination - term-loop-2
 #
@@ -61,19 +51,6 @@ def successor_term_loop_2(x):
 
     return [y]
 
-def nd_successor_term_loop_2(s, succ_s):
-    terminated = Or(s[0] <= 0)
-
-    action_1 = And(
-        If(terminated, 
-            succ_s[0] == s[0],
-            And(succ_s[0] == s[0] + s[1])
-        ),
-        succ_s[1] == s[1]
-    )
-
-    return [action_1]
-
 # Conditional Termination - audio-compr
 #
 # while(0 <= l_var < 1073741824):
@@ -89,14 +66,6 @@ def successor_audio_compr(x):
 
     return y
 
-def nd_successor_audio_compr(s, succ_s):
-    cond = If(
-        Or(s[0] < 0, s[0] >= 1073741824),
-        succ_s[0] == s[0],
-        succ_s[0] == s[0] * 2
-    )
-
-    return Or(cond)
 
 # Conditional Termination - euclid
 #
@@ -117,16 +86,6 @@ def successor_euclid(x):
     y[1] = simplify(If(valid_vars, If(x[0] <= x[1], x[1] - x[0], x[1]), y[1]))
 
     return y
-
-def nd_successor_euclid(s, succ_s):
-    is_succ = If(s[0] == s[1],
-        And(succ_s[0] == s[0], succ_s[1] == s[1]),
-        If(s[0] > s[1],
-            And(succ_s[0] == s[0] - s[1], succ_s[1] == s[1]),
-            And(succ_s[0] == s[0], succ_s[1] == s[1] - s[0])
-        )
-    )
-    return Or(is_succ)
 
 
 # Conditional Termination - greater

@@ -2,7 +2,7 @@
 from bl_solver.template import *
 from bl_solver.z3_utils import *
 
-def bisimulation_learning(transition_system: TransitionSystem, template: QuotientSystem, iters = 10):
+def bisimulation_learning(transition_system: DeterminsticTransitionSystem, template: QuotientSystem, iters = 10):
     while True:
         success, params = guess_and_check(transition_system, template, iters)
         if success:
@@ -13,7 +13,7 @@ def bisimulation_learning(transition_system: TransitionSystem, template: Quotien
             pass
 
 # cegis
-def guess_and_check(transition_system: TransitionSystem, template: QuotientSystem, iters):
+def guess_and_check(transition_system: DeterminsticTransitionSystem, template: QuotientSystem, iters):
     counterexamples = []
     for _ in range(iters):
         verified, (theta, gamma, eta) = guess(transition_system, template, counterexamples)
@@ -26,7 +26,7 @@ def guess_and_check(transition_system: TransitionSystem, template: QuotientSyste
         else:
             return False, None
 
-def guess(transition_system: TransitionSystem, template: QuotientSystem, counterexamples):
+def guess(transition_system: DeterminsticTransitionSystem, template: QuotientSystem, counterexamples):
     """
     Takes as input a proposed template and a list of
     counterexamples in the form of a tuple (s, T(s)).
@@ -62,7 +62,7 @@ def guess(transition_system: TransitionSystem, template: QuotientSystem, counter
         # signal you have to change the template
         return False, None
 
-def check(transition_system: TransitionSystem, template: QuotientSystem, theta, gamma, eta):
+def check(transition_system: DeterminsticTransitionSystem, template: QuotientSystem, theta, gamma, eta):
     s = template.m
     succ_s = template.succ_m
 

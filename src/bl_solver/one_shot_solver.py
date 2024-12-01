@@ -2,57 +2,80 @@ from bl_solver.template import *
 from bl_solver.conditions import *
 
 def one_shot(
-    transition_system: TransitionSystem,
+    transition_system: DeterminsticTransitionSystem | BranchingTransitionSystem,
     template: QuotientSystem,
     allow_branching = False
     ):
     
     model_params     = template.model_params
     adjacency_params = template.adjacency_params
-    ranking_params   = template.rank_params
     s                = template.m
     succ_s           = template.succ_m
 
-    proof_rules = conds_wbs_deterministic
+    formulas = []
+    universally_quantified_state_params = []
+
     if allow_branching:
-        proof_rules = conds_wbs_branching
+        print("Using branching formulas")
+        ranking_params = template.rank_params_branching_global
+        w = template.w
 
-    # formuals contain both cond_1 and cond_2
-    formulas = encode_classification(
-        transition_system=transition_system,
-        template=template,
-        proof_rules=proof_rules,
-        theta=model_params,
-        gamma=adjacency_params,
-        eta=ranking_params,
-        s=s,
-        succ_s=succ_s
-    )
+        formulas = encode_classification_branching(
+            transition_system=transition_system,
+            template=template,
+            theta=model_params,
+            gamma=adjacency_params,
+            eta=ranking_params,
+            s=s, succ_s=succ_s, w=w,
+            explicit_classes=False
+        )
+        universally_quantified_state_params = [*s, *succ_s, *w]
+    else:
+        print("Using deterministic formulas")
+        ranking_params   = template.rank_params
+        # formuals contain both cond_1 and cond_2
+        formulas = encode_classification(
+            transition_system=transition_system,
+            template=template,
+            proof_rules=conds_wbs_deterministic,
+            theta=model_params,
+            gamma=adjacency_params,
+            eta=ranking_params,
+            s=s,
+            succ_s=succ_s
+        )
+        universally_quantified_state_params = [*s, *succ_s]
 
-    # formulas += encode_one_shot_additional(
-    #     transition_system=transition_system,
-    #     template=template,
-    #     theta=model_params,
-    #     gamma=adjacency_params,
-    #     eta=ranking_params,
-    #     s=s,
-    #     succ_s=succ_s
-    # )
 
-    formula = ForAll([*s, *succ_s],
+
+    formula = ForAll(universally_quantified_state_params,
         And([simplify(phi) for phi in formulas])
     )
 
     solver = Solver()
     solver.add(formula)
+
+    # if allow_branching:
+    #     conds = encode_transition_relation(
+    #         transition_system=transition_system,
+    #         template=template,
+    #         theta=model_params,
+    #         gamma=adjacency_params,
+    #         eta=ranking_params,
+    #         s=s, succ_s=succ_s, w=w
+    #     )
+    #     for cond in conds:
+    #         solver.add(simplify(cond))
+
+
     res = solver.check()
     if f"{res}" == "sat":
-        return True, extract_solution(solver, template)
+        return True, extract_solution(solver, template, allow_branching=allow_branching)
     else:
         return False, None
 
 def encode_one_shot_additional(
-    transition_system: TransitionSystem,
+    transition_system: DeterminsticTransitionSystem,
     template: QuotientSystem,
     theta, gamma, eta, 
     s, succ_s

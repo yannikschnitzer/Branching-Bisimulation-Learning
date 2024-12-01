@@ -15,7 +15,7 @@ def term_loop_1():
         return simplify(And(x[1] >= 0 , x[1] <= 1))
     dim = 2
 
-    transition_system = TransitionSystem(
+    transition_system = DeterminsticTransitionSystem(
         dim=dim,
         successor=nd_successor_term_loop_1,
         domain=domain
@@ -35,9 +35,9 @@ def term_loop_2():
 
     dim = 2
 
-    transition_system = TransitionSystem(
+    transition_system = DeterminsticTransitionSystem(
         dim=dim,
-        successor=nd_successor_term_loop_2,
+        successor=successor_term_loop_2,
         domain=domain
     )
 
@@ -84,9 +84,9 @@ def visualize_template(theta, t: QuotientSystem):
 def audio_compr():
     dim = 1
 
-    transition_system = TransitionSystem(
+    transition_system = DeterminsticTransitionSystem(
         dim=dim,
-        successor=nd_successor_audio_compr,
+        successor=successor_audio_compr,
         domain=domain
     )
 
@@ -101,10 +101,10 @@ def audio_compr():
     return transition_system, template
 
 def euclid():
-    ts = TransitionSystem(
+    ts = DeterminsticTransitionSystem(
         dim=2,
         domain=domain,
-        successor=nd_successor_euclid
+        successor=successor_euclid
     )
 
     qs = QuotientSystem(
@@ -118,7 +118,7 @@ def euclid():
 
 def run(constructor):
     ts, t = constructor()
-    res, params = one_shot(ts, t, allow_branching=True)
+    res, params = one_shot(ts.to_branching(), t, allow_branching=True)
     if res:
         (theta, gamma, eta) = params
         print(f"""
