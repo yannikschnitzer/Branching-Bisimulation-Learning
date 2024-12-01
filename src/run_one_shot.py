@@ -16,6 +16,7 @@ def run(constructor):
 
 
 if __name__ == "__main__":
-    run(exp_term_loop_2)
+    # run(exp_term_loop_2)
     # run(exp_audio_compr)
+    run(exp_euclid)
     

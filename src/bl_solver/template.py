@@ -55,7 +55,7 @@ class QuotientSystem:
         self.partitions = [i for i in range(self.num_partitions)]
         self.adjacency_params = [[Bool("a_%s_%s" % (i, j)) for j in range(len(self.partitions))] for i in range(len(self.partitions))]
         self.model_params = [Real("p_%s" % i) for i in range(self.num_params)] + [Real("a_%s" % i) for i in range(self.num_coefficients)]
-        self.rank_params = [[Real("u_%s_%s" % (j, i)) for j in range(dim)] + [Real("c_%s" % i)] for i in range(self.num_partitions)]
+        self.rank_params = [[Real("u_%s_%s" % (d, i)) for d in range(dim)] + [Real("c_%s" % i)] for i in range(self.num_partitions)]
     
     def setup_adjacency(self):
         """
@@ -83,9 +83,18 @@ class QuotientSystem:
             return gamma[p][q]
         
         # TODO modify dot product (take unspecified number of arguments)
-        def h(eta, p, s):
-            # TODO check if len(eta[p]) == dim * len(s)
-            return np.dot(eta[p][:-1], s) + eta[p][-1]
+        def h(eta, *args):
+            if len(args) == 2:
+                # deterministic bisimulation learning
+                p = args[0]
+                s = args[1]
+                return np.dot(eta[p][:-1], s) + eta[p][-1]
+            elif len(args) == 3:
+                # branching
+                p = args[0]
+                q = args[1]
+                s = args[2]
+                return np.dot(eta[p][q][:-1], s) + eta[p][q][-1]
         
         return f, g, h
         

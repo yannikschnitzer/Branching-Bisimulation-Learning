@@ -59,7 +59,7 @@ def successor_term_loop_2(x):
 
     y[0] = simplify(If(valid_vars, If(x[0] <= 0, x[0], x[0] + x[1]), y[0]))
 
-    return y
+    return [y]
 
 def nd_successor_term_loop_2(s, succ_s):
     terminated = Or(s[0] <= 0)
@@ -72,7 +72,7 @@ def nd_successor_term_loop_2(s, succ_s):
         succ_s[1] == s[1]
     )
 
-    return Or(action_1)
+    return [action_1]
 
 # Conditional Termination - audio-compr
 #
