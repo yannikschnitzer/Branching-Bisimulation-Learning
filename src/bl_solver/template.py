@@ -162,7 +162,7 @@ def encode_classification_branching(
                 domain=transition_system.domain,
                 f=f, h=h,
                 theta=theta, eta=eta,
-                s=s, u=succ_s, w=w,
+                s=s, succ_s=succ_s, w=w,
                 c=p
             )
             conds.append(cond)
@@ -174,7 +174,7 @@ def encode_classification_branching(
             domain=transition_system.domain,
             f=f, h=h,
             theta=theta, eta=eta,
-            s=s, u=succ_s, w=w
+            s=s, succ_s=succ_s, w=w
         )
         conds = [cond]
     
@@ -184,36 +184,81 @@ def encode_transition_relation(
     transition_system: BranchingTransitionSystem,
     template: QuotientSystem,
     theta, gamma, eta,
-    s, succ_s, w):
+    s):
     f, g, h = template.get_template_functions(branching=True)
 
     conds = []
 
     for p in template.partitions:
         for q in template.partitions:
-            new_cond = cond_branching_out_transition(
-                successors=transition_system.successors,
-                domain=transition_system.domain,
-                f=f, g=g,
-                theta=theta, gamma=gamma,
-                c=p, d=q,
-                s=s
-            )
-            conds.append(new_cond)
+            if p != q:
+                out_transition = cond_branching_out_transition(
+                    successors=transition_system.successors,
+                    domain=transition_system.domain,
+                    f=f, g=g,
+                    theta=theta, gamma=gamma,
+                    c=p, d=q,
+                    s=s
+                )
+                conds.append(out_transition)
+        loop_condition = cond_branching_loop_transition(
+            successors=transition_system.successors,
+            domain=transition_system.domain,
+            f=f, g=g,
+            theta=theta, gamma=gamma,
+            c=p,
+            s=s
+        )
+        # temp. disabled (not working)
+        # conds.append(loop_condition)
     return conds
+
+def extract_quotient(s: Solver, transition_system: BranchingTransitionSystem, template: QuotientSystem):
+
+    partitions       = template.partitions
+    model_params     = template.model_params
+    rank_params      = template.rank_params_branching_global
+
+    m = s.model()
+    params = [m.evaluate(param) for param in model_params]
+    rankp = [[m.evaluate(param) for param in l] for l in rank_params]
+
+    adjacency_params = template.adjacency_params
+    s = template.m
+
+    quotient_solver = Solver()
+    conds = encode_transition_relation(
+        transition_system=transition_system,
+        template=template,
+        theta=params,
+        gamma=adjacency_params,
+        eta=rankp,
+        s=s
+    )
+    for cond in conds:
+        quotient_solver.add(simplify(cond))
+    
+    res = quotient_solver.check()
+    if f"{res}" == "sat":
+        m = quotient_solver.model()
+        adj = [ [ m.evaluate(adjacency_params[i][j]) for j in range(len(partitions)) ] for i in range(len(partitions)) ]
+        return params, adj, rankp
+    else:
+        raise Exception(f"No solution for the quotient system. Result was {res}")
+
                     
-def extract_solution(s: Solver, template: QuotientSystem, verbose = False, allow_branching = False):
+def extract_solution(s: Solver, template: QuotientSystem, verbose = False):
     """
         Extract obtained solution from the solver
     """
-    sat = s.check()
+    # sat = s.check()
     if verbose: print("Checking #Constraints:", len(s.assertions()))
     if verbose: print("Result:", sat)
 
     partitions       = template.partitions
     model_params     = template.model_params
     adjacency_params = template.adjacency_params
-    rank_params      = template.rank_params_branching_global if allow_branching else template.rank_params
+    rank_params      = template.rank_params
 
     m = s.model()
     adj = [ [ m.evaluate(adjacency_params[i][j]) for j in range(len(partitions)) ] for i in range(len(partitions)) ]

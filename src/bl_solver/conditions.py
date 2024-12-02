@@ -1,5 +1,6 @@
 
 from z3 import *
+from bl_solver.z3_utils import *
 
 """
     Conditions for the well founded bisimulation.
@@ -36,7 +37,7 @@ def cond_2_deterministic(
         i.e. the "ranking condition".
     """
     return Implies(
-        And(successor(s, succ_s),
+        And(variables_equals(succ_s, successor(s)),
             g(gamma, p, q) == IntVal(1), 
             Not(p == q),
             f(theta, s) == p, 
@@ -63,7 +64,7 @@ def cond_1_deterministic(
         so we don't even require it
     """
     return Implies(
-        And(successor(s, succ_s),
+        And(variables_equals(succ_s, successor(s)),
             f(theta, s) == p, 
             f(theta, succ_s) == q, 
             domain(s), 
@@ -98,7 +99,7 @@ def cond_branching_no_explicit_partiton(
         domain(succ_s),
         domain(w),
         f(theta, s) == f(theta, w), 
-        Or([succ_s == u for u in successors(s)])
+        Or([variables_equals(succ_s, u) for u in successors(s)])
     )
     straight_bisimulation = Or([f(theta, succ_s) == f(theta, v) for v in successors(w)])
     stutter_on_s = And(
@@ -150,14 +151,27 @@ def cond_branching_out_transition(
     theta, gamma,
     c, d,
     s):
-    c_to_d = And(g(gamma, c, d) == IntVal(1), Not(c == d))
+    c_to_d = And(g(gamma, c, d) == IntVal(1))
     succ_s_in_d = Or([f(theta, succ_s) == d for succ_s in successors(s)])
     s_goes_in_d = Exists([*s], And(f(theta, s) == c, succ_s_in_d))
     return And(
         Implies(c_to_d, s_goes_in_d),
         # Implies(s_goes_in_d, c_to_d)
     )
-    
+
+def cond_branching_loop_transition(
+    successors, domain,
+    f, g,
+    theta, gamma,
+    c,
+    s):
+    self_loop = And(g(gamma, c, c) == IntVal(1))
+    all_can_remain = ForAll([*s], Implies(f(theta, s) == c, Or([f(theta, succ_s) == c for succ_s in successors(s)])))
+    return And(
+        Implies(self_loop, all_can_remain),
+        # Implies(all_can_remain, self_loop)
+    )
+
 
 def cond_1_branching(
     successor, domain, # the successor function of the TS

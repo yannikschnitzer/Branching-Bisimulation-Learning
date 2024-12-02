@@ -116,9 +116,11 @@ def euclid():
     )
     return ts, qs
 
-def run(constructor):
+def run(constructor, allow_branching=False):
     ts, t = constructor()
-    res, params = one_shot(ts.to_branching(), t, allow_branching=True)
+    if allow_branching:
+        ts = ts.to_branching()
+    res, params = one_shot(ts, t, allow_branching=allow_branching)
     if res:
         (theta, gamma, eta) = params
         print(f"""
@@ -133,8 +135,8 @@ def run(constructor):
         print("No condition found!")
 
 if __name__ == "__main__":
-    # run(term_loop_2)
+    # run(term_loop_2, allow_branching=False)
     # run(audio_compr)
-    run(euclid)
+    run(euclid, allow_branching=True)
 
     

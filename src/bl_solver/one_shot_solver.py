@@ -55,22 +55,14 @@ def one_shot(
     solver = Solver()
     solver.add(formula)
 
-    # if allow_branching:
-    #     conds = encode_transition_relation(
-    #         transition_system=transition_system,
-    #         template=template,
-    #         theta=model_params,
-    #         gamma=adjacency_params,
-    #         eta=ranking_params,
-    #         s=s, succ_s=succ_s, w=w
-    #     )
-    #     for cond in conds:
-    #         solver.add(simplify(cond))
-
 
     res = solver.check()
     if f"{res}" == "sat":
-        return True, extract_solution(solver, template, allow_branching=allow_branching)
+        print("Found a solution!")
+        if allow_branching:
+            return True, extract_quotient(solver, transition_system, template)
+        else:
+            return True, extract_solution(solver, template)
     else:
         return False, None
 
