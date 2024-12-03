@@ -49,7 +49,7 @@ def successor_term_loop_2(x):
 
     y[0] = simplify(If(valid_vars, If(x[0] <= 0, x[0], x[0] + x[1]), y[0]))
 
-    return [y]
+    return y
 
 # Conditional Termination - audio-compr
 #

@@ -21,7 +21,7 @@ def term_loop_1():
         domain=domain
     )
 
-    template = QuotientSystem(
+    template = BDTTemplate(
         dim=dim,
         bdt_classifier=bdt_term_loop_1,
         num_coefficients=2,
@@ -41,7 +41,7 @@ def term_loop_2():
         domain=domain
     )
 
-    template = QuotientSystem(
+    template = BDTTemplate(
         dim=dim,
         bdt_classifier=bdt_term_loop_2,
         num_coefficients=2,
@@ -51,7 +51,7 @@ def term_loop_2():
 
     return transition_system, template
 
-def draw_template(gamma, t: QuotientSystem):
+def draw_template(gamma, t: BDTTemplate):
 
     exp = Experiment(
         classifier=t.bdt_classifier,
@@ -66,7 +66,7 @@ def draw_template(gamma, t: QuotientSystem):
     )
     draw_quotient(gamma, exp)
 
-def visualize_template(theta, t: QuotientSystem):
+def visualize_template(theta, t: BDTTemplate):
 
     exp = Experiment(
         classifier=t.bdt_classifier,
@@ -90,7 +90,7 @@ def audio_compr():
         domain=domain
     )
 
-    template = QuotientSystem(
+    template = BDTTemplate(
         dim=dim,
         bdt_classifier=bdt_audio_compr,
         num_coefficients=1,
@@ -107,7 +107,7 @@ def euclid():
         successor=successor_euclid
     )
 
-    qs = QuotientSystem(
+    qs = BDTTemplate(
         dim=2,
         bdt_classifier=bdt_euclid,
         num_params=2,
@@ -118,9 +118,12 @@ def euclid():
 
 def run(constructor, allow_branching=False):
     ts, t = constructor()
+    res = False
+    params = None
     if allow_branching:
-        ts = ts.to_branching()
-    res, params = one_shot(ts, t, allow_branching=allow_branching)
+        res, params = one_shot_namjoshi(ts.to_branching(), t)
+    else:
+        res, params = one_shot_deterministic(ts, t)
     if res:
         (theta, gamma, eta) = params
         print(f"""
@@ -135,8 +138,8 @@ def run(constructor, allow_branching=False):
         print("No condition found!")
 
 if __name__ == "__main__":
-    # run(term_loop_2, allow_branching=False)
-    # run(audio_compr)
-    run(euclid, allow_branching=True)
+    # run(term_loop_2, allow_branching=True)
+    run(audio_compr, allow_branching=True)
+    # run(euclid, allow_branching=True)
 
     

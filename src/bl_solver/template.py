@@ -23,8 +23,7 @@ class BranchingTransitionSystem:
         self.domain = domain
 
 
-
-class QuotientSystem:
+class BDTTemplate:
 
     def __init__(self, 
         dim,
@@ -67,6 +66,7 @@ class QuotientSystem:
         self.q = Int("q")
 
         self.partitions = [i for i in range(self.num_partitions)]
+        # NOTE: adjacency (and gamma as well) is not needed for branching systems
         self.adjacency_params = [[Bool("a_%s_%s" % (i, j)) for j in range(len(self.partitions))] for i in range(len(self.partitions))]
         self.model_params = [Real("p_%s" % i) for i in range(self.num_params)] + [Real("a_%s" % i) for i in range(self.num_coefficients)]
         self.rank_params = [[Real("u_%s_%s" % (d, i)) for d in range(dim)] + [Real("c_%s" % i)] for i in range(self.num_partitions)]
@@ -114,7 +114,7 @@ class QuotientSystem:
 
 def encode_classification(
     transition_system: DeterminsticTransitionSystem,
-    template: QuotientSystem,
+    template: BDTTemplate,
     proof_rules, # function taking all the parameters and returning a list of functions
     theta, gamma, eta, 
     s, succ_s
@@ -146,8 +146,8 @@ def encode_classification(
 
 def encode_classification_branching(
     transition_system: BranchingTransitionSystem,
-    template: QuotientSystem,
-    theta, gamma, eta,
+    template: BDTTemplate,
+    theta, eta,
     s, succ_s, w,
     explicit_classes = False
     ):
@@ -182,9 +182,9 @@ def encode_classification_branching(
 
 def encode_transition_relation(
     transition_system: BranchingTransitionSystem,
-    template: QuotientSystem,
+    template: BDTTemplate,
     theta, gamma, eta,
-    s):
+    s, succ_s):
     f, g, h = template.get_template_functions(branching=True)
 
     conds = []
@@ -198,7 +198,7 @@ def encode_transition_relation(
                     f=f, g=g,
                     theta=theta, gamma=gamma,
                     c=p, d=q,
-                    s=s
+                    s=s, succ_s=succ_s
                 )
                 conds.append(out_transition)
         loop_condition = cond_branching_loop_transition(
@@ -207,47 +207,110 @@ def encode_transition_relation(
             f=f, g=g,
             theta=theta, gamma=gamma,
             c=p,
-            s=s
+            s=s, succ_s=succ_s
         )
         # temp. disabled (not working)
         # conds.append(loop_condition)
     return conds
 
-def extract_quotient(s: Solver, transition_system: BranchingTransitionSystem, template: QuotientSystem):
+def compute_adjacency_matrix(
+    transition_system: BranchingTransitionSystem,
+    template: BDTTemplate, 
+    theta
+    ):
 
     partitions       = template.partitions
     model_params     = template.model_params
     rank_params      = template.rank_params_branching_global
 
-    m = s.model()
-    params = [m.evaluate(param) for param in model_params]
-    rankp = [[m.evaluate(param) for param in l] for l in rank_params]
+    adjacency_matrix = [[False for c in partitions] for d in partitions]
 
-    adjacency_params = template.adjacency_params
+    for c in partitions:
+        for d in partitions:
+            if c != d:
+                adjacency_matrix[c][d] = quotient_has_transition(
+                    transition_system,
+                    template,
+                    theta,
+                    c, 
+                    d
+                )
+            else:
+                adjacency_matrix[c][d] = quotient_self_loop(
+                    transition_system,
+                    template,
+                    theta,
+                    c
+                )
+
+    return adjacency_matrix
+
+def quotient_has_transition(
+    transition_system: BranchingTransitionSystem, 
+    template: BDTTemplate,
+    theta,
+    c, d
+    ):
+    assert(c != d)
+
+    successors = transition_system.successors
+    f, _, _ = template.get_template_functions()
+    s = template.m
+    
+    solver = Solver()
+    formula = And(
+        f(theta, s) == c,
+        Or([f(theta, u) == d for u in successors(s)])
+    )
+    solver.add(formula)
+    res = solver.check()
+    if f"{res}" == "sat":
+        return True
+    else:
+        assert(f"{res}" == "unsat")
+        return False
+
+def quotient_self_loop(
+    transition_system: BranchingTransitionSystem, 
+    template: BDTTemplate,
+    theta,
+    c
+    ):
+
+    successors = transition_system.successors
     s = template.m
 
-    quotient_solver = Solver()
-    conds = encode_transition_relation(
-        transition_system=transition_system,
-        template=template,
-        theta=params,
-        gamma=adjacency_params,
-        eta=rankp,
-        s=s
-    )
-    for cond in conds:
-        quotient_solver.add(simplify(cond))
+    f, _, _ = template.get_template_functions()
     
-    res = quotient_solver.check()
-    if f"{res}" == "sat":
-        m = quotient_solver.model()
-        adj = [ [ m.evaluate(adjacency_params[i][j]) for j in range(len(partitions)) ] for i in range(len(partitions)) ]
-        return params, adj, rankp
-    else:
-        raise Exception(f"No solution for the quotient system. Result was {res}")
+    solver = Solver()
 
-                    
-def extract_solution(s: Solver, template: QuotientSystem, verbose = False):
+    formula = And(
+        f(theta, s) == c,
+        And([f(theta, u) != c for u in successors(s)])
+    )
+
+    solver.add(formula)
+    res = solver.check()
+    if f"{res}" == "sat":
+        return False
+    else:
+        assert(f"{res}" == "unsat")
+        return True
+
+
+def extract_quotient_cex(conds: list, s, succ_s):
+    solver = Solver()
+    solver.add(simplify(Or([simplify(Not(cond)) for cond in conds])))
+    resc = solver.check()
+    if f"{resc}" == "sat":
+        model = solver.model()
+        cex = [model.evaluate(d) for d in s]
+        succ_cex = [model.evaluate(d) for d in succ_s]
+        raise Exception(f"No quotient system was synthetized. Counterexample state was {cex} -> {succ_cex}")
+    else:
+        raise Exception(f"No solution for the quotient system nor counterexample found. Satisfiability result was {resc}")
+
+def extract_solution(s: Solver, template: BDTTemplate, verbose = False):
     """
         Extract obtained solution from the solver
     """
