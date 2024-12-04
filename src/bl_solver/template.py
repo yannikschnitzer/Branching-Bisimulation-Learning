@@ -6,10 +6,15 @@ from binary_decision_trees import *
 from bl_solver.conditions import *
 
 class DeterminsticTransitionSystem:
-    def __init__(self, dim, successor, domain):
+    def __init__(self, dim, successor, domain = None):
         self.dim = dim
         self.successor = successor
-        self.domain = domain
+        if domain is None:
+            def const_true(x):
+                return True
+            self.domain = const_true
+        else:
+            self.domain = domain
     
     def to_branching(self):
         def successors(x):
