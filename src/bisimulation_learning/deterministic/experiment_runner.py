@@ -2,10 +2,8 @@
  Code for running, profiling and visualizing experiments.
 """
 
-from utils import *
-from experiment import Experiment
-from cegis_solver import *
-from visualization import *
+from bisimulation_learning.shared import *
+from bisimulation_learning.deterministic.cegis_solver import *
 import numpy as np
 
 __author__ = "Yannik Schnitzer"

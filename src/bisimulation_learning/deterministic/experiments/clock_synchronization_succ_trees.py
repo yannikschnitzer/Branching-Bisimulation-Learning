@@ -2,7 +2,7 @@
  Clock Synchronization Benchmarks.
 """
 
-from binary_decision_trees import *
+from bisimulation_learning.shared import *
 from z3 import *
 
 __author__ = "Yannik Schnitzer"

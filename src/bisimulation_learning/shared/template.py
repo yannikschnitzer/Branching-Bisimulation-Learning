@@ -1,9 +1,7 @@
 import numpy as np
 
-from utils import *
-from binary_decision_trees import *
-
-from bl_solver.conditions import *
+from bisimulation_learning.shared.utils import *
+from bisimulation_learning.shared.binary_decision_trees import *
 
 class DeterminsticTransitionSystem:
     def __init__(self, dim, successor, domain = None):
@@ -149,74 +147,6 @@ def encode_classification(
     
     return phis
 
-def encode_classification_branching(
-    transition_system: BranchingTransitionSystem,
-    template: BDTTemplate,
-    theta, eta,
-    s, succ_s, w,
-    explicit_classes = False
-    ):
-    f, g, h = template.get_template_functions(branching=True)
-
-    conds = []
-    if explicit_classes:
-        print("Using explicit classes")
-        for p in template.partitions:
-            cond = cond_branching_explicit_partiton(
-                successors=transition_system.successors,
-                domain=transition_system.domain,
-                f=f, h=h,
-                theta=theta, eta=eta,
-                s=s, succ_s=succ_s, w=w,
-                c=p
-            )
-            conds.append(cond)
-        
-    else:
-        print("Using implicit classes")
-        cond = cond_branching_no_explicit_partiton(
-            successors=transition_system.successors,
-            domain=transition_system.domain,
-            f=f, h=h,
-            theta=theta, eta=eta,
-            s=s, succ_s=succ_s, w=w
-        )
-        conds = [cond]
-    
-    return conds
-
-def encode_transition_relation(
-    transition_system: BranchingTransitionSystem,
-    template: BDTTemplate,
-    theta, gamma, eta,
-    s, succ_s):
-    f, g, h = template.get_template_functions(branching=True)
-
-    conds = []
-
-    for p in template.partitions:
-        for q in template.partitions:
-            if p != q:
-                out_transition = cond_branching_out_transition(
-                    successors=transition_system.successors,
-                    domain=transition_system.domain,
-                    f=f, g=g,
-                    theta=theta, gamma=gamma,
-                    c=p, d=q,
-                    s=s, succ_s=succ_s
-                )
-                conds.append(out_transition)
-        loop_condition = cond_branching_loop_transition(
-            successors=transition_system.successors,
-            domain=transition_system.domain,
-            f=f, g=g,
-            theta=theta, gamma=gamma,
-            c=p,
-            s=s, succ_s=succ_s
-        )
-        # temp. disabled (not working)
-        # conds.append(loop_condition)
-    return conds
 
 def compute_adjacency_matrix(
     transition_system: BranchingTransitionSystem,

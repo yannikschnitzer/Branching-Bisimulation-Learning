@@ -2,9 +2,11 @@
  Classes for using Binary Decision Tree (BDT) templates with arbitary or linear predicates.
 """
 
-from utils import *
-from z3 import *
 import numpy as np
+
+from z3 import *
+
+from bisimulation_learning.shared.utils import *
 
 
 __author__ = "Yannik Schnitzer"

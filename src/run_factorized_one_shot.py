@@ -1,8 +1,6 @@
-from bl_solver.one_shot_solver import *
-
 from conditional_termination_succ_trees import *
 
-from visualization import *
+from bisimulation_learning.shared import *
 
 def domain(x):
     return True
@@ -51,20 +49,6 @@ def term_loop_2():
 
     return transition_system, template
 
-def draw_template(gamma, t: BDTTemplate):
-
-    exp = Experiment(
-        classifier=t.bdt_classifier,
-        name="Default Name",
-        num_coefficients=t.num_coefficients,
-        num_initial=10,
-        num_params=t.num_params,
-        num_partitions=t.num_partitions,
-        successor=None,
-        dim=None,
-        domain=None
-    )
-    draw_quotient(gamma, exp)
 
 def visualize_template(theta, t: BDTTemplate):
 

@@ -7,6 +7,10 @@ RUN apt-get update && \
     apt-get install -y git build-essential && \
     apt-get install -y sudo && \
     apt-get install -y software-properties-common && \
+    apt-get install -y wget && \
+    apt-get install -y openjdk-21-jdk && \
+    apt-get install -y maven && \
+    apt-get install -y zip && \
     add-apt-repository ppa:deadsnakes/ppa && \
     apt install -y python3.10 && \
     apt-get install -y python3-pip && \
@@ -17,17 +21,13 @@ RUN apt-get update && \
 
 # Install nuXmv
 WORKDIR /CAV24
-RUN apt-get install -y wget && \
-    wget https://nuxmv.fbk.eu/theme/download.php?file=nuXmv-2.0.0-linux64.tar.gz && \
+RUN wget https://nuxmv.fbk.eu/theme/download.php?file=nuXmv-2.0.0-linux64.tar.gz && \
     tar -xvzf download.php\?file\=nuXmv-2.0.0-linux64.tar.gz && \
     rm download.php\?file\=nuXmv-2.0.0-linux64.tar.gz 
 
 # Install Ultimate
 WORKDIR /CAV24
-RUN apt-get install -y openjdk-11-jdk && \ 
-    apt install -y maven && \
-    apt install -y zip && \
-    git clone https://github.com/ultimate-pa/ultimate
+RUN git clone https://github.com/ultimate-pa/ultimate
 WORKDIR /CAV24/ultimate/releaseScripts/default
 RUN ./makeFresh.sh
 

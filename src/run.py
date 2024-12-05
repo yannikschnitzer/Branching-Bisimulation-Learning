@@ -2,8 +2,8 @@
     Main file for commandline interface.
 """
 import argparse
-from conditional_termination_experiments import *
-from clock_synchronization_experiments import *
+
+from bisimulation_learning.deterministic.experiments import *
 from cpa.CPA_runner import *
 from cpa.CPA_experiments import *
 from ultimate.ultimate_experiments import *

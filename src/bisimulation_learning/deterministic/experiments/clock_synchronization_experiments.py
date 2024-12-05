@@ -1,14 +1,12 @@
 """
  Defines and runs Clock Synchronization experiments.
 """
-
-from utils import *
-from experiment import Experiment
-from experiment_runner import *
-from clock_synchronization_succ_trees import *
-from cegis_solver import *
-from visualization import *
 import numpy as np
+
+from bisimulation_learning.shared import *
+from bisimulation_learning.deterministic.experiment_runner import *
+from bisimulation_learning.deterministic.experiments.clock_synchronization_succ_trees import *
+from bisimulation_learning.deterministic.cegis_solver import *
 
 __author__ = "Yannik Schnitzer"
 __copyright__ = "Copyright 2024, Yannik Schnitzer"

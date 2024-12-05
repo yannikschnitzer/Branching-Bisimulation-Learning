@@ -2,12 +2,12 @@
  Utility and helper functions.
 """
 
-from experiment import *
 import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
-from z3 import *
 
+from z3 import *
+from bisimulation_learning.shared.experiment import *
 
 __author__ = "Yannik Schnitzer"
 __copyright__ = "Copyright 2024, Yannik Schnitzer"
@@ -65,7 +65,7 @@ def extract_abstract_transitions(adj_matrix):
     return G
 
 
-def draw_quotient(adj_matrix, exp : Experiment, save = False):
+def draw_quotient(adj_matrix, name: str, save = False):
     """
         Draw network graph of obtained quotient 
     """
@@ -156,3 +156,18 @@ def save_results(model_params, adjacency_params, rank_params, exp: Experiment):
             print(row, file = file)
         
     
+def eval_z3(m, x):
+        """
+            Evaluate Z3 result
+        """
+        return m.evaluate(x) if not (m.evaluate(x) == x) else 0
+
+def variables_equals(s, t):
+    if len(s) != len(t):
+        raise Exception(f"""
+        Tried to check whether two variables are equal, but they have different lenght
+        {len(s)} != {len(t)}
+        First variable was {s}
+        Second variable was {t}
+        """)
+    return And([s[d] == t[d] for d in range(len(s))])

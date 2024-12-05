@@ -3,11 +3,8 @@
 """
 
 import time
-from utils import *
-from experiment import Experiment
-from visualization import *
+from bisimulation_learning.shared import *
 from z3 import *
-from conditional_termination_succ_trees import *
 import matplotlib.pyplot as plt
 
 __author__ = "Yannik Schnitzer"

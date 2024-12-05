@@ -3,10 +3,9 @@
 """
 
 import time
-from utils import *
-from experiment import *
+from bisimulation_learning.shared import *
 from z3 import *
-from conditional_termination_succ_trees import *
+from bisimulation_learning.deterministic.experiments import *
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap 
 
@@ -87,4 +86,18 @@ def visualize(mp, exp : Experiment, acc, save = False):
     else:
         plt.show(block = True)
 
-    
+
+def visualize_branching(theta, t: BDTTemplate):
+
+    exp = Experiment(
+        classifier=t.bdt_classifier,
+        name="Default Name",
+        num_coefficients=t.num_coefficients,
+        num_initial=10,
+        num_params=t.num_params,
+        num_partitions=t.num_partitions,
+        successor=None,
+        dim=None,
+        domain=None
+    )
+    visualize(theta, exp, 0.2, save = False)

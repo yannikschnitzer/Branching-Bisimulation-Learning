@@ -2,12 +2,11 @@
  Defines and runs Conditional Termination experiments.
 """
 
-from utils import *
-from experiment import Experiment
-from experiment_runner import *
-from conditional_termination_succ_trees import *
-from cegis_solver import *
-from visualization import *
+from bisimulation_learning.shared import *
+from bisimulation_learning.deterministic.experiment_runner import *
+from bisimulation_learning.deterministic.experiments.conditional_termination_succ_trees import *
+from bisimulation_learning.deterministic.cegis_solver import *
+
 import numpy as np
 
 __author__ = "Yannik Schnitzer"
