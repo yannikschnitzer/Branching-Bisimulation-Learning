@@ -20,10 +20,15 @@ class DeterminsticTransitionSystem:
         return BranchingTransitionSystem(self.dim, successors, self.domain)
 
 class BranchingTransitionSystem:
-    def __init__(self, dim, successors, domain):
+    def __init__(self, dim, successors, domain=None):
         self.dim = dim
         self.successors = successors
-        self.domain = domain
+        if domain is None:
+            def const_true(x):
+                return True
+            self.domain = const_true
+        else:
+            self.domain = domain
 
 
 class BDTTemplate:

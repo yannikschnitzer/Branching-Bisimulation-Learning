@@ -34,6 +34,7 @@ def guess_and_check(
                 counterexamples += new_cexs
         else:
             return False, None
+    return False, None
 
 
 def guess(transition_system: BranchingTransitionSystem, template: BDTTemplate, counterexamples):
