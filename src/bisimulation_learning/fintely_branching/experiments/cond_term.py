@@ -19,10 +19,26 @@ def term_loop_2():
         num_partitions=3
     )
 
-    return transition_system, template
+    return transition_system.to_branching(), template
+
+def audio_compr():
+    ts = DeterminsticTransitionSystem(
+        dim = 1,
+        successor=successor_audio_compr
+    )
+
+    tem = BDTTemplate(
+        dim=1,
+        bdt_classifier=bdt_audio_compr,
+        num_params=1,
+        num_coefficients=1,
+        num_partitions=3
+    )
+
+    return ts.to_branching(), tem
 
 def euclid():
-    ts = DeterminsticTransitionSystem(
+    ts = DeterministicTransitionSystem(
         dim=2,
         domain=domain,
         successor=successor_euclid
@@ -35,4 +51,34 @@ def euclid():
         num_coefficients=4,
         num_partitions=3
     )
-    return ts, qs
+    return ts.to_branching(), qs
+
+def greater():
+    ts = DeterministicTransitionSystem(
+        dim=2,
+        successor=successor_greater
+    )
+    tem = BDTTemplate(
+        bdt_classifier=bdt_greater,
+        dim=2,
+        num_params=1,
+        num_coefficients=2,
+        num_partitions=3
+    )
+    return ts.to_branching(), tem
+
+def smaller():
+    trs = DeterministicTransitionSystem(
+        dim=2,
+        successor=successor_smaller
+    )
+
+    tem = BDTTemplate(
+        bdt_classifier=bdt_smaller,
+        num_params=1,
+        num_coefficients=2,
+        num_partitions=3,
+        dim=2
+    )
+
+    return trs.to_branching(), tem

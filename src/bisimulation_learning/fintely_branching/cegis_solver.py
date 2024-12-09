@@ -19,7 +19,7 @@ def bisimulation_learning(transition_system: BranchingTransitionSystem, template
 
 
 def guess_and_check(
-    transition_system: DeterminsticTransitionSystem, 
+    transition_system: DeterministicTransitionSystem, 
     template: BDTTemplate,
     iters = 10
     ):
@@ -73,7 +73,7 @@ def guess(transition_system: BranchingTransitionSystem, template: BDTTemplate, c
         Got: {res} with reason {res.reason_unknown()}
         """)
 
-def check(transition_system: DeterminsticTransitionSystem, template: BDTTemplate, theta, eta):
+def check(transition_system: DeterministicTransitionSystem, template: BDTTemplate, theta, eta):
     s      = template.m
     succ_s = template.succ_m
     t      = template.w

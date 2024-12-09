@@ -26,7 +26,7 @@ def run_experiment(exp : Experiment, benchmark_time = False, num_reps = 10, type
         mp, ap, rp = solver.solve_experiment(exp, verbose = verbose)
 
         if vis:
-            draw_quotient(ap, exp)
+            draw_quotient(ap, exp.name)
             visualize(mp, exp, 0.2)
     
     if benchmark_time:
@@ -50,7 +50,7 @@ def run_experiment(exp : Experiment, benchmark_time = False, num_reps = 10, type
 
         # Visualize last iteration
         if vis:
-            draw_quotient(ap, exp, save = True)
+            draw_quotient(ap, exp.name, save = True)
             visualize(mp, exp, 0.2, save = True)
 
         # Print result of last iteration to file

@@ -13,7 +13,7 @@ def term_loop_1():
         return simplify(And(x[1] >= 0 , x[1] <= 1))
     dim = 2
 
-    transition_system = DeterminsticTransitionSystem(
+    transition_system = DeterministicTransitionSystem(
         dim=dim,
         successor=nd_successor_term_loop_1,
         domain=domain
@@ -33,7 +33,7 @@ def term_loop_2():
 
     dim = 2
 
-    transition_system = DeterminsticTransitionSystem(
+    transition_system = DeterministicTransitionSystem(
         dim=dim,
         successor=successor_term_loop_2,
         domain=domain
@@ -68,7 +68,7 @@ def visualize_template(theta, t: BDTTemplate):
 def audio_compr():
     dim = 1
 
-    transition_system = DeterminsticTransitionSystem(
+    transition_system = DeterministicTransitionSystem(
         dim=dim,
         successor=successor_audio_compr,
         domain=domain
@@ -85,7 +85,7 @@ def audio_compr():
     return transition_system, template
 
 def euclid():
-    ts = DeterminsticTransitionSystem(
+    ts = DeterministicTransitionSystem(
         dim=2,
         domain=domain,
         successor=successor_euclid

@@ -2,7 +2,7 @@ from bisimulation_learning.fact_det.conditions import *
 from bisimulation_learning.shared import *
 
 def solve_one_shot(
-    transition_system: DeterminsticTransitionSystem,
+    transition_system: DeterministicTransitionSystem,
     template: BDTTemplate
     ):
     
@@ -46,7 +46,7 @@ def solve_one_shot(
 
 
 def encode_one_shot_additional(
-    transition_system: DeterminsticTransitionSystem,
+    transition_system: DeterministicTransitionSystem,
     template: BDTTemplate,
     theta, gamma, eta, 
     s, succ_s

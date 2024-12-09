@@ -2,7 +2,7 @@ from bisimulation_learning.shared import *
 from z3 import *
 
 
-def bisimulation_learning(transition_system: DeterminsticTransitionSystem, template: BDTTemplate, iters = 10):
+def bisimulation_learning(transition_system: DeterministicTransitionSystem, template: BDTTemplate, iters = 10):
     while True:
         success, params = guess_and_check(
             transition_system   = transition_system,
@@ -18,7 +18,7 @@ def bisimulation_learning(transition_system: DeterminsticTransitionSystem, templ
 
 
 def guess_and_check(
-    transition_system: DeterminsticTransitionSystem, 
+    transition_system: DeterministicTransitionSystem, 
     template: BDTTemplate,
     iters = 10
     ):
@@ -34,7 +34,7 @@ def guess_and_check(
         else:
             return False, None
 
-def guess(transition_system: DeterminsticTransitionSystem, template: BDTTemplate, counterexamples):
+def guess(transition_system: DeterministicTransitionSystem, template: BDTTemplate, counterexamples):
     """
     Takes as input a proposed template and a list of
     counterexamples in the form of a tuple (s, T(s)).
@@ -71,7 +71,7 @@ def guess(transition_system: DeterminsticTransitionSystem, template: BDTTemplate
         return False, None
 
 
-def check(transition_system: DeterminsticTransitionSystem, template: BDTTemplate, theta, gamma, eta):
+def check(transition_system: DeterministicTransitionSystem, template: BDTTemplate, theta, gamma, eta):
     s = template.m
     succ_s = template.succ_m
 

@@ -3,7 +3,7 @@ import numpy as np
 from bisimulation_learning.shared.utils import *
 from bisimulation_learning.shared.binary_decision_trees import *
 
-class DeterminsticTransitionSystem:
+class DeterministicTransitionSystem:
     def __init__(self, dim, successor, domain = None):
         self.dim = dim
         self.successor = successor
@@ -121,7 +121,7 @@ class BDTTemplate:
         
 
 def encode_classification(
-    transition_system: DeterminsticTransitionSystem,
+    transition_system: DeterministicTransitionSystem,
     template: BDTTemplate,
     proof_rules, # function taking all the parameters and returning a list of functions
     theta, gamma, eta, 
