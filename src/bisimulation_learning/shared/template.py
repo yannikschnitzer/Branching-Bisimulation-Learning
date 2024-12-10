@@ -81,6 +81,9 @@ class BDTTemplate:
         
         # linear ranking function
         self.rank_params_branching_global = [[Real("u_0_%s" % d) for d in range(dim)], [Real("u_1_%s" % d) for d in range(dim)]]
+        tmp = [[[Real("u_%s_0_%s" % (i, d)) for d in range(dim)], [Real("u_%s_1_%s" % (i, d)) for d in range(dim)]] for i in range(self.num_partitions)]
+        self.rank_params_branching_classes = [item for row in tmp for item in row]
+        print(self.rank_params_branching_classes)
     
     def setup_adjacency(self):
         """
@@ -99,7 +102,7 @@ class BDTTemplate:
         elif i < mx and j == mx:
             return simplify(If(And(p == i, q == j), If(params[i][j],1,0), self.generate_adjacency(p,q,i+1,0,params,mx)))
  
-    def get_template_functions(self, branching = False):
+    def get_template_functions(self, branching = False, explicit_classes=False):
         def f(theta, s):
             classification_formula, _ = self.bdt_classifier(theta, s, self.num_params, self.partitions)
             return classification_formula
@@ -110,12 +113,17 @@ class BDTTemplate:
         def h_det(eta, p, s):
             return np.dot(eta[p][:-1], s) + eta[p][-1]
         
-        def h_brn(eta, s_0, s_1):
-            # TODO do we need coefficient?
+        def h_brn_impl(eta, s_0, s_1):
             return np.dot(eta[0], s_0) + np.dot(eta[1], s_1)
         
-        if branching:
-            return f, g, h_brn
+        def h_brn_expl(eta, c, s_0, s_1):
+            return np.dot(eta[c], s_0) + np.dot(eta[c + 1], s_1)
+
+        
+        if branching and explicit_classes:
+            return f, g, h_brn_expl
+        elif branching and not explicit_classes:
+            return f, g, h_brn_impl
         else:
             return f, g, h_det
         

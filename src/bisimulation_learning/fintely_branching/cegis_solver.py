@@ -3,12 +3,18 @@ from bisimulation_learning.shared import *
 from z3 import *
 from bisimulation_learning.fintely_branching.conditions import *
 
-def bisimulation_learning(transition_system: BranchingTransitionSystem, template: BDTTemplate, iters = 10):
+def bisimulation_learning(
+    transition_system: BranchingTransitionSystem, 
+    template: BDTTemplate, 
+    iters = 10,
+    explicit_classes = False
+    ):
     while True:
         success, params = guess_and_check(
             transition_system   = transition_system,
             template            = template,
-            iters               = iters
+            iters               = iters,
+            explicit_classes    = explicit_classes
         )
         if success:
             theta, eta = params
@@ -21,13 +27,14 @@ def bisimulation_learning(transition_system: BranchingTransitionSystem, template
 def guess_and_check(
     transition_system: DeterministicTransitionSystem, 
     template: BDTTemplate,
-    iters = 10
+    iters = 10,
+    explicit_classes = False
     ):
     counterexamples = []
     for _ in range(iters):
-        verified, (theta, eta) = guess(transition_system, template, counterexamples)
+        verified, (theta, eta) = guess(transition_system, template, counterexamples, explicit_classes)
         if verified:
-            new_cexs = check(transition_system, template, theta, eta)
+            new_cexs = check(transition_system, template, theta, eta, explicit_classes)
             if len(new_cexs) == 0:
                 return True, (theta, eta)
             else:
@@ -37,10 +44,15 @@ def guess_and_check(
     return False, None
 
 
-def guess(transition_system: BranchingTransitionSystem, template: BDTTemplate, counterexamples):
+def guess(
+    transition_system: BranchingTransitionSystem, 
+    template: BDTTemplate, 
+    counterexamples,
+    explicit_classes = False
+    ):
 
     theta    = template.model_params
-    eta      = template.rank_params_branching_global
+    eta      = template.rank_params_branching_classes if explicit_classes else template.rank_params_branching_global
     formulas = []
 
     for (s, succ_s, w) in counterexamples:
@@ -51,7 +63,8 @@ def guess(transition_system: BranchingTransitionSystem, template: BDTTemplate, c
             eta                 = eta,
             s                   = s, 
             succ_s              = succ_s, 
-            w                   = w
+            w                   = w,
+            explicit_classes    = explicit_classes
         )
     
     solver = Solver()
@@ -73,7 +86,13 @@ def guess(transition_system: BranchingTransitionSystem, template: BDTTemplate, c
         Got: {res} with reason {res.reason_unknown()}
         """)
 
-def check(transition_system: DeterministicTransitionSystem, template: BDTTemplate, theta, eta):
+def check(
+    transition_system: DeterministicTransitionSystem, 
+    template: BDTTemplate, 
+    theta, 
+    eta,
+    explicit_classes = False
+    ):
     s      = template.m
     succ_s = template.succ_m
     t      = template.w
@@ -87,7 +106,8 @@ def check(transition_system: DeterministicTransitionSystem, template: BDTTemplat
         eta                 = eta,
         s                   = s, 
         succ_s              = succ_s, 
-        w                   = t
+        w                   = t,
+        explicit_classes    = explicit_classes
     )
 
     for formula in formulas:

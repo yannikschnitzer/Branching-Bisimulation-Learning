@@ -47,7 +47,8 @@ def cond_explicit_partiton(
     f, h,
     theta, eta,
     c,
-    s, succ_s, w):
+    s, succ_s, w
+    ):
     assumptions = And(
         domain(s),
         domain(succ_s),
@@ -59,11 +60,10 @@ def cond_explicit_partiton(
     straight_bisimulation = Or([f(theta, succ_s) == f(theta, v) for v in successors(w)])
     stutter_on_s = And(
         f(theta, succ_s) == c,
-        h(eta, succ_s, succ_s) < h(eta, s, s)
+        h(eta, c, succ_s, succ_s) < h(eta, c, s, s)
     )
-    # i.e. there is at least one successor v of w s.t. 
     stutter_on_w = Or([
-        And(f(theta, v) == c, h(eta, succ_s, v) < h(eta, succ_s, w))
+        And(f(theta, v) == c, h(eta, c, succ_s, v) < h(eta, c, succ_s, w))
             for v in successors(w)]
     )
     return Implies(
@@ -79,19 +79,23 @@ def encode_classification_branching(
     s, succ_s, w,
     explicit_classes = False
     ):
-    f, g, h = template.get_template_functions(branching=True)
+    f, g, h = template.get_template_functions(branching=True, explicit_classes=explicit_classes)
 
     conds = []
     if explicit_classes:
         print("Using explicit classes")
         for p in template.partitions:
             cond = cond_explicit_partiton(
-                successors=transition_system.successors,
-                domain=transition_system.domain,
-                f=f, h=h,
-                theta=theta, eta=eta,
-                s=s, succ_s=succ_s, w=w,
-                c=p
+                successors  = transition_system.successors,
+                domain      = transition_system.domain,
+                f           = f, 
+                h           = h,
+                theta       = theta,
+                eta         = eta,
+                s           = s, 
+                succ_s      = succ_s, 
+                w           = w,
+                c           = p
             )
             conds.append(cond)
         
