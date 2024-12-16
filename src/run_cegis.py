@@ -12,4 +12,4 @@ if __name__ == "__main__":
     # run_experiment(exp_cubic(), vis=True)
     # DIM 1
     # run_experiment(exp_nlr_cond(), vis=True)
-    run_experiment(exp_con_sf_10(), vis=True)
+    run_experiment(exp_tte_sf_1000(), vis=True)

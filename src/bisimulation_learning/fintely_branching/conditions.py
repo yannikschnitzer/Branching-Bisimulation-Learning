@@ -27,19 +27,18 @@ def cond_implicit_partiton(
         f(theta, s) == f(theta, w), 
         Or([variables_equals(succ_s, u) for u in successors(s)])
     )
-    straight_bisimulation = Or([f(theta, succ_s) == f(theta, v) for v in successors(w)])
+    straight_bisimulation = [And(domain(v), f(theta, succ_s) == f(theta, v)) for v in successors(w)]        
     stutter_on_s = And(
         f(theta, succ_s) == f(theta, w),
         h(eta, succ_s, succ_s) < h(eta, s, s)
     )
     # i.e. there is at least one successor v of w s.t. 
-    stutter_on_w = Or([
-        And(f(theta, s) == f(theta, v), h(eta, succ_s, v) < h(eta, succ_s, w))
+    stutter_on_w = [
+        And(domain(v), f(theta, s) == f(theta, v), h(eta, succ_s, v) < h(eta, succ_s, w))
             for v in successors(w)]
-    )
     return Implies(
         assumptions,
-        Or(straight_bisimulation, stutter_on_s, stutter_on_w)
+        Or(*straight_bisimulation, stutter_on_s, *stutter_on_w)
     )
 
 def cond_explicit_partiton(
@@ -57,18 +56,17 @@ def cond_explicit_partiton(
         f(theta, w) == c,
         Or([variables_equals(succ_s, u) for u in successors(s)])
     )
-    straight_bisimulation = Or([f(theta, succ_s) == f(theta, v) for v in successors(w)])
+    straight_bisimulation = [And(domain(v), f(theta, succ_s) == f(theta, v)) for v in successors(w)]
     stutter_on_s = And(
         f(theta, succ_s) == c,
         h(eta, c, succ_s, succ_s) < h(eta, c, s, s)
     )
-    stutter_on_w = Or([
-        And(f(theta, v) == c, h(eta, c, succ_s, v) < h(eta, c, succ_s, w))
+    stutter_on_w = [
+        And(domain(v), f(theta, v) == c, h(eta, c, succ_s, v) < h(eta, c, succ_s, w))
             for v in successors(w)]
-    )
     return Implies(
         assumptions,
-        Or(straight_bisimulation, stutter_on_s, stutter_on_w)
+        Or(*straight_bisimulation, stutter_on_s, *stutter_on_w)
     )
 
 
@@ -83,7 +81,6 @@ def encode_classification_branching(
 
     conds = []
     if explicit_classes:
-        print("Using explicit classes")
         for p in template.partitions:
             cond = cond_explicit_partiton(
                 successors  = transition_system.successors,
@@ -100,7 +97,6 @@ def encode_classification_branching(
             conds.append(cond)
         
     else:
-        print("Using implicit classes")
         cond = cond_implicit_partiton(
             successors  = transition_system.successors,
             domain      = transition_system.domain,

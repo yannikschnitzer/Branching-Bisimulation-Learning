@@ -1,4 +1,5 @@
 import numpy as np
+from z3 import *
 
 from bisimulation_learning.shared.utils import *
 from bisimulation_learning.shared.binary_decision_trees import *
@@ -69,7 +70,7 @@ class BDTTemplate:
         self.m = [Int("m_%s" % i) for i in range(dim)]
         self.succ_m = [Int("succ_m_%s" % i) for i in range(dim)]
         self.w = [Int("w_%s" % i) for i in range(dim)] # only for branching wfbs
-        self.succ_w = [Int("succ_w_%s" % i) for i in range(dim)] # only for branching wfbs
+        # self.succ_w = [Int("succ_w_%s" % i) for i in range(dim)] # only for branching wfbs
         self.p = Int("p")
         self.q = Int("q")
 
@@ -80,10 +81,18 @@ class BDTTemplate:
         self.rank_params = [[Real("u_%s_%s" % (d, i)) for d in range(dim)] + [Real("c_%s" % i)] for i in range(self.num_partitions)]
         
         # linear ranking function
-        self.rank_params_branching_global = [[Real("u_0_%s" % d) for d in range(dim)], [Real("u_1_%s" % d) for d in range(dim)]]
-        tmp = [[[Real("u_%s_0_%s" % (i, d)) for d in range(dim)], [Real("u_%s_1_%s" % (i, d)) for d in range(dim)]] for i in range(self.num_partitions)]
-        self.rank_params_branching_classes = [item for row in tmp for item in row]
-        print(self.rank_params_branching_classes)
+        self.rank_params_branching_global = [
+            [Real("u_0_%s" % d) for d in range(dim)], 
+            [Real("u_1_%s" % d) for d in range(dim)]
+        ]
+        tmp = [
+            [
+                [Real("u_%s_0_%s" % (i, d)) for d in range(dim)], 
+                [Real("u_%s_1_%s" % (i, d)) for d in range(dim)]
+            ] for i in range(self.num_partitions)
+        ]
+        self.rank_params_branching_classes = [item for partition in tmp for item in partition]
+        
     
     def setup_adjacency(self):
         """
@@ -114,7 +123,7 @@ class BDTTemplate:
             return np.dot(eta[p][:-1], s) + eta[p][-1]
         
         def h_brn_impl(eta, s_0, s_1):
-            return np.dot(eta[0], s_0) + np.dot(eta[1], s_1)
+            return np.dot(eta[0], s_0) + np.dot(eta[1], s_1) # + eta[0][-1] + eta[1][-1]
         
         def h_brn_expl(eta, c, s_0, s_1):
             return np.dot(eta[c], s_0) + np.dot(eta[c + 1], s_1)
@@ -169,7 +178,6 @@ def compute_adjacency_matrix(
 
     partitions       = template.partitions
     model_params     = template.model_params
-    rank_params      = template.rank_params_branching_global
 
     adjacency_matrix = [[False for c in partitions] for d in partitions]
 
@@ -184,7 +192,7 @@ def compute_adjacency_matrix(
                     d
                 )
             else:
-                adjacency_matrix[c][d] = quotient_self_loop(
+                adjacency_matrix[c][c] = quotient_self_loop(
                     transition_system,
                     template,
                     theta,
@@ -212,10 +220,10 @@ def quotient_has_transition(
     )
     solver.add(formula)
     res = solver.check()
-    if f"{res}" == "sat":
+    if res == sat:
         return True
     else:
-        assert(f"{res}" == "unsat")
+        assert(res == unsat)
         return False
 
 def quotient_self_loop(
@@ -239,10 +247,10 @@ def quotient_self_loop(
 
     solver.add(formula)
     res = solver.check()
-    if f"{res}" == "sat":
+    if res == sat:
         return False
     else:
-        assert(f"{res}" == "unsat")
+        assert(res == unsat)
         return True
 
 
@@ -250,7 +258,7 @@ def extract_quotient_cex(conds: list, s, succ_s):
     solver = Solver()
     solver.add(simplify(Or([simplify(Not(cond)) for cond in conds])))
     resc = solver.check()
-    if f"{resc}" == "sat":
+    if resc == sat:
         model = solver.model()
         cex = [model.evaluate(d) for d in s]
         succ_cex = [model.evaluate(d) for d in succ_s]
