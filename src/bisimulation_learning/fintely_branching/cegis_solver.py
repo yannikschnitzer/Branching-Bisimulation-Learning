@@ -78,6 +78,7 @@ def guess(
         guessed_eta   = [[model.evaluate(p) for p in d] for d in eta]
         return True, (guessed_theta, guessed_eta)
     elif res == unsat:
+        print(f"[GUESS] Formula cannot be satisfied")
         return False, None
     else:
         raise Exception(f"""

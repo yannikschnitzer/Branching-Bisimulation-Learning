@@ -6,7 +6,7 @@ def term_loop_2():
 
     dim = 2
 
-    transition_system = DeterminsticTransitionSystem(
+    transition_system = DeterministicTransitionSystem(
         dim=dim,
         successor=successor_term_loop_2
     )
@@ -22,7 +22,7 @@ def term_loop_2():
     return transition_system.to_branching(), template
 
 def audio_compr():
-    ts = DeterminsticTransitionSystem(
+    ts = DeterministicTransitionSystem(
         dim = 1,
         successor=successor_audio_compr
     )

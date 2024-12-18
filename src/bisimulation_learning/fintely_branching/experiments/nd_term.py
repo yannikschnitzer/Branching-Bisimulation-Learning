@@ -212,13 +212,9 @@ def term_loop_nd_y():
 
     dim = 2
 
-    def domain(x):
-        return And(x[1] > 0)
-
     transition_system = BranchingTransitionSystem(
         dim=dim,
-        successors=successors_term_loop_nd_y,
-        domain=domain
+        successors=successors_term_loop_nd_y
     )
 
     template = BDTTemplate(

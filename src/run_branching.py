@@ -18,8 +18,11 @@ if __name__ == "__main__":
     # trs, tem = cubic()
     # trs, tem = euclid()
     # trs, tem = tte_sf(1000)
+    # trs, tem = tte_usf(10)
+    # trs, tem = con_sf(1000)
+    trs, tem = con_usf(10)
     # trs, tem = term_loop_nd()
-    trs, tem = term_loop_nd_2()
+    # trs, tem = term_loop_nd_2()
     # trs, tem = term_loop_nd_y()
     run_and_show(trs, tem)
     
