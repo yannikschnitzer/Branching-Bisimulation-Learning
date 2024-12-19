@@ -210,13 +210,14 @@ def quotient_has_transition(
     assert(c != d)
 
     successors = transition_system.successors
-    f, _, _ = template.get_template_functions()
-    s = template.m
+    domain     = transition_system.domain
+    f, _, _    = template.get_template_functions()
+    s          = template.m
     
     solver = Solver()
     formula = And(
         f(theta, s) == c,
-        Or([f(theta, u) == d for u in successors(s)])
+        Or([And(f(theta, u) == d, domain(u)) for u in successors(s)])
     )
     solver.add(formula)
     res = solver.check()
@@ -234,15 +235,15 @@ def quotient_self_loop(
     ):
 
     successors = transition_system.successors
-    s = template.m
-
-    f, _, _ = template.get_template_functions()
+    domain     = transition_system.domain
+    s          = template.m
+    f, _, _    = template.get_template_functions()
     
     solver = Solver()
 
     formula = And(
         f(theta, s) == c,
-        And([f(theta, u) != c for u in successors(s)])
+        And([Implies(domain(u), f(theta, u) != c) for u in successors(s)])
     )
 
     solver.add(formula)

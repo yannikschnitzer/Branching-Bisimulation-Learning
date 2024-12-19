@@ -27,14 +27,12 @@ def successors_term_loop_nd(s):
         s[0], 
         s[0] - 1
     )
-    succ_s_act_1[1] = s[1]
 
     # if random = true
     succ_s_act_2[0] = If(terminated, 
         s[0], 
         If(s[0] > 1, s[0] + 1, s[0] - 1)
     )
-    succ_s_act_2[1] = s[1]
 
     return [succ_s_act_1, succ_s_act_2]
 
@@ -43,19 +41,19 @@ def successors_term_loop_nd(s):
 # Labelling Function: x[0] > 1 or x[0] < -1 -> not-terminated
 def bdt_term_loop_nd(params, x, num_params, partitions):
     assert(num_params > 1)
-    u = BDTNodePoly([params[num_params], params[num_params+1]], x, params[0],
+    u = BDTNodePoly([params[num_params]], x, params[0],
                         BDTLeave(partitions[0]), BDTLeave(partitions[1]))
 
-    v = BDTNodePoly([params[num_params+2], params[num_params+3]], x, params[1],
+    v = BDTNodePoly([params[num_params+1]], x, params[1],
                         BDTLeave(partitions[1]), BDTLeave(partitions[0]))
 
     b = BDTNodePoly(
         # x <= 1
-        [RealVal(1),RealVal(0)],x, RealVal(1), 
+        [RealVal(1)],x, RealVal(1), 
         # x <= 1 => might be terminated
         BDTNodePoly(
             # -x <= 1 <=> x >= -1
-            [RealVal(-1),RealVal(0)],x, RealVal(1), 
+            [RealVal(-1)],x, RealVal(1), 
             # x >= -1 and x <= 1 => for sure terminated
             BDTLeave(partitions[2]),
             # x < -1 => for sure not terminated
@@ -69,7 +67,7 @@ def bdt_term_loop_nd(params, x, num_params, partitions):
 
 def term_loop_nd():
 
-    dim = 2
+    dim = 1
 
     transition_system = BranchingTransitionSystem(
         dim=dim,
@@ -79,7 +77,7 @@ def term_loop_nd():
     template = BDTTemplate(
         dim=dim,
         bdt_classifier=bdt_term_loop_nd,
-        num_coefficients=4,
+        num_coefficients=2,
         num_params=2,
         num_partitions=3
     )
