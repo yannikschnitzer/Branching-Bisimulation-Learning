@@ -20,21 +20,22 @@ def cond_implicit_partiton(
     well-founded bisimulation without taking any explicit partition,
     over a given *global* ranking function template h, eta
     """
+    ab = f(theta,s)
+    ac = f(theta, succ_s)
+    ae = f(theta, w)
     assumptions = And(
-        domain(s),
-        domain(succ_s),
-        domain(w),
-        f(theta, s) == f(theta, w), 
+        ab == ae, 
         Or([variables_equals(succ_s, u) for u in successors(s)])
     )
-    straight_bisimulation = [And(domain(v), f(theta, succ_s) == f(theta, v)) for v in successors(w)]        
+    straight_bisimulation = [ac == f(theta, v) for v in successors(w)]        
     stutter_on_s = And(
-        f(theta, succ_s) == f(theta, w),
+        f(theta, succ_s) == ae,
         h(eta, succ_s, succ_s) < h(eta, s, s)
     )
     # i.e. there is at least one successor v of w s.t. 
+    ad = h(eta, succ_s, w)
     stutter_on_w = [
-        And(domain(v), f(theta, s) == f(theta, v), h(eta, succ_s, v) < h(eta, succ_s, w))
+        And(ab == f(theta, v), h(eta, succ_s, v) < ad)
             for v in successors(w)]
     return Implies(
         assumptions,
@@ -48,21 +49,22 @@ def cond_explicit_partiton(
     c,
     s, succ_s, w
     ):
+    aa = f(theta, s)
+    ab = f(theta, w)
     assumptions = And(
-        domain(s),
-        domain(succ_s),
-        domain(w),
-        f(theta, s) == c, 
-        f(theta, w) == c,
+        aa == c, 
+        ab == c,
         Or([variables_equals(succ_s, u) for u in successors(s)])
     )
-    straight_bisimulation = [And(domain(v), f(theta, succ_s) == f(theta, v)) for v in successors(w)]
+    ac = f(theta, succ_s)
+    straight_bisimulation = [ac == f(theta, v) for v in successors(w)]
     stutter_on_s = And(
-        f(theta, succ_s) == c,
+        ac == c,
         h(eta, c, succ_s, succ_s) < h(eta, c, s, s)
     )
+    ad = h(eta, c, succ_s, w)
     stutter_on_w = [
-        And(domain(v), f(theta, v) == c, h(eta, c, succ_s, v) < h(eta, c, succ_s, w))
+        And(f(theta, v) == c, h(eta, c, succ_s, v) < ad)
             for v in successors(w)]
     return Implies(
         assumptions,
