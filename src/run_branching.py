@@ -28,15 +28,17 @@ def run_and_print(trs, tem: BDTTemplate):
     
 
 if __name__ == "__main__":
-    # trs, tem = cubic()
+    # trs, tem = conic()
+    # trs, tem = disjunction()
+    # trs, tem = parallel()
     # trs, tem = euclid()
     # trs, tem = tte_sf(1000)
     # trs, tem = tte_usf(10)
-    # trs, tem = con_sf(1000)
+    trs, tem = con_sf(10)
     # trs, tem = con_usf(10)
-    trs, tem = term_loop_nd()
+    # trs, tem = term_loop_nd()
     # trs, tem = term_loop_nd_2()
     # trs, tem = term_loop_nd_y()
-    # run_and_show(trs, tem)
-    run_and_print(trs, tem)
+    run_and_show(trs, tem)
+    # run_and_print(trs, tem)
     
