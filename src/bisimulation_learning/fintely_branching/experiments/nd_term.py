@@ -22,13 +22,13 @@ def successors_term_loop_nd(s):
 
     terminated = And(s[0] >= -1, s[0] <= 1)
 
-    # if random = false
+    # if nondet = false
     succ_s_act_1[0] = If(terminated, 
         s[0], 
         s[0] - 1
     )
 
-    # if random = true
+    # if nondet = true
     succ_s_act_2[0] = If(terminated, 
         s[0], 
         If(s[0] > 1, s[0] + 1, s[0] - 1)
@@ -84,6 +84,54 @@ def term_loop_nd():
 
     return transition_system, template
 
+
+"""
+P17 from [Beyne et al. 2013]
+See T2 repo.
+
+"""
+def successors_P17(s):
+    succ_s_act_1 = [v for v in s] # if random = false
+    succ_s_act_2 = [v for v in s] # if random = true
+
+    succ_s_act_1[0] = s[0] + 1
+
+    succ_s_act_2[0] = If(s[0] <= 5, 
+        1, 
+        s[0] + 1
+    )
+
+    return [succ_s_act_1, succ_s_act_2]
+
+# BDT Template - P17
+# 
+# Labelling Function: x[0] >= 1, x[0] < 1
+def bdt_P17(params, x, num_params, partitions):
+        b = BDTNodePoly([RealVal(1)],x, RealVal(5), 
+                BDTNodePoly([params[num_params]], x, params[0],
+                                BDTLeave(partitions[0]), BDTLeave(partitions[1])),
+                BDTNodePoly([params[num_params+1]], x, params[1],
+                                BDTLeave(partitions[2]), BDTLeave(partitions[3]))
+                )
+        return b.formula(), b
+def P17():
+    dim = 1
+
+    transition_system = BranchingTransitionSystem(
+        dim,
+        successors = successors_P17
+    )
+
+
+    template = BDTTemplate(
+        dim=dim,
+        bdt_classifier=bdt_P17,
+        num_coefficients=2,
+        num_params=2,
+        num_partitions=4
+    )
+
+    return transition_system, template
 
 """
 Branching system termination (2)
