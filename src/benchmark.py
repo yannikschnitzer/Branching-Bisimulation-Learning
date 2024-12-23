@@ -8,19 +8,6 @@ from bisimulation_learning.deterministic.experiments import *
 from bisimulation_learning.fintely_branching.experiments import *
 from bisimulation_learning.fintely_branching.cegis_solver import *
 
-# experiments = [
-#     (term_loop_2, exp_term_loop_2),
-#     (audio_compr, exp_audio_compr),
-#     (euclid, exp_euclid),
-#     (greater, exp_greater),
-#     (smaller, exp_smaller),
-#     (conic, exp_conic),
-#     (disjunction, exp_disjunction),
-#     (parallel, exp_parallel),
-#     (quadratic, exp_quadratic),
-#     (cubic, exp_cubic),
-#     (nlr_cond, exp_nlr_cond)
-# ]
 
 experiments = [
     # (tte_sf(10), exp_tte_sf_10),
@@ -36,17 +23,17 @@ experiments = [
     # (tte_usf(5000), exp_tte_usf_5000),
     # (tte_usf(10000), exp_tte_usf_10000),
     # (con_sf(10), exp_con_sf_10),
-    (con_sf(100), exp_con_sf_100),
-    (con_sf(1000), exp_con_sf_1000),
-    (con_sf(2000), exp_con_sf_2000),
-    (con_sf(5000), exp_con_sf_5000),
+    # (con_sf(100), exp_con_sf_100),
+    # (con_sf(1000), exp_con_sf_1000),
+    # (con_sf(2000), exp_con_sf_2000),
+    # (con_sf(5000), exp_con_sf_5000),
     # (con_sf(10000), exp_con_sf_10000),
-    # (con_usf(10), exp_con_usf_10),
-    # (con_usf(100), exp_con_usf_100),
-    # (con_usf(1000), exp_con_usf_1000),
-    # (con_usf(2000), exp_con_usf_2000),
-    # (con_usf(5000), exp_con_usf_5000),
-    # (con_usf(10000), exp_con_usf_10000)
+    (con_usf(10), exp_con_usf_10),
+    (con_usf(100), exp_con_usf_100),
+    (con_usf(1000), exp_con_usf_1000),
+    (con_usf(2000), exp_con_usf_2000),
+    (con_usf(5000), exp_con_usf_5000),
+    (con_usf(10000), exp_con_usf_10000)
 ]
 
 def compute_branching_abstract_system(trs, tem, explicit_classes):

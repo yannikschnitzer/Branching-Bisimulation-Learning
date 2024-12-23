@@ -40,7 +40,7 @@ def guess_and_check(
             else:
                 counterexamples += new_cexs
         else:
-            return False, None
+            raise Exception("Unexpected failure for guess operation. Perhap")
     return False, None
 
 

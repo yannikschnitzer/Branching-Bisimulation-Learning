@@ -20,22 +20,22 @@ def cond_implicit_partiton(
     well-founded bisimulation without taking any explicit partition,
     over a given *global* ranking function template h, eta
     """
-    ab = f(theta,s)
-    ac = f(theta, succ_s)
-    ae = f(theta, w)
+    class_s      = f(theta,s)
+    class_succ_s = f(theta, succ_s)
+    class_w      = f(theta, w)
     assumptions = And(
-        ab == ae, 
+        class_s == class_w, 
         Or([variables_equals(succ_s, u) for u in successors(s)])
     )
-    straight_bisimulation = [ac == f(theta, v) for v in successors(w)]        
+    straight_bisimulation = [class_succ_s == f(theta, v) for v in successors(w)]        
     stutter_on_s = And(
-        f(theta, succ_s) == ae,
+        f(theta, succ_s) == class_w,
         h(eta, succ_s, succ_s) < h(eta, s, s)
     )
     # i.e. there is at least one successor v of w s.t. 
     ad = h(eta, succ_s, w)
     stutter_on_w = [
-        And(ab == f(theta, v), h(eta, succ_s, v) < ad)
+        And(class_s == f(theta, v), h(eta, succ_s, v) < ad)
             for v in successors(w)]
     return Implies(
         assumptions,
@@ -49,17 +49,17 @@ def cond_explicit_partiton(
     c,
     s, succ_s, w
     ):
-    aa = f(theta, s)
-    ab = f(theta, w)
+    class_s = f(theta, s)
+    class_w = f(theta, w)
     assumptions = And(
-        aa == c, 
-        ab == c,
+        class_s == c, 
+        class_w == c,
         Or([variables_equals(succ_s, u) for u in successors(s)])
     )
-    ac = f(theta, succ_s)
-    straight_bisimulation = [ac == f(theta, v) for v in successors(w)]
+    class_succ_s = f(theta, succ_s)
+    straight_bisimulation = [class_succ_s == f(theta, v) for v in successors(w)]
     stutter_on_s = And(
-        ac == c,
+        class_succ_s == c,
         h(eta, c, succ_s, succ_s) < h(eta, c, s, s)
     )
     ad = h(eta, c, succ_s, w)
