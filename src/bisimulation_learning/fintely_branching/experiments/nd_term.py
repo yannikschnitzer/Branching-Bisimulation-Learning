@@ -322,3 +322,129 @@ def term_loop_nd_y():
 
     return transition_system, template
 
+def successors_robots(s):
+    """
+    The nondeterministic inputs are:
+    id: the id of the robot to move
+    a : the first transformation parameter
+    b : the second transformation parameter
+    """
+    """
+    We first fix a and b so that the program is simpler.
+    """
+    a = 0
+    b = 1
+    """
+    We have to model the program in a way that it can learn by 
+    itself to recognize the partition.
+
+    That is: when encountering the "all robots in same place" state,
+    it halts.
+    """
+    x_indexes = [0, 2, 4]
+    y_indexes = [1, 3, 5]
+    big_crash = And(
+        [s[x_indexes[i]] == s[x_indexes[(i + 1) % 3]] for i in range(3)]
+        + [s[y_indexes[i]] == s[y_indexes[(i + 1) % 3]] for i in range(3)]
+    )
+    # User decides which robot moves
+    """
+    Robot 1:
+    x_1 := x_1 + 2a + b
+    y_1 := y_1
+    """
+    robot_1 = [x for x in s]
+    # robot_1[0] = s[0] + 2 * a + b
+    robot_1[0] = If(big_crash, s[0], s[0] + 1)
+    robot_1[1] = s[1]
+    # x_2, y_2, x_3, y_3
+    robot_1[2] = s[2]
+    robot_1[3] = s[3]
+    robot_1[4] = s[4]
+    robot_1[5] = s[5]
+    """
+    Robot 2:
+    x_2 := x_2 + a + b
+    y_2 := y_2 - 2a - 2b
+    """
+    robot_2 = [x for x in s]
+    robot_2[0] = s[0]
+    robot_2[1] = s[1]
+    # robot_2[2] = s[2] + a + b
+    # robot_2[3] = s[3] - 2 * a - 2 * b
+    robot_2[2] = If(big_crash, s[2], s[2] + 1)
+    robot_2[3] = If(big_crash, s[3], s[3] - 2)
+    robot_2[4] = s[4]
+    robot_2[5] = s[5]
+    """
+    Robot 3:
+    x_3 := x_3 + a + b
+    y_3 := y_3 - a - b
+    """
+    robot_3 = [x for x in s]
+    robot_3[0] = s[0]
+    robot_3[1] = s[1]
+    robot_3[2] = s[2]
+    robot_3[3] = s[3]
+    # robot_3[4] = s[4] + a + b
+    # robot_3[5] = s[5] - a - b
+    robot_3[4] = If(big_crash, s[4], s[4] + 1)
+    robot_3[5] = If(big_crash, s[5], s[5] - 2)
+    return [robot_1, robot_2, robot_3]
+
+def bdt_robots(params, x, num_params, partitions):
+    """
+    The BDT for robots (safety) has to discern the three
+    abstract states of interest:
+    - 0 : the three robots are in the same position
+    - 1 : at least two robots are in different positions
+    - 2 : the three robots are in an impossible position
+
+    The "impossible" position is such that robot_1 < robot_2,
+    i.e. x_1 < x_2 + y_2
+        [ that's the case since y_2 = -2 * x_2 and with chosen a an db
+            x_1 >= 0 and x_2 >= 0, since they start as x_1 = 0 and x_2 = 0 ]
+    so that with the initial values given in the source paper, the states
+    in this region are unreachable.
+    
+    Basically our aim is to verify that 1 -/-> 0,
+    other states relations are interest of another scope.
+
+    We pilot manually the node for a state to be unreachable,
+    the other node's parameters are to be learned and discern
+    whether it's in 0 or 1.
+    """
+    b = BDTNodePoly(
+        # r_2 <= r_1
+        [RealVal(-1) ,RealVal(-1), RealVal(1), RealVal(1), RealVal(0), RealVal(0)], x, RealVal(0), 
+        # True => check further
+        BDTNodePoly(
+            [params[num_params+i] for i in range(6)], x, params[0],
+            BDTLeave(partitions[0]), 
+            BDTLeave(partitions[1])
+        ),
+        # False => Unreachable state 
+        BDTLeave(partitions[2])
+        )
+    return b.formula(), b
+
+def robots():
+    """
+    Example taken from section 4 (Case Study 1) from the paper
+    of Carelli and Grumberg.
+    It features three concurrent robots that change their position
+    each depending on a different linear transformation.
+    """
+    dim = 6
+    trs = BranchingTransitionSystem(
+        dim = dim,
+        successors = successors_robots
+    )
+    tem = BDTTemplate(
+        dim = dim,
+        bdt_classifier = bdt_robots,
+        num_params = 1,
+        num_coefficients = 6,
+        num_partitions = 3
+    )
+    return trs, tem

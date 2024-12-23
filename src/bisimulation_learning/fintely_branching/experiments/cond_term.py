@@ -82,3 +82,88 @@ def smaller():
     )
 
     return trs.to_branching(), tem
+
+def conic():
+    trs = DeterministicTransitionSystem(
+        dim=2,
+        successor=successor_conic
+    )
+    tem = BDTTemplate(
+        bdt_classifier=bdt_conic,
+        num_params=2,
+        num_coefficients=4,
+        num_partitions=3,
+        dim=2
+    )
+    return trs.to_branching(), tem
+
+def disjunction():
+    trs = DeterministicTransitionSystem(
+        dim=3,
+        successor=successor_disjunction
+    )
+    tem = BDTTemplate(
+        bdt_classifier=bdt_disjunction,
+        num_params=1,
+        num_coefficients=3,
+        num_partitions=3,
+        dim=3
+    )
+    return trs.to_branching(), tem
+
+
+def parallel():
+    trs = DeterministicTransitionSystem(
+        dim=2,
+        successor=successor_parallel
+    )
+    tem = BDTTemplate(
+        bdt_classifier=bdt_parallel,
+        num_params=2,
+        num_coefficients=4,
+        num_partitions=3,
+        dim=2
+    )
+    return trs.to_branching(), tem
+
+def quadratic():
+    trs = DeterministicTransitionSystem(
+        dim=1,
+        successor=successor_quadratic
+    )
+    tem = BDTTemplate(
+        bdt_classifier=bdt_quadratic,
+        num_params=2,
+        num_coefficients=2,
+        num_partitions=4,
+        dim=1
+    )
+    return trs.to_branching(), tem
+
+def cubic():
+    trs = DeterministicTransitionSystem(
+        dim=1,
+        successor=successor_cubic
+    )
+    tem = BDTTemplate(
+        bdt_classifier=bdt_cubic,
+        num_params=2,
+        num_coefficients=2,
+        num_partitions=4,
+        dim=1
+    )
+    return trs.to_branching(), tem
+
+def nlr_cond():
+    trs = DeterministicTransitionSystem(
+        dim=1,
+        successor=successor_nlr_cond
+    )
+    tem = BDTTemplate(
+        bdt_classifier=bdt_nlr_cond,
+        num_params=2,
+        num_coefficients=2,
+        num_partitions=4,
+        dim=1
+    )
+    return trs.to_branching(), tem
