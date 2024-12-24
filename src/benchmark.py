@@ -1,6 +1,7 @@
 from argparse import ArgumentParser
 import time
 import numpy as np
+from scipy import stats
 
 from bisimulation_learning.shared import *
 from bisimulation_learning.deterministic.experiment_runner import *
@@ -17,17 +18,17 @@ experiments = [
     # (tte_sf(5000), exp_tte_sf_5000),
     # (tte_sf(10000), exp_tte_sf_10000),
     # (tte_usf(10), exp_tte_usf_10),
-    # (tte_usf(100), exp_tte_usf_100),
-    # (tte_usf(1000), exp_tte_usf_1000),
-    # (tte_usf(2000), exp_tte_usf_2000),
-    # (tte_usf(5000), exp_tte_usf_5000),
-    # (tte_usf(10000), exp_tte_usf_10000),
-    # (con_sf(10), exp_con_sf_10),
-    # (con_sf(100), exp_con_sf_100),
-    # (con_sf(1000), exp_con_sf_1000),
-    # (con_sf(2000), exp_con_sf_2000),
-    # (con_sf(5000), exp_con_sf_5000),
-    # (con_sf(10000), exp_con_sf_10000),
+    (tte_usf(100), exp_tte_usf_100),
+    (tte_usf(1000), exp_tte_usf_1000),
+    (tte_usf(2000), exp_tte_usf_2000),
+    (tte_usf(5000), exp_tte_usf_5000),
+    (tte_usf(10000), exp_tte_usf_10000),
+    (con_sf(10), exp_con_sf_10),
+    (con_sf(100), exp_con_sf_100),
+    (con_sf(1000), exp_con_sf_1000),
+    (con_sf(2000), exp_con_sf_2000),
+    (con_sf(5000), exp_con_sf_5000),
+    (con_sf(10000), exp_con_sf_10000),
     (con_usf(10), exp_con_usf_10),
     (con_usf(100), exp_con_usf_100),
     (con_usf(1000), exp_con_usf_1000),
@@ -44,13 +45,25 @@ def compare_times(branching, deterministic, iters = 10, explicit_classes = True)
     trs, tem = branching
     branching_times = []
     for i in range(iters):
-        branching_start_time = time.time()
-        compute_branching_abstract_system(trs, tem, explicit_classes)
-        branching_end_time = time.time()
-        branching_times.append(branching_end_time - branching_start_time)
-        print(f"--- Branching Formula {i}: {branching_times[-1]}s expired ")
+        done = False
+        while not done:
+            try:
+                branching_start_time = time.time()
+                compute_branching_abstract_system(trs, tem, explicit_classes)
+                branching_end_time = time.time()
+                branching_times.append(branching_end_time - branching_start_time)
+                print(f"--- Branching Formula {i}: {branching_times[-1]}s expired ")
+                done = True
+            except:
+                # Perhaps unlucky with the "randomized part" of the sat solver, 
+                # so we try again
+                done = False
+
+
+            
     brn_avg = np.average(branching_times)
-    print(f"--- Branching Formulas - Average expired time is {brn_avg}s")
+    brn_sem = stats.sem(branching_times)
+    print(f"--- Branching Formulas - Average expired time is {brn_avg}s +/- {brn_sem}")
 
     deterministic_times = []
     exp = deterministic()
@@ -61,8 +74,9 @@ def compare_times(branching, deterministic, iters = 10, explicit_classes = True)
         deterministic_times.append(branching_end_time - branching_start_time)
         print(f"--- Deterministic Formula {i}: {deterministic_times[-1]}s expired ")
     det_avg = np.average(deterministic_times)
-    print(f"--- Deterministic Formulas - Average expired time is {det_avg}s")
-    return exp.name, brn_avg, det_avg
+    det_sem = stats.sem(deterministic_times)
+    print(f"--- Deterministic Formulas - Average expired time is {det_avg}s +/- {det_sem}")
+    return exp.name, brn_avg, det_avg, brn_sem, det_sem
 
 if __name__ == "__main__":
     arg_parser = ArgumentParser(
@@ -88,10 +102,10 @@ if __name__ == "__main__":
     for (branching, deterministic) in experiments:
         experiment = deterministic()
         print(f"Running experiment {experiment.name}")
-        name, brn_avg, det_avg = compare_times(branching, deterministic, iters, explicit_classes)
+        name, brn_avg, det_avg, brn_sem, det_sem = compare_times(branching, deterministic, iters, explicit_classes)
         print(f"End experiment {experiment.name}")
         if output_file is not None:
             with open(output_file, 'a') as out:
-                out.write(f"{name}  & {det_avg} & {brn_avg} \\\\\n")
+                out.write(f"{name}  & {det_avg} \\pm {det_sem} & {brn_avg} \\pm {brn_sem} \\\\\n")
 
     
