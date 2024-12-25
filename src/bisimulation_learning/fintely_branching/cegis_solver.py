@@ -3,6 +3,7 @@ from bisimulation_learning.shared import *
 from z3 import *
 from bisimulation_learning.fintely_branching.conditions import *
 
+solver = Solver()
 
 def bisimulation_learning(
     transition_system: BranchingTransitionSystem, 
@@ -30,7 +31,7 @@ def guess_and_check(
     iters = 10,
     explicit_classes = False
     ):
-    counterexamples = get_initial_samples(10, transition_system)
+    counterexamples = []#get_initial_samples(10, transition_system)
     solver = Solver()
     for _ in range(iters):
         verified, (theta, eta) = guess(solver, transition_system, template, counterexamples, explicit_classes)
@@ -39,7 +40,7 @@ def guess_and_check(
             if len(new_cexs) == 0:
                 return True, (theta, eta)
             else:
-                counterexamples = new_cexs
+                counterexamples += new_cexs
         else:
             raise Exception("Unexpected failure for guess operation. Perhap")
     return False, None
@@ -76,8 +77,7 @@ def guess(
             explicit_classes    = explicit_classes
         )
     
-    solver.push()
-  
+    solver.reset()
     for formula in formulas:
         solver.add(simplify(formula))
     
