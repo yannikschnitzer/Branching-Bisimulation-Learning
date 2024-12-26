@@ -44,16 +44,16 @@ def exp_term_loop_1():
         """
             Domain bounding x[1] to be a boolean (not-terminated / terminated)
         """
-        return simplify(And(x[1] >= 0 , x[1] <= 1))
+        return True
 
     exp = Experiment("term-loop-1",
                       bdt_term_loop_1,
                       successor_term_loop_1,
                       domain,
-                      num_params = 2,
-                      num_coefficients = 2,
+                      num_params = 1,
+                      num_coefficients = 1,
                       num_partitions = 3,
-                      dim = 2,
+                      dim = 1,
                       num_initial = 10
                       )
     return exp

@@ -1,6 +1,24 @@
 
 from bisimulation_learning.deterministic.experiments import *
 
+def term_loop_1():
+
+    dim = 1
+
+    transition_system = DeterministicTransitionSystem(
+        dim=dim,
+        successor=successor_term_loop_1
+    )
+
+    template = BDTTemplate(
+        dim=dim,
+        bdt_classifier=bdt_term_loop_1,
+        num_coefficients=1,
+        num_params=1,
+        num_partitions=3
+    )
+
+    return transition_system.to_branching(), template
 
 def term_loop_2():
 

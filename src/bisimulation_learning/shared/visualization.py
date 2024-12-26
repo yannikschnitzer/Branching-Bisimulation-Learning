@@ -45,8 +45,8 @@ def transform_ctx(ctxs, in_view):
     return np.array(res)
     
 def visualize(mp, exp : Experiment, acc, save = False):
-    x_min, x_max = -3, 10
-    y_min, y_max = -3, 10
+    x_min, x_max = -3, 10003
+    y_min, y_max = -3, 25003
     xx, yy = np.meshgrid(np.arange(x_min, x_max, acc), np.arange(y_min, y_max, acc))
 
     #print(len(np.around(np.c_[xx.ravel(), yy.ravel()], decimals = 3)))
@@ -100,4 +100,4 @@ def visualize_branching(theta, t: BDTTemplate):
         dim=None,
         domain=None
     )
-    visualize(theta, exp, 0.2, save = False)
+    visualize(theta, exp, 100, save = False)

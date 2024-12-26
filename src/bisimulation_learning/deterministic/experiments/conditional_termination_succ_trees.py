@@ -23,15 +23,14 @@ __status__ = "Experimental - Artifact Evaluation"
 # while(x != 0):
 #   x--;
 #
-# Dimension: 2
+# Dimension: 1
 # Notes: Set valid variables in domain to bound x[1] to {0,1}
 def successor_term_loop_1(x):
     y = [i for i in x]
 
     valid_vars = True #And(x[0] >= -r ,x[0] <= r, x[1] >= 0,x[1] <= 1)
 
-    y[0] = simplify(If(valid_vars, If(Or(x[0] == 0, y[1] == 1), x[0], x[0] - 1), y[0]))
-    y[1] = simplify(If(valid_vars, If(Or(x[0] == 0, y[1] == 1) , 1, 0), y[1])) # Variable y[1] marks whether program terminated, y[1] = 1 <-> terminated
+    y[0] = simplify(If(valid_vars, If(x[0] == 0, x[0], x[0] - 1), y[0]))
 
     return y
 
@@ -234,8 +233,8 @@ def successor_nlr_cond(x):
 # 
 # Labelling Function: x[1] = 0 -> not-terminated, x[1] = 1 -> terminated
 def bdt_term_loop_1(params, x, num_params, partitions):
-        b = BDTNodePoly([RealVal(0),RealVal(1)],x, RealVal(0), 
-                BDTNodePoly([params[num_params], params[num_params+1]], x, params[0],
+        b = BDTNodePoly([RealVal(1)],x, RealVal(0), 
+                BDTNodePoly([params[num_params]], x, params[0],
                                 BDTLeave(partitions[0]), BDTLeave(partitions[1])),
                 BDTLeave(partitions[2])
                 )

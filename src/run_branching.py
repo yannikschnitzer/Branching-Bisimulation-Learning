@@ -9,8 +9,8 @@ def run_and_show(trs, tem):
     draw_quotient(gamma, "Default Name")
     visualize_branching(theta, tem)
 
-def run_and_print(trs, tem: BDTTemplate):
-    theta, eta = bisimulation_learning(trs, tem, iters=100, explicit_classes=True)
+def run_and_print(trs, tem: BDTTemplate, expl: False):
+    theta, eta = bisimulation_learning(trs, tem, iters=100, explicit_classes=expl)
     print(f"""
     theta = {theta},
     eta   = {eta} 
@@ -39,7 +39,8 @@ if __name__ == "__main__":
     # trs, tem = term_loop_nd()
     # trs, tem = term_loop_nd_2()
     # trs, tem = term_loop_nd_y()
+    # trs, tem = term_loop_nd_y()
     # run_and_show(trs, tem)
     trs, tem = robots()
-    run_and_print(trs, tem)
+    run_and_print(trs, tem, expl = True)
     

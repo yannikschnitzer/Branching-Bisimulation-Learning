@@ -13,7 +13,7 @@ __version__ = "1.0.0"
 __email__ = "yannik.schnitzer@cs.ox.ac.uk"
 __status__ = "Experimental - Artifact Evaluation"
 
-def run_experiment(exp : Experiment, benchmark_time = False, num_reps = 10, type = "cegis", verbose = False, vis = False, save_res = False):
+def run_experiment(exp : Experiment, benchmark_time = False, num_reps = 1000, type = "cegis", verbose = False, vis = False, save_res = False):
     """
         Run Experiment with given configuration.
     """

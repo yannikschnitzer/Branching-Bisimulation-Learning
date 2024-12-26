@@ -9,54 +9,20 @@ from bisimulation_learning.fintely_branching.experiments import *
 from bisimulation_learning.fintely_branching.cegis_solver import *
 set_param('smt.random_seed', 42)
 
-experiments_term = [
-    (term_loop_1(), exp_term_loop_1),
-    (term_loop_2(), exp_term_loop_2),
-    (audio_compr(), exp_audio_compr),
-    (euclid(), exp_euclid),
-    (greater(), exp_greater),
-    (smaller(), exp_smaller),
-    (conic(), exp_conic),
-    (disjunction(), exp_disjunction),
-    (parallel(), exp_parallel),
-    (quadratic(), exp_quadratic),
-    (cubic(), exp_cubic),
-    (nlr_cond(), exp_nlr_cond)
-]
-
-experiments_clock = [
-    (tte_sf(10), exp_tte_sf_10),
-    (tte_sf(100), exp_tte_sf_100),
-    (tte_sf(1000), exp_tte_sf_1000),
-    (tte_sf(2000), exp_tte_sf_2000),
-    (tte_sf(5000), exp_tte_sf_5000),
-    (tte_sf(10000), exp_tte_sf_10000),
-    (tte_usf(10), exp_tte_usf_10),
-    (tte_usf(100), exp_tte_usf_100),
-    (tte_usf(1000), exp_tte_usf_1000),
-    (tte_usf(2000), exp_tte_usf_2000),
-    (tte_usf(5000), exp_tte_usf_5000),
-    (tte_usf(10000), exp_tte_usf_10000),
-    (con_sf(10), exp_con_sf_10),
-    (con_sf(100), exp_con_sf_100),
-    (con_sf(1000), exp_con_sf_1000),
-    (con_sf(2000), exp_con_sf_2000),
-    (con_sf(5000), exp_con_sf_5000),
-    (con_sf(10000), exp_con_sf_10000),
-    (con_usf(10), exp_con_usf_10),
-    (con_usf(100), exp_con_usf_100),
-    (con_usf(1000), exp_con_usf_1000),
-    (con_usf(2000), exp_con_usf_2000),
-    (con_usf(5000), exp_con_usf_5000),
-    (con_usf(10000), exp_con_usf_10000)
+experiments = [
+    term_loop_nd,
+    term_loop_nd_2,
+   # term_loop_nd_y,
+    P17,
+    P18,
 ]
 
 def compute_branching_abstract_system(trs, tem, explicit_classes):
     theta, eta = bisimulation_learning(trs, tem, 1000, explicit_classes)
     gamma = compute_adjacency_matrix(trs, tem, theta)
 
-def compare_times(branching, deterministic, iters = 10, explicit_classes = True):
-    trs, tem = branching
+def compare_times(branching, iters = 10, explicit_classes = True):
+    trs, tem = branching()
     branching_times_impl = []
     for i in range(iters):
         branching_start_time = time.time()
@@ -68,7 +34,7 @@ def compare_times(branching, deterministic, iters = 10, explicit_classes = True)
     brn_std = np.std(branching_times_impl)
     print(f"--- Branching Implicit Formulas - Average expired time is {brn_avg}s - STD: {brn_std}")
 
-    trs, tem = branching
+    trs, tem = branching()
     branching_times_expl = []
     for i in range(iters):
         branching_start_time = time.time()
@@ -80,18 +46,7 @@ def compare_times(branching, deterministic, iters = 10, explicit_classes = True)
     brn_std = np.std(branching_times_expl)
     print(f"--- Branching Explicit Formulas - Average expired time is {brn_avg}s - STD: {brn_std}")
 
-    deterministic_times = []
-    exp = deterministic()
-    for i in range(iters):
-        branching_start_time = time.time()
-        run_experiment(exp)
-        branching_end_time = time.time()
-        deterministic_times.append(branching_end_time - branching_start_time)
-        print(f"--- Deterministic Formula {i}: {deterministic_times[-1]}s expired ")
-    det_avg = np.average(deterministic_times)
-    det_std = np.std(deterministic_times)
-    print(f"--- Deterministic Formulas - Average expired time is {det_avg}s - STD: {det_std}")
-    return exp.name, brn_avg, det_avg
+    return brn_avg
 
 if __name__ == "__main__":
     arg_parser = ArgumentParser(
@@ -114,13 +69,12 @@ if __name__ == "__main__":
 
     output_file = args.output_file
 
-    for (branching, deterministic) in experiments_term:
-        experiment = deterministic()
-        print(f"Running experiment {experiment.name}")
-        name, brn_avg, det_avg = compare_times(branching, deterministic, iters, explicit_classes)
-        print(f"End experiment {experiment.name}\n")
+    for branching in experiments:
+        print(f"Running experiment {str(branching)}")
+        brn_avg = compare_times(branching, iters, explicit_classes)
+        print(f"End experiment {str(branching)}\n")
         if output_file is not None:
             with open(output_file, 'a') as out:
-                out.write(f"{name}  & {det_avg} & {brn_avg} \\\\\n")
+                out.write(f"{brn_avg} \\\\\n")
 
     
