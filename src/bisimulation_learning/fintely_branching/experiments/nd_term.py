@@ -332,7 +332,7 @@ def successors_robots(s):
     """
     We first fix a and b so that the program is simpler.
     """
-    a = 0
+    a = 1
     b = 1
     """
     We have to model the program in a way that it can learn by 

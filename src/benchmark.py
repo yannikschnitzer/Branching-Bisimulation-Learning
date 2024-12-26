@@ -9,7 +9,22 @@ from bisimulation_learning.fintely_branching.experiments import *
 from bisimulation_learning.fintely_branching.cegis_solver import *
 set_param('smt.random_seed', 42)
 
-experiments = [
+experiments_term = [
+    (term_loop_1(), exp_term_loop_1),
+    (term_loop_2(), exp_term_loop_2),
+    (audio_compr(), exp_audio_compr),
+    (euclid(), exp_euclid),
+    (greater(), exp_greater),
+    (smaller(), exp_smaller),
+    (conic(), exp_conic),
+    (disjunction(), exp_disjunction),
+    (parallel(), exp_parallel),
+    (quadratic(), exp_quadratic),
+    (cubic(), exp_cubic),
+    (nlr_cond(), exp_nlr_cond)
+]
+
+experiments_clock = [
     (tte_sf(10), exp_tte_sf_10),
     (tte_sf(100), exp_tte_sf_100),
     (tte_sf(1000), exp_tte_sf_1000),
@@ -99,11 +114,11 @@ if __name__ == "__main__":
 
     output_file = args.output_file
 
-    for (branching, deterministic) in experiments:
+    for (branching, deterministic) in experiments_term:
         experiment = deterministic()
         print(f"Running experiment {experiment.name}")
         name, brn_avg, det_avg = compare_times(branching, deterministic, iters, explicit_classes)
-        print(f"End experiment {experiment.name}")
+        print(f"End experiment {experiment.name}\n")
         if output_file is not None:
             with open(output_file, 'a') as out:
                 out.write(f"{name}  & {det_avg} & {brn_avg} \\\\\n")
