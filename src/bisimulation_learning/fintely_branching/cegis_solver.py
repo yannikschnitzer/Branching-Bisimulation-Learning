@@ -38,7 +38,7 @@ def guess_and_check(
     
     solver = Solver()
     for _ in range(iters):
-        verified, (theta, eta) = guess(solver, transition_system, template, counterexamples, explicit_classes, formulas, new_cexs)
+        verified, (theta, eta) = guess(solver, transition_system, template, explicit_classes, formulas, new_cexs)
         if verified:
             new_cexs = check(transition_system, template, theta, eta, explicit_classes)
             if len(new_cexs) == 0:
@@ -60,8 +60,7 @@ def get_initial_samples(num: Int, ts: BranchingTransitionSystem, mr = 0,r = 10,d
 def guess(
     solver: Solver,
     transition_system: BranchingTransitionSystem, 
-    template: BDTTemplate, 
-    counterexamples,
+    template: BDTTemplate,
     explicit_classes = False,
     formulas = [],
     new_cexs = []

@@ -256,8 +256,8 @@ def term_loop_nd_2():
 Branching system termination (y)
 
 three states:
-x >= 3 can either loop into itself, or go in x > 0 and x < 3
-x > 0 and x < 3 can only go into x <= 0
+x >= y can either loop into itself, or go in x > 0 and x < y
+x > 0 and x < y can only go into x <= 0
 x <= 0 can only loop (terminated)
 
 while x >= 1 do
