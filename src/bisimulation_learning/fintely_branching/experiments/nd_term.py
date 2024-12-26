@@ -330,9 +330,10 @@ def successors_robots(s):
     b : the second transformation parameter
     """
     """
-    We first fix a and b so that the program is simpler.
+    We first fix a and b so that the program is simpler
+    (i.e. we assume the user will always input those values)
     """
-    a = 1
+    a = 0
     b = 1
     """
     We have to model the program in a way that it can learn by 
@@ -343,9 +344,9 @@ def successors_robots(s):
     """
     x_indexes = [0, 2, 4]
     y_indexes = [1, 3, 5]
-    big_crash = And(
-        [s[x_indexes[i]] == s[x_indexes[(i + 1) % 3]] for i in range(3)]
-        + [s[y_indexes[i]] == s[y_indexes[(i + 1) % 3]] for i in range(3)]
+    all_crash = And(
+        s[0] == s[2], s[2] == s[4], s[4] == s[0],
+        s[1] == s[3], s[3] == s[5], s[5] == s[1]
     )
     # User decides which robot moves
     """
@@ -355,7 +356,7 @@ def successors_robots(s):
     """
     robot_1 = [x for x in s]
     # robot_1[0] = s[0] + 2 * a + b
-    robot_1[0] = If(big_crash, s[0], s[0] + 1)
+    robot_1[0] = If(all_crash, robot_1[0], robot_1[0] + 1)
     robot_1[1] = s[1]
     # x_2, y_2, x_3, y_3
     robot_1[2] = s[2]
@@ -372,8 +373,8 @@ def successors_robots(s):
     robot_2[1] = s[1]
     # robot_2[2] = s[2] + a + b
     # robot_2[3] = s[3] - 2 * a - 2 * b
-    robot_2[2] = If(big_crash, s[2], s[2] + 1)
-    robot_2[3] = If(big_crash, s[3], s[3] - 2)
+    robot_2[2] = If(all_crash, robot_2[2], robot_2[2] + 1)
+    robot_2[3] = If(all_crash, robot_2[3], robot_2[3] - 2)
     robot_2[4] = s[4]
     robot_2[5] = s[5]
     """
@@ -388,8 +389,8 @@ def successors_robots(s):
     robot_3[3] = s[3]
     # robot_3[4] = s[4] + a + b
     # robot_3[5] = s[5] - a - b
-    robot_3[4] = If(big_crash, s[4], s[4] + 1)
-    robot_3[5] = If(big_crash, s[5], s[5] - 2)
+    robot_3[4] = If(all_crash, robot_3[4], robot_3[4] + 1)
+    robot_3[5] = If(all_crash, robot_3[5], robot_3[5] - 1)
     return [robot_1, robot_2, robot_3]
 
 def bdt_robots(params, x, num_params, partitions):
@@ -416,7 +417,7 @@ def bdt_robots(params, x, num_params, partitions):
     """
     b = BDTNodePoly(
         # r_2 <= r_1
-        [RealVal(-1) ,RealVal(-1), RealVal(1), RealVal(1), RealVal(0), RealVal(0)], x, RealVal(0), 
+        [RealVal(-1), RealVal(-1), RealVal(1), RealVal(1), RealVal(0), RealVal(0)], x, RealVal(0), 
         # True => check further
         BDTNodePoly(
             [params[num_params+i] for i in range(6)], x, params[0],
