@@ -31,10 +31,14 @@ def guess_and_check(
     iters = 10,
     explicit_classes = False
     ):
+
     counterexamples = []#get_initial_samples(10, transition_system)
+    new_cexs = []
+    formulas = []
+    
     solver = Solver()
     for _ in range(iters):
-        verified, (theta, eta) = guess(solver, transition_system, template, counterexamples, explicit_classes)
+        verified, (theta, eta) = guess(solver, transition_system, template, counterexamples, explicit_classes, formulas, new_cexs)
         if verified:
             new_cexs = check(transition_system, template, theta, eta, explicit_classes)
             if len(new_cexs) == 0:
@@ -58,14 +62,15 @@ def guess(
     transition_system: BranchingTransitionSystem, 
     template: BDTTemplate, 
     counterexamples,
-    explicit_classes = False
+    explicit_classes = False,
+    formulas = [],
+    new_cexs = []
     ):
 
     theta    = template.model_params
     eta      = template.rank_params_branching_classes if explicit_classes else template.rank_params_branching_global
-    formulas = []
 
-    for (s, succ_s, w) in counterexamples:
+    for (s, succ_s, w) in new_cexs:
         formulas += encode_classification_branching(
             transition_system   = transition_system,
             template            = template,
