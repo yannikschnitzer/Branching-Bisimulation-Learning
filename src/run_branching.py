@@ -41,6 +41,6 @@ if __name__ == "__main__":
     # trs, tem = term_loop_nd_y()
     # trs, tem = term_loop_nd_y()
     # run_and_show(trs, tem)
-    #trs, tem = robots()
+    trs, tem = robots()
     run_and_print(trs, tem, expl = True)
     
