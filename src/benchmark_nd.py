@@ -9,11 +9,12 @@ from bisimulation_learning.fintely_branching.experiments import *
 from bisimulation_learning.fintely_branching.cegis_solver import *
 
 experiments = [
-    term_loop_nd,
-    term_loop_nd_2,
-   # term_loop_nd_y,
-    P17,
-    P18,
+#     term_loop_nd,
+#     term_loop_nd_2,
+#    # term_loop_nd_y,
+#     P17,
+#     P18,
+    P20,
 ]
 
 experiments_robot = [
@@ -29,7 +30,7 @@ def compare_times(branching, iters = 10):
     branching_times_impl = []
     for i in range(iters):
         branching_start_time = time.time()
-        compute_branching_abstract_system(trs, tem, True)
+        compute_branching_abstract_system(trs, tem, False)
         branching_end_time = time.time()
         branching_times_impl.append(branching_end_time - branching_start_time)
         print(f"--- Branching Implicit Formula {i}: {branching_times_impl[-1]}s expired ")
@@ -41,7 +42,7 @@ def compare_times(branching, iters = 10):
     branching_times_expl = []
     for i in range(iters):
         branching_start_time = time.time()
-        compute_branching_abstract_system(trs, tem, False)
+        compute_branching_abstract_system(trs, tem, True)
         branching_end_time = time.time()
         branching_times_expl.append(branching_end_time - branching_start_time)
         print(f"--- Branching Explicit Formula {i}: {branching_times_expl[-1]}s expired ")
@@ -72,7 +73,7 @@ if __name__ == "__main__":
 
     output_file = args.output_file
 
-    for branching in experiments_robot:
+    for branching in experiments:
         print(f"Running experiment {str(branching)}")
         brn_avg = compare_times(branching, iters)
         print(f"End experiment {str(branching)}\n")
