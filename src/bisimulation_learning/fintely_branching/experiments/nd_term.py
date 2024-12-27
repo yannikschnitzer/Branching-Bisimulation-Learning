@@ -322,7 +322,7 @@ def term_loop_nd_y():
 
     return transition_system, template
 
-def successors_robots(s):
+def successors_robots_ab(s,a=0,b=1):
     """
     The nondeterministic inputs are:
     id: the id of the robot to move
@@ -333,8 +333,7 @@ def successors_robots(s):
     We first fix a and b so that the program is simpler
     (i.e. we assume the user will always input those values)
     """
-    a = 0
-    b = 1
+
     """
     We have to model the program in a way that it can learn by 
     itself to recognize the partition.
@@ -359,39 +358,38 @@ def successors_robots(s):
     robot_1[0] = If(all_crash, robot_1[0], robot_1[0] + 1)
     robot_1[1] = s[1]
     # x_2, y_2, x_3, y_3
-    robot_1[2] = s[2]
-    robot_1[3] = s[3]
-    robot_1[4] = s[4]
-    robot_1[5] = s[5]
     """
     Robot 2:
     x_2 := x_2 + a + b
     y_2 := y_2 - 2a - 2b
     """
     robot_2 = [x for x in s]
-    robot_2[0] = s[0]
-    robot_2[1] = s[1]
     # robot_2[2] = s[2] + a + b
     # robot_2[3] = s[3] - 2 * a - 2 * b
     robot_2[2] = If(all_crash, robot_2[2], robot_2[2] + 1)
     robot_2[3] = If(all_crash, robot_2[3], robot_2[3] - 2)
-    robot_2[4] = s[4]
-    robot_2[5] = s[5]
     """
     Robot 3:
     x_3 := x_3 + a + b
     y_3 := y_3 - a - b
     """
     robot_3 = [x for x in s]
-    robot_3[0] = s[0]
-    robot_3[1] = s[1]
-    robot_3[2] = s[2]
-    robot_3[3] = s[3]
     # robot_3[4] = s[4] + a + b
     # robot_3[5] = s[5] - a - b
     robot_3[4] = If(all_crash, robot_3[4], robot_3[4] + 1)
     robot_3[5] = If(all_crash, robot_3[5], robot_3[5] - 1)
     return [robot_1, robot_2, robot_3]
+
+#     a_vals = [-1,0,1]
+#     b_vals = [-1,0,1]
+def successors_robots(s, a_vals = [-10,-2,-1,0,1,2,10], b_vals = [-10,-2,-1,0,1,2,10]):
+
+    succs = []
+    for a in a_vals:
+        for b in b_vals:
+            succs += successors_robots_ab(s,a,b)
+
+    return succs
 
 def bdt_robots(params, x, num_params, partitions):
     """

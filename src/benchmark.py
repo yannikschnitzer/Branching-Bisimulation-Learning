@@ -114,7 +114,7 @@ if __name__ == "__main__":
 
     output_file = args.output_file
 
-    for (branching, deterministic) in experiments_term:
+    for (branching, deterministic) in experiments_clock:
         experiment = deterministic()
         print(f"Running experiment {experiment.name}")
         name, brn_avg, det_avg = compare_times(branching, deterministic, iters, explicit_classes)

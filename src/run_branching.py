@@ -10,7 +10,7 @@ def run_and_show(trs, tem):
     visualize_branching(theta, tem)
 
 def run_and_print(trs, tem: BDTTemplate, expl: False):
-    theta, eta = bisimulation_learning(trs, tem, iters=100, explicit_classes=expl)
+    theta, eta = bisimulation_learning(trs, tem, iters=1000, explicit_classes=expl)
     print(f"""
     theta = {theta},
     eta   = {eta} 
@@ -41,6 +41,7 @@ if __name__ == "__main__":
     # trs, tem = term_loop_nd_y()
     # trs, tem = term_loop_nd_y()
     # run_and_show(trs, tem)
-    trs, tem = robots()
-    run_and_print(trs, tem, expl = True)
+    for i in range(10):
+        trs, tem = robots()
+        run_and_print(trs, tem, expl = False)
     
