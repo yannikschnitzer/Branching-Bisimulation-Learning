@@ -38,7 +38,7 @@ if __name__ == "__main__":
     # trs, tem = con_usf(10)
     # trs, tem = term_loop_nd()
     # trs, tem = term_loop_nd_2()
-    trs, tem = term_loop_nd_y()
+    # trs, tem = term_loop_nd_y()
     # trs, tem = term_loop_nd_y()
     # run_and_show(trs, tem)
     #trs, tem = robots()
