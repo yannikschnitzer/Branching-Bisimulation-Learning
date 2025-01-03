@@ -3,4 +3,6 @@
 src/figures
 **/results
 **/.history
-
+t2-prover
+test-jammy
+**/.DS_Store
