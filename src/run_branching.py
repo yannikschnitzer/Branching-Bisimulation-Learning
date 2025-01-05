@@ -40,10 +40,10 @@ if __name__ == "__main__":
     # trs, tem = term_loop_nd_2()
     # trs, tem = term_loop_nd_y()
     # trs, tem = term_loop_nd_y()
-    trs, tem = P1()
+    trs, tem = P2()
     # run_and_show(trs, tem)
     for i in range(10):
-        trs, tem = P1()
+        trs, tem = P2()
         run_and_print(trs, tem, expl = False)
 
     

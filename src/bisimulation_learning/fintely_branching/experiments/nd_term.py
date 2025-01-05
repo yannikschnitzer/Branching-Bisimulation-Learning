@@ -94,6 +94,8 @@ def successors_P1(s):
     succ_s_act_1 = [v for v in s] # if random = false
     succ_s_act_2 = [v for v in s] # if random = true
 
+    # succ_s_act_1 just stays, corresponds to direct jump to loc5
+
     # 0 -> A, 1 -> R, 2 -> N
     succ_s_act_2[0] = 1
     succ_s_act_2[1] = If(s[2] > 0, s[1], 1)
@@ -161,6 +163,63 @@ def P1():
         bdt_classifier=bdt_P1,
         num_coefficients=3,
         num_params=2,
+        num_partitions=5
+    )
+
+    return transition_system, template
+
+"""
+P1 from [Beyne et al. 2013]
+See T2 repo.
+
+"""
+def successors_P2(s):
+    succ_s_act_1 = [v for v in s] # if random = false
+    succ_s_act_2 = [v for v in s] # if random = true
+
+    # succ_s_act_1 just stays, corresponds to direct jump to loc5
+    
+    # 0 -> A, 1 -> R, 2 -> N
+    succ_s_act_2[0] = 1
+    succ_s_act_2[1] = If(s[2] > 0, s[1], 1)
+    succ_s_act_2[2] = If(s[2] > 0, s[2] - 1, s[2])
+
+    return [succ_s_act_1, succ_s_act_2]
+
+# BDT Template - P2
+# 
+# Labelling Function: x[0] >= 1, x[0] < 1
+def bdt_P2(params, x, num_params, partitions):
+        b = BDTNodePolyEquality([RealVal(0), RealVal(1), RealVal(0)],x, RealVal(5), 
+                            BDTNodePolyEquality([RealVal(1), RealVal(0), RealVal(0)],x, RealVal(1),
+                                BDTLeave(partitions[0]),
+                                BDTNodePoly([params[num_params], params[num_params+1], params[num_params+2]], x, params[0],
+                                    BDTLeave(partitions[1]), BDTLeave(partitions[2]))
+                            ),
+                            BDTNodePolyEquality([RealVal(1), RealVal(0), RealVal(0)],x, RealVal(1),
+                                BDTLeave(partitions[3]), 
+                                BDTLeave(partitions[4])
+                            )
+                    )
+
+        return b.formula(), b
+
+
+
+def P2():
+    dim = 3
+
+    transition_system = BranchingTransitionSystem(
+        dim,
+        successors = successors_P2
+    )
+
+
+    template = BDTTemplate(
+        dim=dim,
+        bdt_classifier=bdt_P2,
+        num_coefficients=3,
+        num_params=1,
         num_partitions=5
     )
 

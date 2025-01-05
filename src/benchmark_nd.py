@@ -14,7 +14,7 @@ experiments = [
 #    # term_loop_nd_y,
 #     P17,
 #     P18,
-    P1
+    P2
 ]
 
 experiments_robot = [
