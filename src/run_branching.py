@@ -1,7 +1,7 @@
 from bisimulation_learning.fintely_branching.experiments import *
 from bisimulation_learning.fintely_branching.cegis_solver import *
 from bisimulation_learning.shared import *
-    
+from bisimulation_learning.deterministic.experiments.conditional_termination_experiments import *
 
 def run_and_show(trs, tem):
     theta, eta = bisimulation_learning(trs, tem, iters=100, explicit_classes=True)
@@ -40,8 +40,10 @@ if __name__ == "__main__":
     # trs, tem = term_loop_nd_2()
     # trs, tem = term_loop_nd_y()
     # trs, tem = term_loop_nd_y()
+    trs, tem = P1()
     # run_and_show(trs, tem)
     for i in range(10):
-        trs, tem = robots()
+        trs, tem = P1()
         run_and_print(trs, tem, expl = False)
+
     

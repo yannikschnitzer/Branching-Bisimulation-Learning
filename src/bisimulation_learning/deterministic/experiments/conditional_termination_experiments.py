@@ -6,6 +6,7 @@ from bisimulation_learning.shared import *
 from bisimulation_learning.deterministic.experiment_runner import *
 from bisimulation_learning.deterministic.experiments.conditional_termination_succ_trees import *
 from bisimulation_learning.deterministic.cegis_solver import *
+from bisimulation_learning.fintely_branching.experiments.nd_term import *
 
 import numpy as np
 
@@ -55,6 +56,25 @@ def exp_term_loop_1():
                       num_partitions = 3,
                       dim = 1,
                       num_initial = 10
+                      )
+    return exp
+
+def test_exp():
+    def domain(x):
+        """
+            Domain bounding x[1] to be a boolean (not-terminated / terminated)
+        """
+        return True
+
+    exp = Experiment("test",
+                      bdt_P25,
+                      successors_P25,
+                      domain,
+                      num_params = 4,
+                      num_coefficients = 12,
+                      num_partitions = 8,
+                      dim = 2,
+                      num_initial = 1
                       )
     return exp
 

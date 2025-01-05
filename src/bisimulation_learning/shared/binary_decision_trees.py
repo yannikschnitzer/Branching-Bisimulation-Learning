@@ -70,3 +70,24 @@ class BDTNodePoly:
             return self.res_l.pred(x)
         else:
             return self.res_r.pred(x)
+        
+class BDTNodePolyEquality:
+    def __init__(self, coefficients: list, variables: list, param, res_l, res_r):
+        self.coeffs = coefficients
+        self.vars = variables
+        self.param = param
+        self.res_l = res_l
+        self.res_r = res_r
+
+        self.condition = np.dot(coefficients, variables)
+
+    def formula(self):
+        return If(self.condition == self.param, self.res_l.formula(), self.res_r.formula())
+    
+
+    # Prediction is only used for means visualization, to get classificaiton as long and not Z3 types.
+    def pred(self, x):
+        if decimal(np.dot(self.coeffs, x)) <= decimal(self.param):
+            return self.res_l.pred(x)
+        else:
+            return self.res_r.pred(x)

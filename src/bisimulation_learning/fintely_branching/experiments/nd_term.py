@@ -86,6 +86,89 @@ def term_loop_nd():
 
 
 """
+P1 from [Beyne et al. 2013]
+See T2 repo.
+
+"""
+def successors_P1(s):
+    succ_s_act_1 = [v for v in s] # if random = false
+    succ_s_act_2 = [v for v in s] # if random = true
+
+    # 0 -> A, 1 -> R, 2 -> N
+    succ_s_act_2[0] = 1
+    succ_s_act_2[1] = If(s[2] > 0, s[1], 1)
+    succ_s_act_2[2] = If(s[2] > 0, s[2] - 1, s[2])
+
+    return [succ_s_act_1, succ_s_act_2]
+
+# BDT Template - P1
+# 
+# Labelling Function: x[0] >= 1, x[0] < 1
+def bdt_P1a(params, x, num_params, partitions):
+        b = BDTNodePolyEquality([RealVal(0), RealVal(1), RealVal(0)],x, RealVal(1), 
+                            BDTLeave(partitions[0]),
+                            BDTLeave(partitions[1])
+                    )
+        return b.formula(), b
+
+def bdt_P1(params, x, num_params, partitions):
+        b = BDTNodePolyEquality([RealVal(0), RealVal(1), RealVal(0)],x, RealVal(1), 
+                            BDTNodePolyEquality([RealVal(1), RealVal(0), RealVal(0)],x, RealVal(1),
+                                BDTLeave(partitions[0]),
+                                BDTLeave(partitions[1]),
+                            ),
+                            BDTNodePolyEquality([RealVal(1), RealVal(0), RealVal(0)],x, RealVal(1),
+                                BDTLeave(partitions[2]), 
+                                BDTNodePoly([params[num_params], params[num_params+1], params[num_params+2]], x, params[1],
+                                    BDTLeave(partitions[3]), BDTLeave(partitions[4]))
+                            )
+                    )
+
+        return b.formula(), b
+
+def bdt_P1b(params, x, num_params, partitions):
+        b = BDTNodePolyEquality([RealVal(0), RealVal(1), RealVal(0)],x, RealVal(1), 
+                            BDTNodePolyEquality([RealVal(1), RealVal(0), RealVal(0)],x, RealVal(1),
+                                BDTNodePoly([params[num_params], params[num_params+1], params[num_params+2]], x, params[0],
+                                    BDTLeave(partitions[0]), BDTLeave(partitions[1])
+                                ),
+                                BDTNodePoly([params[num_params+6], params[num_params+7], params[num_params+8]], x, params[2],
+                                    BDTLeave(partitions[5]), BDTLeave(partitions[6]))
+                            ),
+                            BDTNodePolyEquality([RealVal(1), RealVal(0), RealVal(0)],x, RealVal(1),
+                                BDTNodePoly([params[num_params+3], params[num_params+4], params[num_params+5]], x, params[1],
+                                    BDTLeave(partitions[3]), BDTLeave(partitions[4])), 
+                                BDTNodePoly([params[num_params+9], params[num_params+10], params[num_params+11]], x, params[4],
+                                    BDTLeave(partitions[7]), BDTLeave(partitions[8]))
+                            )
+                    )
+
+        return b.formula(), b
+
+
+
+def P1():
+    dim = 3
+
+    transition_system = BranchingTransitionSystem(
+        dim,
+        successors = successors_P1
+    )
+
+
+    template = BDTTemplate(
+        dim=dim,
+        bdt_classifier=bdt_P1,
+        num_coefficients=3,
+        num_params=2,
+        num_partitions=5
+    )
+
+    return transition_system, template
+
+
+
+"""
 P17 from [Beyne et al. 2013]
 See T2 repo.
 
@@ -273,6 +356,281 @@ def P20():
     )
 
     return transition_system, template
+
+
+"""
+P21 from [Beyne et al. 2013]
+See T2 repo.
+
+"""
+def successors_P21(s):
+    succ_s_act_1 = [v for v in s] 
+    succ_s_act_2 = [v for v in s] 
+
+    succ_s_act_1[0] = 1 # W
+    succ_s_act_1[1] = If(s[1] >= 1, 0, s[1]) # G
+    
+    return [succ_s_act_1]
+
+# BDT Template - P20
+# 
+# Labelling Function: x[0] == 1;
+def bdt_P21(params, x, num_params, partitions):
+        b = BDTNodePoly([RealVal(1), RealVal(0)],x, RealVal(1), 
+                        BDTNodePoly([RealVal(-1), RealVal(0)],x, RealVal(-1), 
+                                    BDTLeave(partitions[0]),
+                                    BDTNodePoly([params[num_params], params[num_params+1]], x, params[0],
+                                        BDTLeave(partitions[1]), BDTLeave(partitions[2]))
+                            ),
+                        BDTNodePoly([params[num_params+2], params[num_params+3]], x, params[1],
+                                BDTLeave(partitions[3]), BDTLeave(partitions[4])
+                            )
+                    )
+        return b.formula(), b
+def P21():
+    dim = 2
+
+    transition_system = BranchingTransitionSystem(
+        dim,
+        successors = successors_P21
+    )
+
+
+    template = BDTTemplate(
+        dim=dim,
+        bdt_classifier=bdt_P21,
+        num_coefficients=4,
+        num_params=2,
+        num_partitions=5
+    )
+
+    return transition_system, template
+
+"""
+P22 from [Beyne et al. 2013]
+See T2 repo.
+
+"""
+def successors_P22(s):
+    succ_s_act_1 = [v for v in s] 
+    succ_s_act_2 = [v for v in s] 
+
+    # W
+    succ_s_act_1[0] = 0
+    succ_s_act_2[0] = 1
+
+    # G
+    succ_s_act_1[1] = If(s[1] >= 1, 0, s[1])
+    succ_s_act_2[1] = If(s[1] >= 1, 0, s[1])
+
+    return [succ_s_act_1, succ_s_act_2] 
+
+
+# BDT Template - P20
+# 
+# Labelling Function: x[0] == 1;
+def bdt_P22(params, x, num_params, partitions):
+        b = BDTNodePoly([RealVal(1), RealVal(0)],x, RealVal(1), 
+                        BDTNodePoly([RealVal(-1), RealVal(0)],x, RealVal(-1), 
+                                    BDTLeave(partitions[0]),
+                                    BDTNodePoly([params[num_params], params[num_params+1]], x, params[0],
+                                        BDTLeave(partitions[1]), BDTLeave(partitions[2]))
+                            ),
+                        BDTNodePoly([params[num_params+2], params[num_params+3]], x, params[1],
+                                BDTLeave(partitions[3]), BDTLeave(partitions[4])
+                            )
+                    )
+        return b.formula(), b
+def P22():
+    dim = 2
+
+    transition_system = BranchingTransitionSystem(
+        dim,
+        successors = successors_P22
+    )
+
+
+    template = BDTTemplate(
+        dim=dim,
+        bdt_classifier=bdt_P22,
+        num_coefficients=4,
+        num_params=2,
+        num_partitions=5
+    )
+
+    return transition_system, template
+
+"""
+P23 from [Beyne et al. 2013]
+See T2 repo.
+
+"""
+def successors_P23(s):
+    succ_s_act_1 = [v for v in s] 
+    succ_s_act_2 = [v for v in s] 
+
+    # W
+    succ_s_act_1[0] = If(s[1] < 1, If(s[0] >= 1, 0, s[0]), 1)
+    succ_s_act_2[0] = If(s[1] < 1, If(s[0] >= 1, 0, s[0]), s[0])
+
+    # G
+    succ_s_act_1[1] = If(s[1] < 1, s[1], 0)
+    succ_s_act_2[1] = If(s[1] < 1, s[1], 0)
+
+    return [succ_s_act_1, succ_s_act_2] 
+
+
+# BDT Template - P20
+# 
+# Labelling Function: x[0] == 1;
+def bdt_P23(params, x, num_params, partitions):
+        b = BDTNodePoly([RealVal(1), RealVal(0)],x, RealVal(1), 
+                        BDTNodePoly([RealVal(-1), RealVal(0)],x, RealVal(-1), 
+                                    BDTLeave(partitions[0]),
+                                    BDTNodePoly([params[num_params], params[num_params+1]], x, params[0],
+                                        BDTLeave(partitions[1]), BDTLeave(partitions[2]))
+                            ),
+                        BDTNodePoly([params[num_params+2], params[num_params+3]], x, params[1],
+                                BDTLeave(partitions[3]), BDTLeave(partitions[4])
+                            )
+                    )
+        return b.formula(), b
+
+def P23():
+    dim = 2
+
+    transition_system = BranchingTransitionSystem(
+        dim,
+        successors = successors_P23
+    )
+
+
+    template = BDTTemplate(
+        dim=dim,
+        bdt_classifier=bdt_P23,
+        num_coefficients=4,
+        num_params=2,
+        num_partitions=5
+    )
+
+    return transition_system, template
+
+"""
+P25 from [Beyne et al. 2013], in a 2D version
+See T2 repo.
+
+"""
+def successors_P25_2D(s):
+    succ_s_act_1 = [v for v in s]
+    succ_s_act_2 = [v for v in s]
+
+    # C
+    succ_s_act_1[0] = s[0] 
+    succ_s_act_2[0] = s[0] - 1
+
+    # R
+    succ_s_act_1[1] = s[1] 
+    succ_s_act_2[1] = s[1] + 1
+
+    return [succ_s_act_1, succ_s_act_2]
+
+
+# BDT Template - P25
+# 
+# Labelling Function: x[0] == 1;
+def bdt_P25_2D(params, x, num_params, partitions):
+        b = BDTNodePoly([RealVal(0), RealVal(1)],x, RealVal(5), 
+                            BDTNodePoly([params[num_params], params[num_params+1]], x, params[0],
+                                BDTLeave(partitions[0]), BDTLeave(partitions[1])),
+                            BDTNodePoly([params[num_params+2], params[num_params+3]], x, params[1],
+                                BDTLeave(partitions[2]), BDTLeave(partitions[3]))
+                    )
+
+        return b.formula(), b
+
+def P25_2D():
+    dim = 2
+
+    transition_system = BranchingTransitionSystem(
+        dim,
+        successors = successors_P25_2D
+    )
+
+
+    template = BDTTemplate(
+        dim=dim,
+        bdt_classifier=bdt_P25_2D,
+        num_coefficients=4,
+        num_params=2,
+        num_partitions=4
+    )
+
+    return transition_system, template
+
+"""
+P25 from [Beyne et al. 2013]
+See T2 repo.
+
+"""
+def successors_P25(s):
+    succ_s_act_1 = [v for v in s]
+    succ_s_act_2 = [v for v in s]
+
+    # C
+    succ_s_act_1[0] = If(s[2] <= 0, s[0], s[0] - 1)
+    succ_s_act_2[0] = If(s[2] <= 0, s[0], If(s[0] >= s[2], s[0] - 1 , s[0]))
+
+    # R
+    succ_s_act_1[1] = If(s[2] <= 0, s[1], s[1] + 1)
+    succ_s_act_2[1] = If(s[2] <= 0, s[1], If(s[0] >= s[2], s[1] + 1, s[1]))
+
+    # CS
+    succ_s_act_1[2] = If(s[2] <= 0, s[2], s[2] - 1)
+    succ_s_act_2[2] = If(s[2] <= 0, s[2], s[2] - 1)
+
+    return [succ_s_act_1, succ_s_act_2] 
+
+
+# BDT Template - P25
+# 
+# Labelling Function: x[0] == 1;
+def bdt_P25(params, x, num_params, partitions):
+        b = BDTNodePoly([RealVal(0), RealVal(1), RealVal(0)],x, RealVal(0), 
+                            BDTNodePoly([params[num_params], params[num_params+1], params[num_params+2]], x, params[0],
+                                BDTNodePoly([params[num_params+3], params[num_params+4], params[num_params+5]], x, params[1],
+                                    BDTLeave(partitions[0]), BDTLeave(partitions[1])), 
+                                BDTNodePoly([params[num_params+6], params[num_params+7], params[num_params+8]], x, params[2],
+                                    BDTLeave(partitions[2]), BDTLeave(partitions[3]))),
+
+                            BDTNodePoly([params[num_params+9], params[num_params+10], params[num_params+11]], x, params[3],
+                                BDTNodePoly([params[num_params+12], params[num_params+13], params[num_params+14]], x, params[4],
+                                    BDTLeave(partitions[4]), BDTLeave(partitions[5])), 
+                                BDTNodePoly([params[num_params+15], params[num_params+16], params[num_params+17]], x, params[5],
+                                    BDTLeave(partitions[6]), BDTLeave(partitions[7]))),
+                    )
+
+        return b.formula(), b
+
+def P25():
+    dim = 3
+
+    transition_system = BranchingTransitionSystem(
+        dim,
+        successors = successors_P25
+    )
+
+
+    template = BDTTemplate(
+        dim=dim,
+        bdt_classifier=bdt_P25,
+        num_coefficients=18,
+        num_params=6,
+        num_partitions=8
+    )
+
+    return transition_system, template
+
+
 
 """
 Branching system termination (2)
