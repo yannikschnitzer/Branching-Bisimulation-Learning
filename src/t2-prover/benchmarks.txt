@@ -1,0 +1,25 @@
+--- Experiment {'name': 'P1.t2', 'formula': '[AG](varA != 1 || [AF](varR == 1))'}
+	average = 0.7815219402313233
+	std = 0.0033443160568841115
+--- Experiment {'name': 'P17.t2', 'formula': '[AG]([AF](varW >= 1))'}
+	average = 0.6588172912597656
+	std = 0.0040268996356033196
+--- Experiment {'name': 'P18.t2', 'formula': '[EF]([EG](varW < 1))'}
+	average = 0.9509024143218994
+	std = 0.10543806993762281
+--- Experiment {'name': 'P19.t2', 'formula': '[AG]([EF](varW >= 1))'}
+	average = 5.168667244911194
+	std = 0.034593622705627346
+--- Experiment {'name': 'P20.t2', 'formula': '[EF]([AG](varW < 1))'}
+	average = 1.0381011247634888
+	std = 0.0028418517556971826
+--- Experiment {'name': 'P21.t2', 'formula': '[AG]([AF](varW == 1))'}
+	average = 0.5685897827148437
+	std = 0.0037046057327350377
+--- Experiment {'name': 'P22.t2', 'formula': '[EF]([EG](varW != 1))'}
+	average = 1.1037028074264525
+	std = 0.016593187085683227
+--- Experiment {'name': 'P23.t2', 'formula': '[AG]([EF](varW == 1))'}
+	average = 0.610474705696106
+	std = 0.0027627453213880954
+
