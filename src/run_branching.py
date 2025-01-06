@@ -43,7 +43,7 @@ if __name__ == "__main__":
     trs, tem = P2()
     # run_and_show(trs, tem)
     for i in range(10):
-        trs, tem = P4()
+        trs, tem = P5()
         run_and_print(trs, tem, expl = True)
 
     
