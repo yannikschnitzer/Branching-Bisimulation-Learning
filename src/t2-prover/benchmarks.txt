@@ -23,3 +23,12 @@
 	average = 0.610474705696106
 	std = 0.0027627453213880954
 
+--- Experiment {'name': 'bl_tests/term_loop_nd.t2', 'formula': '[EG](varX > 1 || varX < -1)'}
+	average = 0.5829217195510864
+	std = 0.009627540660640376
+--- Experiment {'name': 'bl_tests/term_loop_nd_2.t2', 'formula': '[EG]([AF](varX == 0))'}
+	average = 1.2128455877304076
+	std = 0.13128281094388008
+--- Experiment {'name': 'bl_tests/term_loop_nd_y.t2', 'formula': '[EG]([AF](varX == 0))'}
+	average = 1.6392659902572633
+	std = 0.005992140767636243
