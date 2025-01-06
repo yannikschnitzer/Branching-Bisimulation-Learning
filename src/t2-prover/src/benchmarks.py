@@ -5,46 +5,59 @@ import re
 import os
 import numpy as np
 
+# mono src/bin/Debug/T2.exe term_loop_nd_2.T2 --CTL '[EG]([AF](varX == 0))'
 
 experiments = [
     {
-        'name': "P1.t2",
+        'name': "test/cav13-ctl-examples/P1.t2",
         'formula': "[AG](varA != 1 || [AF](varR == 1))"
     },
     {
-        'name': "P17.t2",
+        'name': "test/cav13-ctl-examples/P17.t2",
         'formula': "[AG]([AF](varW >= 1))"
     },
     {
-        'name': "P18.t2",
+        'name': "test/cav13-ctl-examples/P18.t2",
         'formula': "[EF]([EG](varW < 1))"
     },
     {
-        'name': "P19.t2",
+        'name': "test/cav13-ctl-examples/P19.t2",
         'formula': "[AG]([EF](varW >= 1))"
     },
     {
-        'name': "P20.t2",
+        'name': "test/cav13-ctl-examples/P20.t2",
         'formula': "[EF]([AG](varW < 1))"
     },
     {
-        'name': "P21.t2",
+        'name': "test/cav13-ctl-examples/P21.t2",
         'formula': "[AG]([AF](varW == 1))"
     },
     {
-        'name': "P22.t2",
+        'name': "test/cav13-ctl-examples/P22.t2",
         'formula': "[EF]([EG](varW != 1))"
     },
     {
-        'name': "P23.t2",
+        'name': "test/cav13-ctl-examples/P23.t2",
         'formula': "[AG]([EF](varW == 1))"
+    },
+    {
+        'name': "bl_tests/term_loop_nd.t2",
+        'formula': "[EG](varX > 1 || varX < -1)"
+    },
+    {
+        'name': "bl_tests/term_loop_nd_2.t2",
+        'formula': "[EG]([AF](varX == 0))"
+    },
+    {
+        'name': "bl_tests/term_loop_nd_y.t2",
+        'formula': "[EG]([AF](varX == 0))"
     }
 ]
 
 def run_t2_experiment(exp):
     cmd = f"""
     mono src/bin/Debug/T2.exe \\
-        test/cav13-ctl-examples/{exp['name']} \\
+        {exp['name']} \\
         --CTL '{exp['formula']}' 
     """
     outb = subprocess.check_output(cmd, shell=True, stderr=subprocess.DEVNULL)
