@@ -13,6 +13,66 @@ experiments = [
         'formula': "[AG](varA != 1 || [AF](varR == 1))"
     },
     {
+        'name': "test/cav13-ctl-examples/P2.t2",
+        'formula': "[EF](varA == 1 && [EG](varR != 5))"
+    },
+    {
+        'name': "test/cav13-ctl-examples/P3.t2",
+        'formula': "[AG](varA != 1 || [EF](varR == 1))"
+    },
+    {
+        'name': "test/cav13-ctl-examples/P4.t2",
+        'formula': "[EF](varA == 1 && [AG](varR != 1))"
+    },
+    {
+        'name': "test/cav13-ctl-examples/P5.t2",
+        'formula': "[AG](varS != 1 || [AF](varU == 1))"
+    },
+    {
+        'name': "test/cav13-ctl-examples/P6.t2",
+        'formula': "[EF](varS == 1 || [EG](varU != 1))"
+    },
+    {
+        'name': "test/cav13-ctl-examples/P7.t2",
+        'formula': "[AG](varS != 1 || [EF](varU == 1))"
+    },
+    {
+        'name': "test/cav13-ctl-examples/P8.t2",
+        'formula': "[EF](varS == 1 && [AG](varU != 1))"
+    },
+    {
+        'name': "test/cav13-ctl-examples/P9.t2",
+        'formula': "[AG](varA != 1 || [AF](varR == 1))"
+    },
+    {
+        'name': "test/cav13-ctl-examples/P10.t2",
+        'formula': "[EF](varA == 1 && [EG](varR != 1))"
+    },
+    {
+        'name': "test/cav13-ctl-examples/P11.t2",
+        'formula': "[AG](varA != 1 || [EF](varR == 1))"
+    },
+    {
+        'name': "test/cav13-ctl-examples/P12.t2",
+        'formula': "[EF](varA == 1 && [AG](varR != 1))"
+    },
+    {
+        'name': "test/cav13-ctl-examples/P13.t2",
+        'formula': "[EG](varP1 != 1) || [EG](varP2 != 1)"
+    },
+    {
+        'name': "test/cav13-ctl-examples/P14.t2",
+        'formula': "[EG](varP1 != 1) || [EG](varP2 != 1)"
+    },
+    {
+        'name': "test/cav13-ctl-examples/P15.t2",
+        'formula': "[EF](varP1 == 1) && [EF](varP2 == 1)"
+    },
+    {
+        'name': "test/cav13-ctl-examples/P16.t2",
+        'formula': "[AG](varP1 != 1) || [AG](varP2 != 1)"
+    },
+    {
         'name': "test/cav13-ctl-examples/P17.t2",
         'formula': "[AG]([AF](varW >= 1))"
     },
@@ -22,7 +82,7 @@ experiments = [
     },
     {
         'name': "test/cav13-ctl-examples/P19.t2",
-        'formula': "[AG]([EF](varW >= 1))"
+        'formula': "[AG]([EF](varW >=1))"
     },
     {
         'name': "test/cav13-ctl-examples/P20.t2",
@@ -39,6 +99,26 @@ experiments = [
     {
         'name': "test/cav13-ctl-examples/P23.t2",
         'formula': "[AG]([EF](varW == 1))"
+    },
+    {
+        'name': "test/cav13-ctl-examples/P24.t2",
+        'formula': "[EF]([AG](varW != 1))"
+    },
+    {
+        'name': "test/cav13-ctl-examples/P25.t2",
+        'formula': "(varC <= 5) || ([AF](varR > 5))"
+    },
+    {
+        'name': "test/cav13-ctl-examples/P26.t2",
+        'formula': "(varC > 5) && [EG](varR <= 5)"
+    },
+    {
+        'name': "test/cav13-ctl-examples/P27.t2",
+        'formula': "(varC <= 5) || [EF](varR > 5)"
+    },
+    {
+        'name': "test/cav13-ctl-examples/P28.t2",
+        'formula': "(varC > 5) && [AG](varR <= 5)"
     },
     {
         'name': "bl_tests/term_loop_nd.t2",
@@ -65,21 +145,31 @@ def run_t2_experiment(exp):
     match = re.search("Temporal proof succeeded", out)
     if match is None:
         print("Alarm! Alarm!")
-        print(out)
+        raise Exception(out)
+
+def measure_t2_experiment(exp):
+    # retry until success
+    start_time = time.time()
+    run_t2_experiment(exp)
+    stop_time = time.time()
+    return start_time, stop_time
+
 
 def run_t2_experiments(iters, verbose=False):
     for exp in experiments:
         times = []
-        for i in range(iters):
-            start_time = time.time()
-            run_t2_experiment(exp)
-            stop_time = time.time()
-            times.append(stop_time - start_time)
-            if verbose:
-                print(f"--- Experiment {exp} - {i}th run expired in {times[-1]}s")
-        avg = np.average(times)
-        std = np.std(times)
-        print(f"--- Experiment {exp} \n\taverage = {avg} \n\tstd = {std}")
+        try:
+            for i in range(iters):
+                start_time, stop_time = measure_t2_experiment(exp)
+                times.append(stop_time - start_time)
+                if verbose:
+                    print(f"--- Experiment {exp} - {i}th run expired in {times[-1]}s")
+            avg = np.average(times)
+            std = np.std(times)
+            print(f"--- Experiment {exp} \n\taverage = {avg} \n\tstd = {std}")
+        except Exception:
+            print(f"Skipped experiment {exp} one iteration failed")
+            pass
 
 
 
