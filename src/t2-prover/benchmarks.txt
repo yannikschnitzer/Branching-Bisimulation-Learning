@@ -32,7 +32,14 @@
 --- Experiment {'name': 'test/cav13-ctl-examples/P3.t2', 'formula': '[AG](varA != 1 || [EF](varR == 1))'}
 	average = 0.5519057512283325
 	std = 0.0034451869534286557
-Skipped experiment {'name': 'test/cav13-ctl-examples/P4.t2', 'formula': '[EF](varA == 1 && [AG](varR != 1))'} one iteration failed
+
+--- Experiment {'name': 'test/cav13-ctl-examples/P4.t2', 'formula': '[EF](varA == 1 && [AG](varR != 1))'}
+	average = 0.35429441928863525
+	std = 0.0007673501968383789
+--- Experiment {'name': 'test/cav13-ctl-examples/P4.t2', 'formula': '[AG](varA != 1 || [EF](varR != 1))'}
+	average = 0.4339900970458984
+	std = 0.007751297931494436
+
 --- Experiment {'name': 'test/cav13-ctl-examples/P5.t2', 'formula': '[AG](varS != 1 || [AF](varU == 1))'}
 	average = 0.7536802768707276
 	std = 0.05311055736411812
@@ -92,26 +99,86 @@ Skipped experiment {'name': 'test/cav13-ctl-examples/P15.t2', 'formula': '[EF](v
 	average = 0.6175119161605835
 	std = 0.005026197235839419
 Skipped experiment {'name': 'test/cav13-ctl-examples/P25.t2', 'formula': '(varC <= 5) || ([AF](varR > 5))'} one iteration failed
-Skipped experiment {'name': 'test/cav13-ctl-examples/P26.t2', 'formula': '(varC > 5) && [EG](varR <= 5)'} one iteration failed
-Skipped experiment {'name': 'test/cav13-ctl-examples/P27.t2', 'formula': '(varC <= 5) || [EF](varR > 5)'} one iteration failed
-Skipped experiment {'name': 'test/cav13-ctl-examples/P28.t2', 'formula': '(varC > 5) && [AG](varR <= 5)'} one iteration failed
---- Experiment {'name': 'bl_tests/term_loop_nd.t2', 'formula': '[EG](varX > 1 || varX < -1)'}
-	average = 0.7543114423751831
-	std = 0.008015147562152962
---- Experiment {'name': 'bl_tests/term_loop_nd_2.t2', 'formula': '[EG]([AF](varX == 0))'}
-	average = 1.465748167037964
-	std = 0.01770699295430705
---- Experiment {'name': 'bl_tests/term_loop_nd_y.t2', 'formula': '[EG]([AF](varX == 0))'}
-	average = 1.6943200826644897
-	std = 0.03230829282930425
+--- Experiment {'name': 'test/cav13-ctl-examples/P26.t2', 'formula': '(varC > 5) && [EG](varR <= 5)'}
+	average = 0.6076380968093872
+	std = 0.005762955694430772
+--- Experiment {'name': 'test/cav13-ctl-examples/P27.t2', 'formula': '(varC <= 5) || [EF](varR > 5)'}
+	average = 0.7607292652130127
+	std = 0.07927471584852923
+--- Experiment {'name': 'test/cav13-ctl-examples/P28.t2', 'formula': '(varC > 5) && [AG](varR <= 5)'}
+	average = 0.6410201787948608
+	std = 0.0065266133421212355
 
 
 --- Experiment {'name': 'bl_tests/term_loop_nd.t2', 'formula': '[EG](varX > 1 || varX < -1)'}
-	average = 0.5829217195510864
-	std = 0.009627540660640376
+	average = 0.5585898637771607
+	std = 0.0036906025003767117
 --- Experiment {'name': 'bl_tests/term_loop_nd_2.t2', 'formula': '[EG]([AF](varX == 0))'}
-	average = 1.2128455877304076
-	std = 0.13128281094388008
+	average = 1.5076003789901733
+	std = 0.009322035107486243
 --- Experiment {'name': 'bl_tests/term_loop_nd_y.t2', 'formula': '[EG]([AF](varX == 0))'}
-	average = 1.6392659902572633
-	std = 0.005992140767636243
+	average = 1.5553143262863158
+	std = 0.0727573423490843
+
+## NEGATIONS
+
+--- Experiment {'name': 'test/cav13-ctl-examples/P1.t2', 'formula': '!([AG](varA != 1 || [AF](varR == 1)))'}
+	average = 0.7841491460800171
+	std = 0.008149435451208603
+--- Experiment {'name': 'test/cav13-ctl-examples/P2.t2', 'formula': '!([EF](varA == 1 && [EG](varR != 5)))'}
+	average = 1.1991343021392822
+	std = 0.2756316130168223
+--- Experiment {'name': 'test/cav13-ctl-examples/P3.t2', 'formula': '!([AG](varA != 1 || [EF](varR == 1)))'}
+	average = 0.6182972908020019
+	std = 0.06194444088318851
+Skipped experiment {'name': 'test/cav13-ctl-examples/P4.t2', 'formula': '!([EF](varA == 1 && [AG](varR != 1)))'} one iteration failed
+--- Experiment {'name': 'test/cav13-ctl-examples/P5.t2', 'formula': '!([AG](varS != 1 || [AF](varU == 1)))'}
+	average = 0.7444901704788208
+	std = 0.054619468769193553
+--- Experiment {'name': 'test/cav13-ctl-examples/P6.t2', 'formula': '!([EF](varS == 1 || [EG](varU != 1)))'}
+	average = 0.7868206262588501
+	std = 0.005420575936782788
+--- Experiment {'name': 'test/cav13-ctl-examples/P7.t2', 'formula': '!([AG](varS != 1 || [EF](varU == 1)))'}
+	average = 0.6663110733032227
+	std = 0.005980719720498107
+--- Experiment {'name': 'test/cav13-ctl-examples/P17.t2', 'formula': '!([AG]([AF](varW >= 1)))'}
+	average = 0.8478496551513672
+	std = 0.013277175812526722
+--- Experiment {'name': 'test/cav13-ctl-examples/P18.t2', 'formula': '!([EF]([EG](varW < 1)))'}
+	average = 1.088995623588562
+	std = 0.01509900632669315
+--- Experiment {'name': 'test/cav13-ctl-examples/P19.t2', 'formula': '!([AG]([EF](varW >=1)))'}
+	average = 5.263309049606323
+	std = 0.02373849922864036
+--- Experiment {'name': 'test/cav13-ctl-examples/P20.t2', 'formula': '!([EF]([AG](varW < 1)))'}
+	average = 1.0562838792800904
+	std = 0.006825019394800477
+--- Experiment {'name': 'test/cav13-ctl-examples/P21.t2', 'formula': '!([AG]([AF](varW == 1)))'}
+	average = 0.5751250505447387
+	std = 0.004484818223386545
+--- Experiment {'name': 'test/cav13-ctl-examples/P22.t2', 'formula': '!([EF]([EG](varW != 1)))'}
+	average = 1.1153176307678223
+	std = 0.0062147623175564945
+--- Experiment {'name': 'test/cav13-ctl-examples/P23.t2', 'formula': '!([AG]([EF](varW == 1)))'}
+	average = 0.6199511289596558
+	std = 0.008036597601773453
+--- Experiment {'name': 'test/cav13-ctl-examples/P24.t2', 'formula': '!([EF]([AG](varW != 1)))'}
+	average = 0.6126430749893188
+	std = 0.003142341071499386
+Skipped experiment {'name': 'test/cav13-ctl-examples/P25.t2', 'formula': '!((varC <= 5) || ([AF](varR > 5)))'} one iteration failed
+--- Experiment {'name': 'test/cav13-ctl-examples/P26.t2', 'formula': '!((varC > 5) && [EG](varR <= 5))'}
+	average = 0.7722118377685547
+	std = 0.0070837092329266195
+--- Experiment {'name': 'test/cav13-ctl-examples/P27.t2', 'formula': '!((varC <= 5) || [EF](varR > 5))'}
+	average = 0.9243169069290161
+	std = 0.004336170318837085
+--- Experiment {'name': 'test/cav13-ctl-examples/P28.t2', 'formula': '!((varC > 5) && [AG](varR <= 5))'}
+	average = 0.6262585639953613
+	std = 0.012250038717661492
+--- Experiment {'name': 'bl_tests/term_loop_nd.t2', 'formula': '!([EG](varX > 1 || varX < -1))'}
+	average = 0.711316704750061
+	std = 0.005339774648781806
+Skipped experiment {'name': 'bl_tests/term_loop_nd_2.t2', 'formula': '!([EG]([AF](varX == 0))'} one iteration fail)ed
+--- Experiment {'name': 'bl_tests/term_loop_nd_y.t2', 'formula': '!([EG]([AF](varX == 0)))'}
+	average = 1.5891704082489013
+	std = 0.0805093556819935

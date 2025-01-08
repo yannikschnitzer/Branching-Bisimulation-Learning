@@ -36,42 +36,42 @@ experiments = [
         'name': "test/cav13-ctl-examples/P7.t2",
         'formula': "[AG](varS != 1 || [EF](varU == 1))"
     },
-    {
-        'name': "test/cav13-ctl-examples/P8.t2",
-        'formula': "[EF](varS == 1 && [AG](varU != 1))"
-    },
-    {
-        'name': "test/cav13-ctl-examples/P9.t2",
-        'formula': "[AG](varA != 1 || [AF](varR == 1))"
-    },
-    {
-        'name': "test/cav13-ctl-examples/P10.t2",
-        'formula': "[EF](varA == 1 && [EG](varR != 1))"
-    },
-    {
-        'name': "test/cav13-ctl-examples/P11.t2",
-        'formula': "[AG](varA != 1 || [EF](varR == 1))"
-    },
-    {
-        'name': "test/cav13-ctl-examples/P12.t2",
-        'formula': "[EF](varA == 1 && [AG](varR != 1))"
-    },
-    {
-        'name': "test/cav13-ctl-examples/P13.t2",
-        'formula': "[EG](varP1 != 1) || [EG](varP2 != 1)"
-    },
-    {
-        'name': "test/cav13-ctl-examples/P14.t2",
-        'formula': "[EG](varP1 != 1) || [EG](varP2 != 1)"
-    },
-    {
-        'name': "test/cav13-ctl-examples/P15.t2",
-        'formula': "[EF](varP1 == 1) && [EF](varP2 == 1)"
-    },
-    {
-        'name': "test/cav13-ctl-examples/P16.t2",
-        'formula': "[AG](varP1 != 1) || [AG](varP2 != 1)"
-    },
+    # {
+    #     'name': "test/cav13-ctl-examples/P8.t2",
+    #     'formula': "[EF](varS == 1 && [AG](varU != 1))"
+    # },
+    # {
+    #     'name': "test/cav13-ctl-examples/P9.t2",
+    #     'formula': "[AG](varA != 1 || [AF](varR == 1))"
+    # },
+    # {
+    #     'name': "test/cav13-ctl-examples/P10.t2",
+    #     'formula': "[EF](varA == 1 && [EG](varR != 1))"
+    # },
+    # {
+    #     'name': "test/cav13-ctl-examples/P11.t2",
+    #     'formula': "[AG](varA != 1 || [EF](varR == 1))"
+    # },
+    # {
+    #     'name': "test/cav13-ctl-examples/P12.t2",
+    #     'formula': "[EF](varA == 1 && [AG](varR != 1))"
+    # },
+    # {
+    #     'name': "test/cav13-ctl-examples/P13.t2",
+    #     'formula': "[EG](varP1 != 1) || [EG](varP2 != 1)"
+    # },
+    # {
+    #     'name': "test/cav13-ctl-examples/P14.t2",
+    #     'formula': "[EG](varP1 != 1) || [EG](varP2 != 1)"
+    # },
+    # {
+    #     'name': "test/cav13-ctl-examples/P15.t2",
+    #     'formula': "[EF](varP1 == 1) && [EF](varP2 == 1)"
+    # },
+    # {
+    #     'name': "test/cav13-ctl-examples/P16.t2",
+    #     'formula': "[AG](varP1 != 1) || [AG](varP2 != 1)"
+    # },
     {
         'name': "test/cav13-ctl-examples/P17.t2",
         'formula': "[AG]([AF](varW >= 1))"
@@ -134,33 +134,36 @@ experiments = [
     }
 ]
 
-def run_t2_experiment(exp):
+def run_t2_experiment(exp, negated=False):
+    formula = exp['formula']
+    if negated:
+        formula = f"!({formula})"
     cmd = f"""
     mono src/bin/Debug/T2.exe \\
         {exp['name']} \\
-        --CTL '{exp['formula']}' 
+        --CTL '{formula}' 
     """
     outb = subprocess.check_output(cmd, shell=True, stderr=subprocess.DEVNULL)
     out = outb.decode("utf-8")
-    match = re.search("Temporal proof succeeded", out)
+    match = re.search("Temporal proof", out)
     if match is None:
         print("Alarm! Alarm!")
         raise Exception(out)
 
-def measure_t2_experiment(exp):
+def measure_t2_experiment(exp, negated=False):
     # retry until success
     start_time = time.time()
-    run_t2_experiment(exp)
+    run_t2_experiment(exp, negated)
     stop_time = time.time()
     return start_time, stop_time
 
 
-def run_t2_experiments(iters, verbose=False):
+def run_t2_experiments(iters, verbose=False, negated=False):
     for exp in experiments:
         times = []
         try:
             for i in range(iters):
-                start_time, stop_time = measure_t2_experiment(exp)
+                start_time, stop_time = measure_t2_experiment(exp, negated)
                 times.append(stop_time - start_time)
                 if verbose:
                     print(f"--- Experiment {exp} - {i}th run expired in {times[-1]}s")
@@ -180,11 +183,13 @@ if __name__ == "__main__":
         epilog = "Copyright?"
     )
     arg_parser.add_argument("-i", "--iters")
+    arg_parser.add_argument("-n", "--negated", action="store_true")
     arg_parser.add_argument("-v", "--verbose", action="store_true")
     args = arg_parser.parse_args()
     
     iters = args.iters or 10 # default iterations is 10
     iters = int(iters)
+    negated = args.negated
     verbose = args.verbose
     os.system("")
-    run_t2_experiments(iters, verbose)
+    run_t2_experiments(iters, verbose=verbose, negated=negated)

@@ -14,11 +14,10 @@ FROM: loc3;
 TO: loc3;
 
 FROM: loc2;
-varND := nondet() % 2;
 TO: loc4;
 
 FROM: loc4;
-assume(varND <= 0 && varX > 1);
+assume(varX > 1);
 TO: loc5;
 
 FROM: loc5;
@@ -26,6 +25,13 @@ varX := varX + 1;
 TO: loc2;
 
 FROM: loc4;
-assume(varND >= 1 || varX <= 1);
+assume(varX <= 1);
+varX := varX - 1;
+TO: loc2;
+
+FROM: loc2;
+TO: loc6;
+
+FROM: loc6;
 varX := varX - 1;
 TO: loc2;
