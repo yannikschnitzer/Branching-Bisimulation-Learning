@@ -1,0 +1,44 @@
+MODULE main
+    VAR a : -2047..2048;
+    VAR r : -2047..2048;
+    VAR n : -2047..2048;
+    VAR loc : 1..5;
+    VAR pcp : 1..5;
+
+    INIT a = 0;
+    INIT r = 0;
+    INIT loc = 1;
+
+    ASSIGN next(a) := case
+        loc = 1 & pcp = 2 : 1;
+        loc = 2 & pcp = 3 : 0;
+        TRUE    : a;
+    esac;
+
+    ASSIGN next(r) := case
+        loc = 3 & pcp = 4 & n <= 0 : 1;
+        loc = 4 & pcp = 1          : 0;
+        TRUE                       : r;
+    esac;
+
+    ASSIGN next(n) := case
+        loc = 3 & pcp = 3 & n > 0 : n - 1;
+        TRUE                      : n;
+    esac;
+
+    ASSIGN next(loc) := case
+        loc = 1 & pcp = 5 : 5;
+        loc = 1 & pcp = 2 : 2;
+        loc = 2 & pcp = 3 : 3;
+        loc = 3 & pcp = 3 : 3;
+        loc = 3 & pcp = 4 : 4;
+        loc = 4 & pcp = 1 : 1;
+        TRUE              : loc;
+    esac;
+
+    LTLSPEC G(a != 1 | F(r = 1));
+
+
+
+
+    
