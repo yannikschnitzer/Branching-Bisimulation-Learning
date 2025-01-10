@@ -1,0 +1,15 @@
+MODULE main
+    VAR x : integer;
+    
+    DEFINE terminated := x >= -1 & x <= 1;
+
+    TRANS (terminated           & next(x) = x)
+        | (!terminated          & next(x) = x - 1)
+        | (!terminated & x >  1 & next(x) = x + 1)
+        | (!terminated & x <= 1 & next(x) = x - 1)
+        ;
+    
+    LTLSPEC (x < -1 -> G(!terminated))
+
+    
+

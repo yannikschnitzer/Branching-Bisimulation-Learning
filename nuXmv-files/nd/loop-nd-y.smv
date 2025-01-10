@@ -1,0 +1,17 @@
+MODULE main
+    VAR x : integer;
+    VAR y : integer;
+    
+    DEFINE terminated := x <= 0;
+
+    TRANS ((terminated           & next(x) = x)
+        | (!terminated          & next(x) = x - 1)
+        | (!terminated & x >= y & next(x) = x + 1)
+        | (!terminated & x <  y & next(x) = x - 1))
+        & next(y) = y
+        ;
+    
+    LTLSPEC (x < y -> F(terminated))
+    /-- CTLSPEC (x > y -> EG(!terminated)) --/
+
+    

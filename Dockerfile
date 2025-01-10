@@ -55,6 +55,8 @@ WORKDIR /z3/build
 RUN make && \
     make install
 
+RUN ln -s /CAV25/nuXmv-2.0.0-Linux/bin/nuXmv /usr/bin/nuxmv
+
 # Get artifact and libraries 
 WORKDIR /CAV25 
 RUN mkdir Bisimulation-Learning
