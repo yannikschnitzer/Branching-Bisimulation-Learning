@@ -37,6 +37,6 @@ TO: loc6;
 
 FROM: loc6;
 varX := varX - 1;
-varY := = varY;
+varY := varY;
 TO: loc2;
 
