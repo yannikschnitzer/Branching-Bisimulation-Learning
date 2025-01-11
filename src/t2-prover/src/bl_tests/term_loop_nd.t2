@@ -32,7 +32,7 @@ assume(varX > 1);
 varX := varX - 1;
 TO: loc2;
 
-FROM loc4;
+FROM: loc4;
 assume(varX >= -1 && varX <= 1);
 TO loc3;
 
