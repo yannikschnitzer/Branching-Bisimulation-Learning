@@ -1,0 +1,17 @@
+MODULE main
+    VAR i: integer;
+    VAR p: integer;
+    VAR s: integer;
+    VAR u: integer;
+
+    TRANS (next(i) = i < p ? i : i + 1 
+            & next(p) = p 
+            & next(s) = 1
+            & next(u) = i < p ? 1 : u)
+        | (next(i) = i
+            & next(p) = p
+            & next(s) = 1
+            & next(u) = 1)
+        ;
+    
+    LTLSPEC G(s = 1 -> F(u = 1))

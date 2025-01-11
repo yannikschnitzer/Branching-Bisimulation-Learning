@@ -1,0 +1,13 @@
+MODULE main
+    VAR x: integer;
+
+    TRANS (next(x) = x < 0 ? x : x + 1)
+        | (next(x) = x < 0 
+            ? x 
+            : (x > 5 
+                ? x + 1
+                : (x > 2 ? x - 1 : x)))
+        ;
+    
+    LTLSPEC F(G(x < 1))
+

@@ -64,4 +64,4 @@ COPY . ./Bisimulation-Learning
 # RUN git clone https://github.com/yannikschnitzer/Bisimulation-Learning.git 
 RUN pip install -r Bisimulation-Learning/requirements.txt
 
-
+WORKDIR /CAV25/Bisimulation-Learning/nuXmv-files/nd

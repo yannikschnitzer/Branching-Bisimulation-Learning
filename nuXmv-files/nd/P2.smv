@@ -9,8 +9,8 @@ MODULE main
         | (n <= 0
             & next(a) = 1 & next(r) = 1 & next(n) = n)
         ;
-        
-    LTLSPEC G(a != 1 | F(r = 1));
+    
+    LTLSPEC F(a = 1 & G(r != 5));
 
 
 
