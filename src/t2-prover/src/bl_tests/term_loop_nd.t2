@@ -34,7 +34,7 @@ TO: loc2;
 
 FROM: loc4;
 assume(varX >= -1 && varX <= 1);
-TO loc3;
+TO: loc3;
 
 FROM: loc6;
 varX := varX - 1;
