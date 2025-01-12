@@ -2,7 +2,7 @@ MODULE main
     VAR x: integer;
 
     TRANS (next(x) = x + 1)
-        | (next(x) = x <= 5 ? 1 : x + 1)
+        | (next(x) = (x <= 5 ? 1 : x + 1))
         ;
     
     LTLSPEC G(F(x >= 1))
