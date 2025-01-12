@@ -33,8 +33,9 @@ experiments = [
 ]
 
 def run_nuxmv_experiment(exp: str):
-    cmd = f"nuxmv -source chech-inf-state.scr {exp}"
+    cmd = f"nuxmv -source check-inf-state.scr {exp}"
     outb = subprocess.check_output(cmd, shell=True, stderr=subprocess.DEVNULL, timeout=500)
+    # print(outb.decode("utf-8"))
 
 def measure_nuxmv_experiment(exp):
     start_time = time.time()
