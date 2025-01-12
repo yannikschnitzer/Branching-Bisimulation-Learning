@@ -1,0 +1,4 @@
+/CAV25/ultimate/releaseScripts/default/UAutomizer-linux/Ultimate \
+    -tc /CAV25/ultimate/releaseScripts/default/UAutomizer-linux/config/AutomizerLTL.xml \
+    -i $1 \
+    --settings /CAV25/ultimate/releaseScripts/default/UAutomizer-linux/config/svcomp-LTL-64bit-Automizer_Default.epf

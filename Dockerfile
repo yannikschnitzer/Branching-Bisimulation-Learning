@@ -57,6 +57,15 @@ RUN make && \
 
 RUN ln -s /CAV25/nuXmv-2.0.0-Linux/bin/nuXmv /usr/bin/nuxmv
 
+# To run ultimate-ltl
+WORKDIR /
+RUN wget http://www.lsv.fr/~gastin/ltl2ba/ltl2ba-1.3.tar.gz
+RUN tar -xvzf ltl2ba-1.3.tar.gz
+WORKDIR /ltl2ba-1.3
+RUN make
+RUN ln -s /ltl2ba-1.3/ltl2ba /usr/bin/ltl2ba
+
+
 # Get artifact and libraries 
 WORKDIR /CAV25 
 RUN mkdir Bisimulation-Learning
@@ -64,4 +73,8 @@ COPY . ./Bisimulation-Learning
 # RUN git clone https://github.com/yannikschnitzer/Bisimulation-Learning.git 
 RUN pip install -r Bisimulation-Learning/requirements.txt
 
-WORKDIR /CAV25/Bisimulation-Learning/nuXmv-files/nd
+RUN mv /CAV25/Bisimulation-Learning/src/ultimate-ltl/ultimate-ltl /usr/local/bin/
+RUN chmod 757 /usr/local/bin/ultimate-ltl
+
+WORKDIR /CAV25/Bisimulation-Learning/src/ultimate-ltl
+
