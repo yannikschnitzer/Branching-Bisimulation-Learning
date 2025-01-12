@@ -1,5 +1,7 @@
 MODULE main
     VAR x: integer;
+    
+    INIT x = 10;
 
     TRANS (next(x) = (x < 0 ? x : x + 1))
         | (next(x) = (x < 0
@@ -9,5 +11,8 @@ MODULE main
                 : (x > 2 ? x - 1 : x))))
         ;
     
-    LTLSPEC F(G(x < 1))
+    --LTLSPEC F(x < 1)
+    --LTLSPEC x <= 1 -> G(x <= 1)
+     LTLSPEC G(F(x < 1))
+    --LTLSPEC F G (x < 1)
 

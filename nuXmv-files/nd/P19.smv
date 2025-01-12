@@ -4,6 +4,8 @@ MODULE main
     TRANS (next(x) = x + 1)
         | (next(x) = (x <= 5 & x > 2 ? x - 1 : x + 1))
         ;
-    
-    LTLSPEC G(F(x >= 1))
 
+    --LTLSPEC F(x>= 1)
+    --LTLSPEC x <= 1 -> G(x <= 1)
+    --LTLSPEC G(F(x >= 1))
+    LTLSPEC F G (x >= 1)
