@@ -1,15 +1,19 @@
 MODULE main
     VAR x : integer;
+    VAR y : integer;
     
     DEFINE terminated := x <= 0;
 
-    TRANS (terminated           & next(x) = x)
-        | (!terminated          & next(x) = x - 1)
-        | (!terminated & x >= 3 & next(x) = x + 1)
-        | (!terminated & x <  3 & next(x) = x - 1)
+    TRANS (terminated           & next(x) = x & next(y) = y)
+        | (!terminated          & next(x) = x - 1 & next(y) = y)
+        | (!terminated & x >= 3 & next(x) = x + 1 & next(y) = y)
+        | (!terminated & x <  3 & next(x) = x - 1 & next(y) = y)
         ;
     
-    LTLSPEC (x = 2 -> F(terminated))
+    LTLSPEC (x > 0 -> F(terminated))
+    LTLSPEC (x < 0 -> !F(terminated))
+    LTLSPEC F(G(x > 0))
+    LTLSPEC G(F(x > 0))
 
     
 

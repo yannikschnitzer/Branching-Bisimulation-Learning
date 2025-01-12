@@ -9,7 +9,10 @@ MODULE main
         | (!terminated & x <= 1 & next(x) = x - 1)
         ;
     
-    LTLSPEC (x < -1 -> G(!terminated))
+    --LTLSPEC (x > 1 -> F(terminated))
+    --LTLSPEC (x < -1 -> G(!terminated))
+    --LTLSPEC F(G(x >= -1))
+    LTLSPEC (G F(x >= -1))
 
     
 

@@ -3,14 +3,20 @@ MODULE main
     VAR r : integer;
     VAR n : integer;
 
+    INIT r = 0;
+    INIT n >= 16;
+
     TRANS (next(a) = a & next(r) = r & next(n) = n)
         | (n > 0
             & next(a) = 1 & next(r) = r & next(n) = n - 1)
         | (n <= 0
             & next(a) = 1 & next(r) = 1 & next(n) = n)
         ;
-        
-    LTLSPEC G(a != 1 | F(r = 1));
+    
+    --LTLSPEC F (a = 1)
+    --LTLSPEC G (n >= 0)
+    --LTLSPEC G F(n > 0);
+    LTLSPEC r < a -> F G(r < a)
 
 
 

@@ -11,7 +11,9 @@ MODULE main
         & next(y) = y
         ;
     
-    LTLSPEC (x < y -> F(terminated))
-    /-- CTLSPEC (x > y -> EG(!terminated)) --/
+    --LTLSPEC (x < y -> F(terminated))
+    LTLSPEC (x > 0 -> F(terminated))
+    --LTLSPEC (x < y -> G F(terminated))
+    LTLSPEC (G F(terminated))
 
     
