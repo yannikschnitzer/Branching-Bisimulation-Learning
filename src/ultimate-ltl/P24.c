@@ -1,5 +1,5 @@
 //#Safe
-//@ ltl invariant positive: [] <> AP(w == 1);
+//@ ltl invariant positive: <> [] AP(w != 1);
 
 #include <stdio.h> 
 
@@ -16,20 +16,22 @@ int main()
     while(1)
     {
         int choice = __VERIFIER_nondet_int();
-        if (g < 1) {
-            if (w >= 1) {
+        if (choice > 1) {
+            if (w > 0) {
+                w = 0;
+            } else {
+                w = 1;
+            }
+            g = 1;
+        } else if (choice > 0) {
+            if (w > 0) {
                 w = 0;
             } else {
                 w = w;
             }
-            g = g;
+            g = 1;
         } else {
-            if (choice > 0) {
-                w = 1;
-            } else {
-                w = w;
-            }
-            g = 0;
+            // stay
         }
     }
 }
