@@ -1,0 +1,17 @@
+MODULE main
+    VAR x : integer;
+    
+    DEFINE terminated := x < 0 | x > 1000;
+
+    TRANS (terminated           & next(x) = x)
+        | (!terminated          & next(x) = x + 1)
+        | (!terminated          & next(x) = x * x)
+        ;
+    
+    -- LTLSPEC (x > 1 -> F(terminated))
+    --LTLSPEC (F(terminated))
+    LTLSPEC (x > 1 -> F G(terminated))
+
+
+    
+

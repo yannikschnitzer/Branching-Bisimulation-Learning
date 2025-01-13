@@ -3,6 +3,8 @@ MODULE main
     VAR r: integer;
     VAR cs: integer;
 
+    INIT c = 10 & cs = 80 & r = 5;
+
     TRANS (cs <= 0 | c > 5 | c < cs
             ? next(c) = c & next(r) = r & next(cs) = cs
             : next(c) = c - 1 & next(r) = r + 1 & next(cs) = cs - 1)
@@ -11,4 +13,7 @@ MODULE main
             : next(cs) = cs - 1))
         ;
     
-    LTLSPEC (c > 5 & G (r <= 5))
+    LTLSPEC (F c < 5)
+    LTLSPEC (G c > 5)
+    LTLSPEC (G F r >= 5)
+    LTLSPEC (F G c > 5)

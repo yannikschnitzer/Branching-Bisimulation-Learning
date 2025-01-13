@@ -4,4 +4,5 @@ MODULE main
 
     TRANS next(w) = 1 & next(g) = (g >= 1 ? 0 : g);
 
-    LTLSPEC G(F(w >= 1))
+    LTLSPEC G F (w != 1)
+    LTLSPEC G(F(w = 1))
