@@ -1,8 +1,3 @@
-//#Safe
-//@ ltl invariant positive: AP(r < a) ==> <> [] AP(r < a);
-// ltl invariant positive: [] <> AP(n > 0);
-// ltl invariant positive: [] (AP(a == 1) ==> <> AP(r == 1));
-// ltl invariant positive: <> AP(n == 1);
 
 #include <stdio.h> 
 

@@ -1,10 +1,4 @@
 
-//#Safe
-//@ ltl invariant positive: <> [] AP(x > 0);
-// ltl invariant positive: [] <> AP(x > 0);
-// ltl invariant positive: AP(x < 0) ==> !<> AP(x <= 0);
-// ltl invariant positive: AP(x > 0) ==> <> AP(x <= 0);
-
 #include <stdio.h> 
 
 extern void __VERIFIER_error() __attribute__ ((__noreturn__));

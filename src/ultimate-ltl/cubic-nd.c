@@ -12,14 +12,14 @@ int main()
     x = __VERIFIER_nondet_int();
     while(1)
     {
-        if (x < -1) {
-            x = x - 1;
-        } else if (x > 1) {
+        int terminated = x < 0 || x > 1000;
+        if (!terminated) {
+
             int a = __VERIFIER_nondet_int();
             if (a > 0) {
-                x = x - 1;
-            } else {
                 x = x + 1;
+            } else {
+                x = 4 * x * x * x + 3 * x * x + 2 * x + 1;
             }
         }
         else {

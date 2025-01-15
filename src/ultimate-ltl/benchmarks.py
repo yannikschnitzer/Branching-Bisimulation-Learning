@@ -4,63 +4,123 @@ import time
 import re
 import os
 import numpy as np
+import pandas as pd
 
 # ultimate-ltl P19.c
 
 experiments = [
-    # "term-loop-nd.c",
-    # "term-loop-nd-2.c",
-    # "term-loop-nd-y.c",
-    "quadratic-nd.c",
-    "cubic-nd.c",
-    "nlr-cond-nd.c",
-    # "P1.c",
-    # "P2.c",
-    # "P3.c",
-    # "P4.c",
-    # "P5.c",
-    # "P6.c",
-    # "P7.c",
-    # "P17.c",
-    # "P18.c",
-    # "P19.c",
-    # "P20.c",
-    # "P21.c",
-    # "P22.c",
-    # "P23.c",
-    # "P24.c",
-    # "P25.c",
-    # "P26.c",
-    # "P27.c",
-    # "P28.c"
+    {
+        'experiment': "term-loop-nd.c",
+        'formulas': "term-loop-nd.ltl"
+    },
+    {
+        'experiment': "term-loop-nd-2.c",
+        'formulas': "term-loop-nd-2.ltl"
+    },
+    {
+        'experiment': "term-loop-nd-y.c",
+        'formulas': "term-loop-nd-y.ltl"
+    },
+    {
+        'experiment': "P1.c",
+        'formulas': "P1.ltl"
+    },
+    {
+        'experiment': "P2.c",
+        'formulas': "P2.ltl"
+    },
+    {
+        'experiment': "P3.c",
+        'formulas': "P3.ltl"
+    },
+    {
+        'experiment': "P4.c",
+        'formulas': "P4.ltl"
+    },
+    {
+        'experiment': "P5.c",
+        'formulas': "P5.ltl"
+    },
+    {
+        'experiment': "P6.c",
+        'formulas': "P6.ltl"
+    },
+    {
+        'experiment': "P7.c",
+        'formulas': "P7.ltl"
+    },
+    {
+        'experiment': "P17.c",
+        'formulas': "P17.ltl"
+    },
+    {
+        'experiment': "P18.c",
+        'formulas': "P18.ltl"
+    },
+    {
+        'experiment': "P19.c",
+        'formulas': "P19.ltl"
+    },
+    {
+        'experiment': "P20.c",
+        'formulas': "P20.ltl"
+    },
+    {
+        'experiment': "P21.c",
+        'formulas': "P21.ltl"
+    },
+    {
+        'experiment': "P25.c",
+        'formulas': "P25.ltl"
+    },
 ]
 
-def measure_ultimate_ltl_experiment(exp: str):
-    cmd = f"ultimate-ltl {exp}"
+def run_ultimate_ltl_experiment(exp: str, formula: str, formula_idx: int):
+    file_to_check = f"{formula_idx}-{exp}"
+    ltl_header = f"""//#Safe\n//@ ltl invariant positive: {formula};"""
+    cmd = f"""
+    rm -f "{file_to_check}" \\
+        && echo "{ltl_header}" >> "{file_to_check}" \\
+        && cat "{exp}" >> "{file_to_check}" \\
+        && ultimate-ltl "{file_to_check}"
+    """
     outb = subprocess.check_output(cmd, shell=True, stderr=subprocess.DEVNULL, timeout=500)
     out = outb.decode("utf-8")
     time_pattern = r"Automizer plugin needed (\d+\.\d+)"
     matches = re.findall(time_pattern, out)
     return float(matches[0])
 
+def measure_ultimate_ltl_experiment(exp: str, formula: str, formula_idx: str, output: pd.DataFrame):
+    times = []
+    try:
+        for i in range(iters):
+            time = run_ultimate_ltl_experiment(exp, formula, formula_idx)
+            times.append(time)
+            if verbose:
+                print(f"--- Experiment {exp} Formula {formula} - {i}th run expired in {times[-1]}s")
+        avg = np.average(times)
+        std = np.std(times)
+        output.loc[len(output)] = [exp, formula, avg, std]
+        print(f"--- Experiment {exp} Formula {formula} \n\taverage = {avg} \n\tstd = {std}")
+    except subprocess.TimeoutExpired:
+        print(f"Experiment {exp} Formula {formula}: OOT")
 
-def run_ultimate_ltl_experiments(iters, verbose=False):
+def run_ultimate_ltl_experiments(iters, verbose=False) -> pd.DataFrame:
+    output = pd.DataFrame({
+        'Experiment': [],
+        'Formula': [],
+        'Runtime': [],
+        'StD': []
+    })
     for exp in experiments:
-        times = []
         try:
-            for i in range(iters):
-                time = measure_ultimate_ltl_experiment(exp)
-                times.append(time)
-                if verbose:
-                    print(f"--- Experiment {exp} - {i}th run expired in {times[-1]}s")
-            avg = np.average(times)
-            std = np.std(times)
-            print(f"--- Experiment {exp} \n\taverage = {avg} \n\tstd = {std}")
-        except subprocess.TimeoutExpired:
-            print(f"Experiment {exp}: OOT")
-        except Exception:
-            print(f"Skipped experiment {exp} one iteration failed")
-            pass
+            with open(exp['formulas']) as f_formulas:
+                formulas = [line.rstrip() for line in f_formulas]
+                for idx, formula in enumerate(formulas):
+                    measure_ultimate_ltl_experiment(exp['experiment'], formula, idx, output)
+        except Exception as e:
+            print(f"Skipped experiment {exp} one iteration failed\nReason was: {e}")
+    return output
 
 
 
@@ -79,4 +139,5 @@ if __name__ == "__main__":
     iters = int(iters)
     verbose = args.verbose
     os.system("")
-    run_ultimate_ltl_experiments(iters, verbose=verbose)
+    output = run_ultimate_ltl_experiments(iters, verbose=verbose)
+    output.to_csv("ultimate-ltl.csv")

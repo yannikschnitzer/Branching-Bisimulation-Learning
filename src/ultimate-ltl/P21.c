@@ -1,6 +1,3 @@
-//#Safe
-// ltl invariant positive: [] <> AP(w == 5);
-// ltl invariant positive: [] <> AP(w != 1);
 
 #include <stdio.h> 
 
