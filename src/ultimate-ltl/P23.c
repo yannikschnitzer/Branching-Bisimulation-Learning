@@ -1,5 +1,5 @@
 //#Safe
-//@ ltl invariant positive: [] <> AP(w == 1);
+//@ ltl invariant positive: [] <> AP(w != 1);
 
 #include <stdio.h> 
 

@@ -1,6 +1,9 @@
 
 //#Safe
-//@ ltl invariant positive: <>([] AP(x >= -1) && [] AP(x <= 1));
+//@ ltl invariant positive: AP(x < y) ==> [] <> AP(x <= 0);
+// ltl invariant positive: [] <> AP(x <= 0);
+// ltl invariant positive: AP(x < y) ==> <> AP(x <= 0);
+// ltl invariant positive: AP(x > 0) ==> <> AP(x <= 0);
 
 #include <stdio.h> 
 

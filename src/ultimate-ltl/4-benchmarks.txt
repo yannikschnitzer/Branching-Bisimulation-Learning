@@ -1,0 +1,44 @@
+
+--- Experiment term-loop-nd.c
+	average = 3.4899999999999998
+	std = 0.29816103031751157
+--- Experiment term-loop-nd-2.c
+	average = 0.38
+	std = 0.040000000000000015
+--- Experiment term-loop-nd-y.c
+	average = 4.81
+	std = 0.05385164807134515
+--- Experiment P1.c
+	average = 0.45999999999999996
+	std = 0.10198039027185568
+--- Experiment P2.c
+	average = 0.45
+	std = 0.06708203932499368
+--- Experiment P3.c
+	average = 0.4600000000000001
+	std = 0.04898979485566355
+--- Experiment P4.c
+	average = 0.47000000000000003
+	std = 0.07810249675906653
+--- Experiment P5.c
+	average = 2.3099999999999996
+	std = 0.053851648071345
+--- Experiment P6.c
+	average = 1.41
+	std = 0.122065556157337
+--- Experiment P7.c
+	average = 1.72
+	std = 0.1661324772583615
+--- Experiment P17.c
+	average = 10.349999999999998
+	std = 0.12845232578665125
+Skipped experiment P18.c one iteration failed
+--- Experiment P19.c
+	average = 9.209999999999999
+	std = 0.0943398113205664
+--- Experiment P20.c
+	average = 0.6799999999999999
+	std = 0.039999999999999994
+--- Experiment P25.c
+	average = 0.78
+	std = 0.040000000000000036

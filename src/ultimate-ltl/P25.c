@@ -1,5 +1,8 @@
 //#Safe
-//@ ltl invariant positive: AP(c > 5) ==> <> AP(r > 5);
+//@ ltl invariant positive: <> [] AP (r > 5);
+// ltl invariant positive: [] <> AP (r >= 5);
+// ltl invariant positive: [] AP (c > 5);
+// ltl invariant positive: <> AP (c < 5);
 
 #include <stdio.h> 
 
