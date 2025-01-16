@@ -1380,3 +1380,89 @@ def robots():
         num_partitions = 3
     )
     return trs, tem
+
+def successors_two_robots(s):
+    succ_move_robot_1 = [x for x in s]
+    succ_move_robot_2 = [x for x in s]
+    clash = And(s[0] == IntVal(0), s[1] == IntVal(0))
+    # robot 1 walks only horizontally E -> W on x axis (i.e. y_1 == 0)
+    # its position variable is just s[0] (X axis)
+    succ_move_robot_1[0] = If(clash, s[0], s[0] + 1)
+    # robot 2 walks only vertically S -> N on y axis (i.e. x_2 == 0)
+    # its position variable is just s[1] (Y axis)
+    succ_move_robot_2[1] = If(clash, s[1], s[1] + 1)
+    return [succ_move_robot_1, succ_move_robot_2]
+
+def bdt_two_robots(params, x, num_params, partitions):
+    """
+    The BDT for robots (safety) has to discern the three
+    abstract states of interest:
+    - 0 : two robots are in the same position (x_1 == 0 && y_2 == 0)
+    - 1 : the two robots can clash (x_1 <= 0 && y_2 <= 0)
+    - 2 : the two robots cannot clash (otherwise)
+    """
+    # b = BDTNodePolyEquality(
+    #     # y_2 == 0
+    #     [RealVal(0), RealVal(0), RealVal(1)], x, RealVal(0), 
+    #     BDTNodePolyEquality(
+    #         # x_1 == x_2
+    #         [RealVal(1), RealVal(-1), 0], x, RealVal(0),
+    #         BDTLeave(partitions[0]),
+    #         BDTNodePoly(
+    #             [params[num_params+3],params[num_params+4],params[num_params+5]], x, params[1],
+    #             BDTLeave(partitions[1]),
+    #             BDTLeave(partitions[2])
+    #         )
+    #     ),
+    #     # y_2 != 0
+    #     BDTNodePoly(
+    #         # y_2 > 0
+    #         [RealVal(0), RealVal(0), RealVal(-1)], x, RealVal(0),
+    #         BDTLeave(partitions[1]),
+    #         # y_2 < 0
+    #         BDTNodePoly(
+    #             [params[num_params],params[num_params+1],params[num_params+2]], x, params[0],
+    #             BDTLeave(partitions[1]),
+    #             BDTLeave(partitions[2])
+    #         )
+    #     )
+    #     # or just BDTNodePoly 1 / 2
+    # )
+    b = BDTNodePoly(
+        # y_2 <= 0
+        [RealVal(0), RealVal(1)], x, RealVal(0), 
+        BDTNodePoly(
+            # x_1 <= 0
+            [RealVal(1), RealVal(0)], x, RealVal(0),
+            BDTNodePoly(
+                [params[num_params],params[num_params+1]], x, params[0],
+                BDTLeave(partitions[1]),
+                BDTLeave(partitions[2])
+            ),
+            BDTLeave(partitions[0]) # G safe
+        ),
+        # y_2 > 0
+        BDTLeave(partitions[0]) # G safe
+    )
+    return b.formula(), b
+
+def two_robots():
+    """
+    Semplification of the example taken from section 4 (Case Study 1) from the paper
+    of Carelli and Grumberg.
+    It features two concurrent robots that change their position
+    depending on a different linear transformation.
+    """
+    dim = 2
+    trs = BranchingTransitionSystem(
+        dim = dim,
+        successors = successors_two_robots
+    )
+    tem = BDTTemplate(
+        dim = dim,
+        bdt_classifier = bdt_two_robots,
+        num_params = 1,
+        num_coefficients = 2,
+        num_partitions = 3
+    )
+    return trs, tem

@@ -40,10 +40,12 @@ if __name__ == "__main__":
     # trs, tem = term_loop_nd_2()
     # trs, tem = term_loop_nd_y()
     # trs, tem = term_loop_nd_y()
-    trs, tem = P2()
+    # trs, tem = P2()
+    trs, tem = two_robots()
+    run_and_print(trs, tem, expl=True)
     # run_and_show(trs, tem)
-    for i in range(10):
-        trs, tem = P5()
-        run_and_print(trs, tem, expl = True)
+    # for i in range(10):
+    #     trs, tem = P5()
+    #     run_and_print(trs, tem, expl = True)
 
     
