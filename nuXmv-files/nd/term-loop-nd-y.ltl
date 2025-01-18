@@ -1,0 +1,4 @@
+(x < y -> F(terminated))
+(x > 0 -> F(terminated))
+(x < y -> G F(terminated))
+(G F(terminated))

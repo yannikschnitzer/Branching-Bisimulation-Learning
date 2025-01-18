@@ -11,4 +11,3 @@ MODULE main
             : next(cs) = cs - 1))
         ;
     
-    LTLSPEC (c > 5 -> F (r > 5))

@@ -15,12 +15,6 @@ MODULE main
     
     LTLSPEC F(a = 1 & G(r != 5));
 
-    --LTLSPEC F (a = 1)
-    --LTLSPEC G (n >= 0)
-    --LTLSPEC G F(n > 0);
-    LTLSPEC r < a -> F G(r < a)
-
-
 
 
     

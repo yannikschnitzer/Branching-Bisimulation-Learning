@@ -7,10 +7,6 @@ MODULE main
         | (!terminated          & next(x) = x + 1)
         | (!terminated          & next(x) = x * x)
         ;
-    
-    -- LTLSPEC (x > 1 -> F(terminated))
-    --LTLSPEC (F(terminated))
-    LTLSPEC (x > 1 -> F G(terminated))
 
 
     

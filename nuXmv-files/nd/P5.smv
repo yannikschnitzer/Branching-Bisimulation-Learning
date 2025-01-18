@@ -13,8 +13,3 @@ MODULE main
             & next(s) = 1
             & next(u) = 1)
         ;
-
-    --LTLSPEC F(s = 1 & u = 1)
-    --LTLSPEC G(s = 1 -> F(u = 1))
-    LTLSPEC G F (u = 1)
-    --LTLSPEC p < i -> F G(u = 1)

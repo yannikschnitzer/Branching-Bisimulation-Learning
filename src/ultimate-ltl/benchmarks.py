@@ -22,6 +22,18 @@ experiments = [
         'formulas': "term-loop-nd-y.ltl"
     },
     {
+        'experiment': "quadratic-nd.smv",
+        'formulas': "quadratic-nd.ltl"
+    },
+    {
+        'experiment': "cubic-nd.smv",
+        'formulas': "cubic-nd.ltl"
+    },
+    {
+        'experiment': "nlr-cond-nd.smv",
+        'formulas': "nlr-cond-nd.ltl"
+    },
+    {
         'experiment': "P1.c",
         'formulas': "P1.ltl"
     },

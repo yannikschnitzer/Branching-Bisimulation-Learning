@@ -10,10 +10,5 @@ MODULE main
         | (!terminated & x <  y & next(x) = x - 1))
         & next(y) = y
         ;
-    
-    --LTLSPEC (x < y -> F(terminated))
-    LTLSPEC (x > 0 -> F(terminated))
-    --LTLSPEC (x < y -> G F(terminated))
-    LTLSPEC (G F(terminated))
 
     

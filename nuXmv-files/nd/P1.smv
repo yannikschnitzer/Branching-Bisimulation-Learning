@@ -12,12 +12,6 @@ MODULE main
         | (n <= 0
             & next(a) = 1 & next(r) = 1 & next(n) = n)
         ;
-    
-    --LTLSPEC F (a = 1)
-    --LTLSPEC G (n >= 0)
-    --LTLSPEC G F(n > 0);
-    LTLSPEC r < a -> F G(r < a)
-
 
 
 

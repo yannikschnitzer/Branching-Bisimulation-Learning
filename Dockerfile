@@ -27,35 +27,11 @@ RUN wget https://dlcdn.apache.org/maven/maven-3/3.9.9/binaries/apache-maven-3.9.
 RUN tar -xvzf apache-maven-3.9.9-bin.tar.gz
 ENV PATH="$PATH:$PWD/apache-maven-3.9.9/bin"
 
-# Install nuXmv
-WORKDIR /CAV25
-RUN wget https://nuxmv.fbk.eu/theme/download.php?file=nuXmv-2.0.0-linux64.tar.gz && \
-    tar -xvzf download.php\?file\=nuXmv-2.0.0-linux64.tar.gz && \
-    rm download.php\?file\=nuXmv-2.0.0-linux64.tar.gz 
-
 # Install Ultimate
 WORKDIR /CAV25
 RUN git clone --depth=1 https://github.com/ultimate-pa/ultimate.git
 WORKDIR /CAV25/ultimate/releaseScripts/default
 RUN ./makeFresh.sh
-
-# Install CPAChecker
-WORKDIR /CAV25
-RUN wget https://cpachecker.sosy-lab.org/CPAchecker-2.3-unix.zip && \
-    unzip CPAchecker-2.3-unix.zip && \
-    rm CPAchecker-2.3-unix.zip  && \
-    apt-get install -y openjdk-17-jdk openjdk-17-jre
-
-# Intstall Z3
-WORKDIR /
-RUN git clone --depth=1 https://github.com/Z3Prover/z3.git 
-WORKDIR /z3
-RUN python3 ./scripts/mk_make.py
-WORKDIR /z3/build
-RUN make && \
-    make install
-
-RUN ln -s /CAV25/nuXmv-2.0.0-Linux/bin/nuXmv /usr/bin/nuxmv
 
 # To run ultimate-ltl
 WORKDIR /
@@ -65,16 +41,42 @@ WORKDIR /ltl2ba-1.3
 RUN make
 RUN ln -s /ltl2ba-1.3/ltl2ba /usr/bin/ltl2ba
 
+# Install nuXmv
+WORKDIR /CAV25
+RUN wget https://nuxmv.fbk.eu/theme/download.php?file=nuXmv-2.1.0-linux64.tar.xz
+RUN tar xf download.php\?file\=nuXmv-2.1.0-linux64.tar.xz && \
+    rm download.php\?file\=nuXmv-2.1.0-linux64.tar.xz 
+
+RUN ln -s /CAV25/nuXmv-2.1.0-linux64/bin/nuXmv /usr/bin/nuxmv
+
+
+# Install CPAChecker
+WORKDIR /CAV25
+RUN wget https://cpachecker.sosy-lab.org/CPAchecker-2.3-unix.zip && \
+    unzip CPAchecker-2.3-unix.zip && \
+    rm CPAchecker-2.3-unix.zip  && \
+    apt-get install -y openjdk-17-jdk openjdk-17-jre
+
+# Intstall Z3
+# WORKDIR /
+# RUN git clone --depth=1 https://github.com/Z3Prover/z3.git 
+# WORKDIR /z3
+# RUN python3 ./scripts/mk_make.py
+# WORKDIR /z3/build
+# RUN make && \
+#     make install
 
 # Get artifact and libraries 
 WORKDIR /CAV25 
 RUN mkdir Bisimulation-Learning
-COPY . ./Bisimulation-Learning
+COPY requirements.txt ./Bisimulation-Learning/
 # RUN git clone https://github.com/yannikschnitzer/Bisimulation-Learning.git 
 RUN pip install -r Bisimulation-Learning/requirements.txt
+
+COPY . ./Bisimulation-Learning
 
 RUN mv /CAV25/Bisimulation-Learning/src/ultimate-ltl/ultimate-ltl /usr/local/bin/
 RUN chmod 757 /usr/local/bin/ultimate-ltl
 
-WORKDIR /CAV25/Bisimulation-Learning/src/ultimate-ltl
+WORKDIR /CAV25/Bisimulation-Learning/nuXmv-files/nd/
 

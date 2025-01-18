@@ -9,11 +9,6 @@ MODULE main
         | (!terminated & x >= 3 & next(x) = x + 1 & next(y) = y)
         | (!terminated & x <  3 & next(x) = x - 1 & next(y) = y)
         ;
-    
-    LTLSPEC (x > 0 -> F(terminated))
-    LTLSPEC (x < 0 -> !F(terminated))
-    LTLSPEC F(G(x > 0))
-    LTLSPEC G(F(x > 0))
 
     
 

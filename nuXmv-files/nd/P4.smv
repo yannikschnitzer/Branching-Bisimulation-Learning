@@ -9,8 +9,3 @@ MODULE main
         | (next(a) = 1 & next(r) = (next(n) <= 0 ? 1 : 0) & next(n) = n - 1)
         | (next(a) = 1 & next(r) = (next(n) <= 0 ? 1 : 0) & next(n) = n)
         ;
-    
-    LTLSPEC F (n = 1)
-    LTLSPEC G(a = 1 -> F(r = 1))
-    --LTLSPEC G F(n > 0);
-    LTLSPEC r < a -> F G(r < a)
