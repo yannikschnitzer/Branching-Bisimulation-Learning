@@ -2,6 +2,7 @@ import numpy as np
 from z3 import *
 
 from bisimulation_learning.shared.utils import *
+from bisimulation_learning.shared.experiment import Experiment
 from bisimulation_learning.shared.binary_decision_trees import *
 
 class DeterministicTransitionSystem:
@@ -19,6 +20,21 @@ class DeterministicTransitionSystem:
         def successors(x):
             return [self.successor(x)]
         return BranchingTransitionSystem(self.dim, successors, self.domain)
+
+def experiment_to_dts(exp : Experiment):
+    trs = DeterministicTransitionSystem(
+        dim = exp.dim,
+        domain=exp.domain,
+        successor=exp.successor
+    )
+    tem = BDTTemplate(
+        dim = exp.dim,
+        bdt_classifier=exp.classifier,
+        num_params=exp.num_params,
+        num_coefficients=exp.num_coefficients,
+        num_partitions=exp.num_partitions
+    )
+    return trs, tem
 
 class BranchingTransitionSystem:
     def __init__(self, dim, successors, domain=None):

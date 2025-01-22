@@ -75,8 +75,8 @@ RUN pip install -r Bisimulation-Learning/requirements.txt
 
 COPY . ./Bisimulation-Learning
 
-RUN mv /CAV25/Bisimulation-Learning/src/ultimate-ltl/ultimate-ltl /usr/local/bin/
+RUN mv /CAV25/Bisimulation-Learning/src/ultimate_ltl/ultimate-ltl /usr/local/bin/
 RUN chmod 757 /usr/local/bin/ultimate-ltl
 
-WORKDIR /CAV25/Bisimulation-Learning/nuXmv-files/nd/
+WORKDIR /CAV25/Bisimulation-Learning/src/
 

@@ -1,8 +1,9 @@
+from bisimulation_learning.fact_det.conditions import *
 from bisimulation_learning.shared import *
 from z3 import *
 
 
-def bisimulation_learning(transition_system: DeterministicTransitionSystem, template: BDTTemplate, iters = 10):
+def run_bisimulation_learning(transition_system: DeterministicTransitionSystem, template: BDTTemplate, iters = 10):
     while True:
         success, params = guess_and_check(
             transition_system   = transition_system,
@@ -49,6 +50,7 @@ def guess(transition_system: DeterministicTransitionSystem, template: BDTTemplat
 
     for (s, succ_s) in counterexamples:
         formulas += encode_classification(
+            proof_rules         = conds_wfb_deterministic,
             transition_system   = transition_system,
             template            = template,
             theta               = theta,
@@ -77,6 +79,7 @@ def check(transition_system: DeterministicTransitionSystem, template: BDTTemplat
 
     counterexamples = []
     formulas = encode_classification(
+        proof_rules         = conds_wfb_deterministic,
         transition_system   = transition_system,
         template            = template,
         theta               = theta,

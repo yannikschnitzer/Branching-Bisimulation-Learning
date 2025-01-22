@@ -4,6 +4,7 @@
 import argparse
 
 from bisimulation_learning.deterministic.experiments import *
+import bisimulation_learning.fact_det.experiments as dbexp
 from cpa.CPA_runner import *
 from cpa.CPA_experiments import *
 from ultimate.ultimate_experiments import *
@@ -19,12 +20,13 @@ __status__ = "Experimental - Artifact Evaluation"
 
 def main_cond_term():
     print("Running Conditional Termination Benchmarks")
-    run_cond_term_experiments()
+    # run_cond_term_experiments()
+    dbexp.run_cond_term_experiments()
     print("Experiments ran successfully.")
 
 def main_clock_synch():
     print("Running Conditional Termination Benchmarks")
-    run_clock_synch_experiments()
+    dbexp.run_clock_sync_experiments()
     print("Experiments ran successfully.")
 
 def main_cpa_exps():
