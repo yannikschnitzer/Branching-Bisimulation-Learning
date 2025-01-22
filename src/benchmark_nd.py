@@ -84,24 +84,30 @@ def compare_times(exp, iters = 10):
     trs, tem = exp
     branching_times_impl = []
     for i in range(iters):
-        branching_start_time = time.time()
-        compute_branching_abstract_system(trs, tem, False)
-        branching_end_time = time.time()
-        branching_times_impl.append(branching_end_time - branching_start_time)
-        if verbose:
-            print(f"--- Branching Implicit Formula {i}: {branching_times_impl[-1]}s expired ")
+        try:
+            branching_start_time = time.time()
+            compute_branching_abstract_system(trs, tem, False)
+            branching_end_time = time.time()
+            branching_times_impl.append(branching_end_time - branching_start_time)
+            if verbose:
+                print(f"--- Branching Implicit Formula {i}: {branching_times_impl[-1]}s expired ")
+        except Exception as e:
+            print(f"--- Branching Implicit Formula {i} error: {e}")
     impl_avg = np.average(branching_times_impl)
     impl_std = np.std(branching_times_impl)
     print(f"--- Branching Implicit Formulas - Average expired time is {impl_avg}s - STD: {impl_std}")
 
     branching_times_expl = []
     for i in range(iters):
-        branching_start_time = time.time()
-        compute_branching_abstract_system(trs, tem, True)
-        branching_end_time = time.time()
-        branching_times_expl.append(branching_end_time - branching_start_time)
-        if verbose:
-            print(f"--- Branching Explicit Formula {i}: {branching_times_expl[-1]}s expired ")
+        try:
+            branching_start_time = time.time()
+            compute_branching_abstract_system(trs, tem, True)
+            branching_end_time = time.time()
+            branching_times_expl.append(branching_end_time - branching_start_time)
+            if verbose:
+                print(f"--- Branching Explicit Formula {i}: {branching_times_expl[-1]}s expired ")
+        except Exception as e:
+            print(f"--- Branching Explicit Formula {i} error: {e}")
     expl_avg = np.average(branching_times_expl)
     expl_std = np.std(branching_times_expl)
     print(f"--- Branching Explicit Formulas - Average expired time is {expl_avg}s - STD: {expl_std}")
@@ -131,10 +137,13 @@ if __name__ == "__main__":
 
     df = pd.DataFrame(columns=["Experiment", "Monolithic Avg", "Monolithic STD", "Piecewise Avg", "Piecewise STD"])
     for exp, name in experiments:
-        print(f"Running experiment {name}")
-        impl_avg, impl_std, expl_avg, expl_std = compare_times(exp, iters)
-        print(f"End experiment {name}\n")
-        df.loc[len(df)] = [name, impl_avg, impl_std, expl_avg, expl_std]
+        try:
+            print(f"Running experiment {name}")
+            impl_avg, impl_std, expl_avg, expl_std = compare_times(exp, iters)
+            print(f"End experiment {name}\n")
+            df.loc[len(df)] = [name, impl_avg, impl_std, expl_avg, expl_std]
+        except Exception as e:
+            print(f"Experiment {name} unexpected error: {e}")
     
     df.to_csv("benchmarks_bl_br.csv")
 
