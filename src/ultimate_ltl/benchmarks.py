@@ -22,15 +22,15 @@ experiments = [
         'formulas': "term-loop-nd-y.ltl"
     },
     {
-        'experiment': "quadratic-nd.smv",
+        'experiment': "quadratic-nd.c",
         'formulas': "quadratic-nd.ltl"
     },
     {
-        'experiment': "cubic-nd.smv",
+        'experiment': "cubic-nd.c",
         'formulas': "cubic-nd.ltl"
     },
     {
-        'experiment': "nlr-cond-nd.smv",
+        'experiment': "nlr-cond-nd.c",
         'formulas': "nlr-cond-nd.ltl"
     },
     {

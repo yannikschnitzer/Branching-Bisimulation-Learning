@@ -1,0 +1,2 @@
+//#Safe
+//@ ltl invariant positive: <> AP(x < 0 || x > 1000);
