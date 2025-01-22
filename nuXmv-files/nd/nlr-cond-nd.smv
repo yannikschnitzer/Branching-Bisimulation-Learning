@@ -1,7 +1,7 @@
 MODULE main
     VAR x : integer;
     
-    DEFINE terminated := x * x * x > 10000;
+    DEFINE terminated := x * x * x > 100;
 
     TRANS (terminated           & next(x) = x)
         | (!terminated          & next(x) = x + 1)

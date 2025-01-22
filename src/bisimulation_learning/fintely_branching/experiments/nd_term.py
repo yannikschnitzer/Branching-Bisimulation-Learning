@@ -1185,6 +1185,130 @@ def term_loop_nd_2():
 
     return transition_system, template
 
+def successors_quadratic_nd(s):
+    succ_s_act_1 = [v for v in s] # if random = false
+    succ_s_act_2 = [v for v in s] # if random = true
+
+    terminated = Or(s[0] <= 0, s[0] > 1000)
+
+    # if random = false
+    succ_s_act_1[0] = If(terminated, 
+        s[0], 
+        s[0] + 1
+    )
+    succ_s_act_1[1] = s[1]
+
+    # if random = true
+    succ_s_act_2[0] = If(terminated, 
+        s[0], 
+        s[0] * s[0]
+    )
+    succ_s_act_2[1] = s[1]
+
+    return [succ_s_act_1, succ_s_act_2]
+
+def quadratic_nd():
+
+    dim = 2
+
+    transition_system = BranchingTransitionSystem(
+        dim=dim,
+        successors=successors_quadratic_nd
+    )
+
+    template = BDTTemplate(
+        dim=dim,
+        bdt_classifier=bdt_quadratic,
+        num_coefficients=2,
+        num_params=1,
+        num_partitions=3
+    )
+
+    return transition_system, template
+
+def successors_cubic_nd(s):
+    succ_s_act_1 = [v for v in s] # if random = false
+    succ_s_act_2 = [v for v in s] # if random = true
+
+    terminated = Or(s[0] <= 0, s[0] > 10000)
+
+    # if random = false
+    succ_s_act_1[0] = If(terminated, 
+        s[0], 
+        s[0] + 1
+    )
+    succ_s_act_1[1] = s[1]
+
+    # if random = true
+    succ_s_act_2[0] = If(terminated, 
+        s[0], 
+        s[0] * s[0] * s[0] * 4 + s[0] * s[0] * 2 + s[0] + 1
+    )
+    succ_s_act_2[1] = s[1]
+
+    return [succ_s_act_1, succ_s_act_2]
+
+def cubic_nd():
+
+    dim = 2
+
+    transition_system = BranchingTransitionSystem(
+        dim=dim,
+        successors=successors_cubic_nd
+    )
+
+    template = BDTTemplate(
+        dim=dim,
+        bdt_classifier=bdt_cubic,
+        num_coefficients=2,
+        num_params=1,
+        num_partitions=3
+    )
+
+    return transition_system, template
+
+def successors_nlr_cond_nd(s):
+    succ_s_act_1 = [v for v in s] # if random = false
+    succ_s_act_2 = [v for v in s] # if random = true
+
+    terminated = And(s[0] * s[0] * s[0] > 100)
+
+    # if random = false
+    succ_s_act_1[0] = If(terminated, 
+        s[0], 
+        s[0] + 1
+    )
+    succ_s_act_1[1] = s[1]
+
+    # if random = true
+    succ_s_act_2[0] = If(terminated, 
+        s[0], 
+        s[0] * s[0] * s[0] * 4 + s[0] * s[0] * 2 + s[0] + 1
+    )
+    succ_s_act_2[1] = s[1]
+
+    return [succ_s_act_1, succ_s_act_2]
+
+def nlr_cond_nd():
+
+    dim = 2
+
+    transition_system = BranchingTransitionSystem(
+        dim=dim,
+        successors=successors_nlr_cond_nd
+    )
+
+    template = BDTTemplate(
+        dim=dim,
+        bdt_classifier=bdt_nlr_cond,
+        num_coefficients=2,
+        num_params=1,
+        num_partitions=3
+    )
+
+    return transition_system, template
+
+
 """
 Branching system termination (y)
 
