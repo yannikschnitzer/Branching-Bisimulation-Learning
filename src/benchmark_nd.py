@@ -132,7 +132,7 @@ if __name__ == "__main__":
     df = pd.DataFrame(columns=["Experiment", "Monolithic Avg", "Monolithic STD", "Piecewise Avg", "Piecewise STD"])
     for fn, name in experiments:
         print(f"Running experiment {name}")
-        impl_avg, impl_std, expl_avg, expl_std = compare_times(branching, iters)
+        impl_avg, impl_std, expl_avg, expl_std = compare_times(fn, iters)
         print(f"End experiment {name}\n")
         df.loc[len(df)] = [name, impl_avg, impl_std, expl_avg, expl_std]
     
