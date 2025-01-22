@@ -101,7 +101,8 @@ def compare_times(branching, iters = 10):
         compute_branching_abstract_system(trs, tem, True)
         branching_end_time = time.time()
         branching_times_expl.append(branching_end_time - branching_start_time)
-        print(f"--- Branching Explicit Formula {i}: {branching_times_expl[-1]}s expired ")
+        if verbose:
+            print(f"--- Branching Explicit Formula {i}: {branching_times_expl[-1]}s expired ")
     expl_avg = np.average(branching_times_expl)
     expl_std = np.std(branching_times_expl)
     print(f"--- Branching Explicit Formulas - Average expired time is {expl_avg}s - STD: {expl_std}")
