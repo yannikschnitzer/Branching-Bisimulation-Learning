@@ -1,5 +1,5 @@
 from bisimulation_learning.shared import *
-from bisimulation_learning.deterministic.experiments.conditional_termination_succ_trees import bdt_term_loop_2
+from bisimulation_learning.deterministic.experiments.conditional_termination_succ_trees import *
 
 """
 Branching system termination

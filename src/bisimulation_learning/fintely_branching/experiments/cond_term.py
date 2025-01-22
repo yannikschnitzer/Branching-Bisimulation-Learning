@@ -1,5 +1,8 @@
 
-from bisimulation_learning.deterministic.experiments import *
+from bisimulation_learning.deterministic.experiments.clock_synchronization_experiments import *
+from bisimulation_learning.deterministic.experiments.clock_synchronization_succ_trees import *
+from bisimulation_learning.deterministic.experiments.conditional_termination_experiments import *
+from bisimulation_learning.deterministic.experiments.conditional_termination_succ_trees import *
 
 def term_loop_1():
 
@@ -58,7 +61,6 @@ def audio_compr():
 def euclid():
     ts = DeterministicTransitionSystem(
         dim=2,
-        domain=domain,
         successor=successor_euclid
     )
 

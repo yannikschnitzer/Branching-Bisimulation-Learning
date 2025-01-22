@@ -10,18 +10,18 @@ from bisimulation_learning.fintely_branching.experiments import *
 from bisimulation_learning.fintely_branching.cegis_solver import *
 
 experiments = [
-    (term_loop_1, "term_loop_1"),
-    (term_loop_2, "term_loop_2"),
-    (audio_compr, "audio_compr"),
-    (euclid, "euclid"),
-    (greater, "greater"),
-    (smaller, "smaller"),
-    (conic, "conic"),
-    (disjunction, "disjunction"),
-    (parallel, "parallel"),
-    (quadratic, "quadratic"),
-    (cubic, "cubic"),
-    (nlr_cond, "nlr_cond"),
+    (term_loop_1(), "term_loop_1"),
+    (term_loop_2(), "term_loop_2"),
+    (audio_compr(), "audio_compr"),
+    (euclid(), "euclid"),
+    (greater(), "greater"),
+    (smaller(), "smaller"),
+    (conic(), "conic"),
+    (disjunction(), "disjunction"),
+    (parallel(), "parallel"),
+    (quadratic(), "quadratic"),
+    (cubic(), "cubic"),
+    (nlr_cond(), "nlr_cond"),
 
     (tte_sf(10), "tte_sf_10"),
     (tte_sf(100), "tte_sf_100"),
@@ -51,25 +51,25 @@ experiments = [
     (con_usf(10000), "con_usf_10000"),
 
 
-    (term_loop_nd, "term_loop_nd"),
-    (term_loop_nd_2, "term_loop_nd_2"),
-    (term_loop_nd_y, "term_loop_nd_y"),
-    (quadratic_nd, "quadratic_nd"),
-    (cubic_nd, "cubic_nd"),
-    (nlr_cond_nd, "nlr_cond_nd"),
-    (P1, "P1"),
-    (P2, "P2"),
-    (P3, "P3"),
-    (P4, "P4"),
-    (P5, "P5"),
-    (P6, "P6"),
-    (P7, "P7"),
-    (P17, "P17"),
-    (P18, "P18"),
-    (P19, "P19"),
-    (P20, "P20"),
-    (P21, "P21"),
-    (P25, "P25"),
+    (term_loop_nd(), "term_loop_nd"),
+    (term_loop_nd_2(), "term_loop_nd_2"),
+    (term_loop_nd_y(), "term_loop_nd_y"),
+    (quadratic_nd(), "quadratic_nd"),
+    (cubic_nd(), "cubic_nd"),
+    (nlr_cond_nd(), "nlr_cond_nd"),
+    (P1(), "P1"),
+    (P2(), "P2"),
+    (P3(), "P3"),
+    (P4(), "P4"),
+    (P5(), "P5"),
+    (P6(), "P6"),
+    (P7(), "P7"),
+    (P17(), "P17"),
+    (P18(), "P18"),
+    (P19(), "P19"),
+    (P20(), "P20"),
+    (P21(), "P21"),
+    (P25(), "P25"),
 ]
 
 experiments_robot = [
@@ -80,8 +80,8 @@ def compute_branching_abstract_system(trs, tem, explicit_classes):
     theta, eta = bisimulation_learning(trs, tem, 1000, explicit_classes)
     gamma = compute_adjacency_matrix(trs, tem, theta)
 
-def compare_times(branching, iters = 10):
-    trs, tem = branching()
+def compare_times(exp, iters = 10):
+    trs, tem = exp
     branching_times_impl = []
     for i in range(iters):
         branching_start_time = time.time()
@@ -94,7 +94,6 @@ def compare_times(branching, iters = 10):
     impl_std = np.std(branching_times_impl)
     print(f"--- Branching Implicit Formulas - Average expired time is {impl_avg}s - STD: {impl_std}")
 
-    trs, tem = branching()
     branching_times_expl = []
     for i in range(iters):
         branching_start_time = time.time()
@@ -131,9 +130,9 @@ if __name__ == "__main__":
 
 
     df = pd.DataFrame(columns=["Experiment", "Monolithic Avg", "Monolithic STD", "Piecewise Avg", "Piecewise STD"])
-    for fn, name in experiments:
+    for exp, name in experiments:
         print(f"Running experiment {name}")
-        impl_avg, impl_std, expl_avg, expl_std = compare_times(fn, iters)
+        impl_avg, impl_std, expl_avg, expl_std = compare_times(exp, iters)
         print(f"End experiment {name}\n")
         df.loc[len(df)] = [name, impl_avg, impl_std, expl_avg, expl_std]
     
