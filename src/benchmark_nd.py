@@ -128,7 +128,6 @@ if __name__ == "__main__":
     else:
         print(f"Running with {iters} iters with a global ranking function")
 
-    output_file = args.output_file
 
     df = pd.DataFrame(columns=["Experiment", "Monolithic Avg", "Monolithic STD", "Piecewise Avg", "Piecewise STD"])
     for fn, name in experiments:
