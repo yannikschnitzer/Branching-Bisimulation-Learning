@@ -41,7 +41,7 @@ def guess_and_check(
         verified, (theta, eta) = guess(solver, transition_system, template, explicit_classes, formulas, new_cexs)
         if verified:
             new_cexs = check(transition_system, template, theta, eta, explicit_classes)
-            print("Counterexamples:", new_cexs)
+            # print("Counterexamples:", new_cexs)
             if len(new_cexs) == 0:
                 return True, (theta, eta)
             else:
