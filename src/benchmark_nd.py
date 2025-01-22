@@ -92,7 +92,7 @@ def compare_times(branching, iters = 10):
             print(f"--- Branching Implicit Formula {i}: {branching_times_impl[-1]}s expired ")
     impl_avg = np.average(branching_times_impl)
     impl_std = np.std(branching_times_impl)
-    print(f"--- Branching Implicit Formulas - Average expired time is {brn_avg}s - STD: {brn_std}")
+    print(f"--- Branching Implicit Formulas - Average expired time is {impl_avg}s - STD: {impl_std}")
 
     trs, tem = branching()
     branching_times_expl = []
@@ -104,7 +104,7 @@ def compare_times(branching, iters = 10):
         print(f"--- Branching Explicit Formula {i}: {branching_times_expl[-1]}s expired ")
     expl_avg = np.average(branching_times_expl)
     expl_std = np.std(branching_times_expl)
-    print(f"--- Branching Explicit Formulas - Average expired time is {brn_avg}s - STD: {brn_std}")
+    print(f"--- Branching Explicit Formulas - Average expired time is {expl_avg}s - STD: {expl_std}")
 
     return (impl_avg, impl_std, expl_avg, expl_std)
 
