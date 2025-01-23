@@ -25,25 +25,27 @@ def run_cmd(cmd):
     return out
 
 def run_nuXmv_experiment(exp : nuXmv_Experiment, timeout = 500):
-        """
-            Runs nuXmv with given experiment.
-        """
-        cmd = "../../nuXmv-2.0.0-Linux/bin/nuXmv -source ../nuXmv-files/" + exp.file
-        
-        print("------------------------------------")
-        print("Running Experiment: ", exp.name)
-        
-        t1 = time.perf_counter()
-        p = multiprocessing.Process(target=run_cmd, name="Runner", args=(cmd, ))
-        p.start()
-        p.join(timeout)
-        t2 = time.perf_counter()
+    """
+        Runs nuXmv with given experiment.
+    """
+    cmd = "nuxmv -source ../nuXmv-files/" + exp.file
     
-        if p.is_alive():
-            print("Timeout after",timeout,"seconds")
-            p.terminate()
-            p.join()
+    print("------------------------------------")
+    print("Running Experiment: ", exp.name)
+    
+    t1 = time.perf_counter()
+    p = multiprocessing.Process(target=run_cmd, name="Runner", args=(cmd, ))
+    p.start()
+    p.join(timeout)
+    t2 = time.perf_counter()
 
-        print("Runtime: ", t2 - t1,"seconds")
-        print("------------------------------------")
+    if p.is_alive():
+        print("Timeout after",timeout,"seconds")
+        p.terminate()
+        p.join()
+    
+    runtime = t2 - t1
+    print("Runtime: ", runtime,"seconds")
+    print("------------------------------------")
+    return runtime
 
