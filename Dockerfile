@@ -78,5 +78,8 @@ COPY . ./Bisimulation-Learning
 RUN mv /CAV25/Bisimulation-Learning/src/ultimate_ltl/ultimate-ltl /usr/local/bin/
 RUN chmod 757 /usr/local/bin/ultimate-ltl
 
+RUN mv /CAV25/Bisimulation-Learning/src/cpa/cpa /usr/local/bin/
+RUN chmod 757 /usr/local/bin/cpa
+
 WORKDIR /CAV25/Bisimulation-Learning/src/
 
