@@ -65,7 +65,7 @@ def compare_times(exp, iters = 10, explicit_classes = True):
     det_avg = np.average(deterministic_times)
     det_std = np.std(deterministic_times)
     print(f"--- Deterministic Formulas - Average expired time is {det_avg}s - STD: {det_std}")
-    return exp.name, brn_avg, det_avg
+    return exp.name, det_avg, det_std
 
 if __name__ == "__main__":
     arg_parser = ArgumentParser(
@@ -89,9 +89,14 @@ if __name__ == "__main__":
     df = pd.DataFrame(columns=["Experiment", "Avg", "STD"])
     for experiment in experiments:
         print(f"Running experiment {experiment.name}")
-        name, brn_avg, det_avg = compare_times(experiment, iters, explicit_classes)
-        print(f"End experiment {experiment.name}\n")
-        df.loc[len(df)] = [name, brn_avg, det_avg]
+        try:
+            name, det_avg, det_std = compare_times(experiment, iters, explicit_classes)
+            print(f"End experiment {experiment.name}\n")
+            df.loc[len(df)] = [name, det_avg, det_std]
+        except Exception as e:
+            print(f"Experiment {experiment.name} had an error: {e}")
+            df.loc[len(df)] = [experiment.name, "error", ""]
+
     df.to_csv("deterministic_bl.csv")
 
     
