@@ -1196,20 +1196,20 @@ def successors_quadratic_nd(s):
         s[0], 
         s[0] + 1
     )
-    succ_s_act_1[1] = s[1]
+    # succ_s_act_1[1] = s[1]
 
     # if random = true
     succ_s_act_2[0] = If(terminated, 
         s[0], 
         s[0] * s[0]
     )
-    succ_s_act_2[1] = s[1]
+    # succ_s_act_2[1] = s[1]
 
     return [succ_s_act_1, succ_s_act_2]
 
 def quadratic_nd():
 
-    dim = 2
+    dim = 1
 
     transition_system = BranchingTransitionSystem(
         dim=dim,
@@ -1220,8 +1220,8 @@ def quadratic_nd():
         dim=dim,
         bdt_classifier=bdt_quadratic,
         num_coefficients=2,
-        num_params=1,
-        num_partitions=3
+        num_params=2,
+        num_partitions=4
     )
 
     return transition_system, template
@@ -1237,20 +1237,20 @@ def successors_cubic_nd(s):
         s[0], 
         s[0] + 1
     )
-    succ_s_act_1[1] = s[1]
+    # succ_s_act_1[1] = s[1]
 
     # if random = true
     succ_s_act_2[0] = If(terminated, 
         s[0], 
         s[0] * s[0] * s[0] * 4 + s[0] * s[0] * 2 + s[0] + 1
     )
-    succ_s_act_2[1] = s[1]
+    # succ_s_act_2[1] = s[1]
 
     return [succ_s_act_1, succ_s_act_2]
 
 def cubic_nd():
 
-    dim = 2
+    dim = 1
 
     transition_system = BranchingTransitionSystem(
         dim=dim,
@@ -1261,8 +1261,8 @@ def cubic_nd():
         dim=dim,
         bdt_classifier=bdt_cubic,
         num_coefficients=2,
-        num_params=1,
-        num_partitions=3
+        num_params=2,
+        num_partitions=4
     )
 
     return transition_system, template
@@ -1278,20 +1278,20 @@ def successors_nlr_cond_nd(s):
         s[0], 
         s[0] + 1
     )
-    succ_s_act_1[1] = s[1]
+    # succ_s_act_1[1] = s[1]
 
     # if random = true
     succ_s_act_2[0] = If(terminated, 
         s[0], 
         s[0] * s[0] * s[0] * 4 + s[0] * s[0] * 2 + s[0] + 1
     )
-    succ_s_act_2[1] = s[1]
+    # succ_s_act_2[1] = s[1]
 
     return [succ_s_act_1, succ_s_act_2]
 
 def nlr_cond_nd():
 
-    dim = 2
+    dim = 1
 
     transition_system = BranchingTransitionSystem(
         dim=dim,
@@ -1302,8 +1302,8 @@ def nlr_cond_nd():
         dim=dim,
         bdt_classifier=bdt_nlr_cond,
         num_coefficients=2,
-        num_params=1,
-        num_partitions=3
+        num_params=2,
+        num_partitions=4
     )
 
     return transition_system, template
