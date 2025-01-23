@@ -32,6 +32,9 @@ def run_ultimate_experiment(exp : Ultimate_Experiment):
         matches = re.findall(time_pattern, out)
         if matches:
             print("Ultimate Automizer Analysis Time:", matches[0],"")
+            return float(matches[0])
+        else:
+            raise Exception("No match")
 
         if exp.print_res:
             res_pattern = r"TerminationAnalysisResult: (.*)"

@@ -20,10 +20,6 @@ class nuXmv_Experiment:
         self.file = file
         self.print_res = print_res
 
-def run_cmd(cmd):
-    out = subprocess.check_output(cmd, shell = True, text = True, stderr=subprocess.DEVNULL)
-    return out
-
 def run_nuXmv_experiment(exp : nuXmv_Experiment, timeout = 500):
     """
         Runs nuXmv with given experiment.
@@ -34,15 +30,8 @@ def run_nuXmv_experiment(exp : nuXmv_Experiment, timeout = 500):
     print("Running Experiment: ", exp.name)
     
     t1 = time.perf_counter()
-    p = multiprocessing.Process(target=run_cmd, name="Runner", args=(cmd, ))
-    p.start()
-    p.join(timeout)
+    subprocess.check_output(cmd, shell = True, text = True, stderr=subprocess.DEVNULL, timeout=timeout)
     t2 = time.perf_counter()
-
-    if p.is_alive():
-        print("Timeout after",timeout,"seconds")
-        p.terminate()
-        p.join()
     
     runtime = t2 - t1
     print("Runtime: ", runtime,"seconds")

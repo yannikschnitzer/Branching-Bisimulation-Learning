@@ -1099,12 +1099,19 @@ experiments = [
 def run_nuxmv_experiments_iters(iters = 10, timeout=500):
     df = pd.DataFrame(columns=["Experiment", "Average", "STD"])
     for experiment in experiments:
-        times = []
-        for _ in range(iters):
-            runtime = run_nuXmv_experiment(experiment, timeout)
-            times.append(runtime)
-        avg = np.average(times)
-        std = np.std(times)
+        avg = None
+        std = None
+        try:
+            times = []
+            for _ in range(iters):
+                runtime = run_nuXmv_experiment(experiment, timeout)
+                times.append(runtime)
+            avg = np.average(times)
+            std = np.std(times)
+        except Exception as e:
+            print(f"Experiment {experiment.name} failed one iteration: {e}")
+            avg = str(e)
+            std = ""
         df.loc[len(df)] = [experiment.name, avg, std]
     df.to_csv("nuxmv_det.csv")
 

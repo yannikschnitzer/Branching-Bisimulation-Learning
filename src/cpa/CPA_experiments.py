@@ -1,8 +1,9 @@
 """
     Runs the CPAChecker baseline experiments.
 """
-
-from cpa.CPA_runner import *
+import numpy as np
+import pandas as pd
+from CPA_runner import *
 
 __author__ = "Yannik Schnitzer"
 __copyright__ = "Copyright 2024, Yannik Schnitzer"
@@ -193,3 +194,49 @@ def exp_nlr_cond_nonterm():
         print_res=True
     )
     return exp
+
+experiments = [
+    exp_term_loop_1_term(),
+    exp_term_loop_1_nonterm(),
+    exp_term_loop_2_term(),
+    exp_term_loop_2_nonterm(),
+    exp_audio_compr_term(),
+    exp_audio_compr_nonterm(),
+    exp_euclid_term(),
+    exp_euclid_nonterm(),
+    exp_greater_term(),
+    exp_greater_nonterm(),
+    exp_smaller_term(),
+    exp_smaller_nonterm(),
+    exp_conic_term(),
+    exp_conic_nonterm(),
+    exp_disjunction_term(),
+    exp_parallel_term(),
+    exp_quadratic_term(),
+    exp_cubic_term(),
+    exp_cubic_nonterm(),
+    exp_nlr_cond_term(),
+    exp_nlr_cond_nonterm()
+]
+
+def run_cpa_experiment_iters(iters = 10):
+    df = pd.DataFrame(columns=["Experiment", "Average", "STD"])
+    for experiment in experiments:
+        avg = None
+        std = None
+        try:
+            times = []
+            for _ in range(iters):
+                runtime = run_cpa_experiment(experiment)
+                times.append(runtime)
+            avg = np.average(times)
+            std = np.std(times)
+        except Exception as e:
+            print(f"Experiment {experiment.name} failed one iteration: {e}")
+            avg = str(e)
+            std = ""
+        df.loc[len(df)] = [experiment.name, avg, std]
+    df.to_csv("cpa-benchmarks.csv")
+
+if __name__ == "__main__":
+    run_cpa_experiment_iters()
