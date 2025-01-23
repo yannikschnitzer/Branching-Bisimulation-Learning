@@ -1,8 +1,9 @@
 """
     Runs the nuXmv baseline experiments.
 """
-
-from nuxmv.nuxmv_runner import *
+import numpy as np
+import pandas as pd
+from nuxmv_runner import *
 
 __author__ = "Yannik Schnitzer"
 __copyright__ = "Copyright 2024, Yannik Schnitzer"
@@ -10,6 +11,7 @@ __license__ = "MIT"
 __version__ = "1.0.0"
 __email__ = "yannik.schnitzer@cs.ox.ac.uk"
 __status__ = "Experimental - Artifact Evaluation"
+
 
 def run_nuXmv_smoketest(timeout = 10):
     run_nuXmv_experiment(exp_term_loop_1_term(), timeout)
@@ -969,3 +971,142 @@ def exp_con_usf_10000_gf_ic3():
         "synch_tte/source_con_usf_10000_gf_ic3.txt"
     )
     return exp
+
+
+experiments = [
+    exp_term_loop_1_term(),
+    exp_term_loop_1_nonterm(),
+    exp_term_loop_2_term(),
+    exp_term_loop_2_nonterm(),
+    exp_audio_compr_term(),
+    exp_audio_compr_nonterm(),
+    exp_euclid_term(),
+    exp_euclid_nonterm(),
+    exp_greater_term(),
+    exp_greater_nonterm(),
+    exp_smaller_term(),
+    exp_smaller_nonterm(),
+    exp_conic_term(),
+    exp_conic_nonterm(),
+    exp_disjunct(),
+    exp_parallel(),
+    exp_quadratic(),
+    exp_cubic_term(),
+    exp_cubic_nonterm(),
+    exp_non_linear_cond_term(),
+    exp_non_linear_cond_nonterm(),
+    exp_tte_sf_10_g_bdd(),
+    exp_tte_sf_10_g_ic3(),
+    exp_tte_sf_10_gf_bdd(),
+    exp_tte_sf_10_gf_ic3(),
+    exp_tte_sf_100_g_bdd(),
+    exp_tte_sf_100_g_ic3(),
+    exp_tte_sf_100_gf_bdd(),
+    exp_tte_sf_100_gf_ic3(),
+    exp_tte_sf_1000_g_bdd(),
+    exp_tte_sf_1000_g_ic3(),
+    exp_tte_sf_1000_gf_bdd(),
+    exp_tte_sf_1000_gf_ic3(),
+    exp_tte_sf_2000_g_bdd(),
+    exp_tte_sf_2000_g_ic3(),
+    exp_tte_sf_2000_gf_bdd(),
+    exp_tte_sf_2000_gf_ic3(),
+    exp_tte_sf_5000_g_bdd(),
+    exp_tte_sf_5000_g_ic3(),
+    exp_tte_sf_5000_gf_bdd(),
+    exp_tte_sf_5000_gf_ic3(),
+    exp_tte_sf_10000_g_bdd(),
+    exp_tte_sf_10000_g_ic3(),
+    exp_tte_sf_10000_gf_bdd(),
+    exp_tte_sf_10000_gf_ic3(),
+
+    exp_tte_usf_10_g_bdd(),
+    exp_tte_usf_10_g_ic3(),
+    exp_tte_usf_10_gf_bdd(),
+    exp_tte_usf_10_gf_ic3(),
+    exp_tte_usf_100_g_bdd(),
+    exp_tte_usf_100_g_ic3(),
+    exp_tte_usf_100_gf_bdd(),
+    exp_tte_usf_100_gf_ic3(),
+    exp_tte_usf_1000_g_bdd(),
+    exp_tte_usf_1000_g_ic3(),
+    exp_tte_usf_1000_gf_bdd(),
+    exp_tte_usf_1000_gf_ic3(),
+    exp_tte_usf_2000_g_bdd(),
+    exp_tte_usf_2000_g_ic3(),
+    exp_tte_usf_2000_gf_bdd(),
+    exp_tte_usf_2000_gf_ic3(),
+    exp_tte_usf_5000_g_bdd(),
+    exp_tte_usf_5000_g_ic3(),
+    exp_tte_usf_5000_gf_bdd(),
+    exp_tte_usf_5000_gf_ic3(),
+    exp_tte_usf_10000_g_bdd(),
+    exp_tte_usf_10000_g_ic3(),
+    exp_tte_usf_10000_gf_bdd(),
+    exp_tte_usf_10000_gf_ic3(),
+
+    exp_con_sf_10_g_bdd(),
+    exp_con_sf_10_g_ic3(),
+    exp_con_sf_10_gf_bdd(),
+    exp_con_sf_10_gf_ic3(),
+    exp_con_sf_100_g_bdd(),
+    exp_con_sf_100_g_ic3(),
+    exp_con_sf_100_gf_bdd(),
+    exp_con_sf_100_gf_ic3(),
+    exp_con_sf_1000_g_bdd(),
+    exp_con_sf_1000_g_ic3(),
+    exp_con_sf_1000_gf_bdd(),
+    exp_con_sf_1000_gf_ic3(),
+    exp_con_sf_2000_g_bdd(),
+    exp_con_sf_2000_g_ic3(),
+    exp_con_sf_2000_gf_bdd(),
+    exp_con_sf_2000_gf_ic3(),
+    exp_con_sf_5000_g_bdd(),
+    exp_con_sf_5000_g_ic3(),
+    exp_con_sf_5000_gf_bdd(),
+    exp_con_sf_5000_gf_ic3(),
+    exp_con_sf_10000_g_bdd(),
+    exp_con_sf_10000_g_ic3(),
+    exp_con_sf_10000_gf_bdd(),
+    exp_con_sf_10000_gf_ic3(),
+
+    exp_con_usf_10_g_bdd(),
+    exp_con_usf_10_g_ic3(),
+    exp_con_usf_10_gf_bdd(),
+    exp_con_usf_10_gf_ic3(),
+    exp_con_usf_100_g_bdd(),
+    exp_con_usf_100_g_ic3(),
+    exp_con_usf_100_gf_bdd(),
+    exp_con_usf_100_gf_ic3(),
+    exp_con_usf_1000_g_bdd(),
+    exp_con_usf_1000_g_ic3(),
+    exp_con_usf_1000_gf_bdd(),
+    exp_con_usf_1000_gf_ic3(),
+    exp_con_usf_2000_g_bdd(),
+    exp_con_usf_2000_g_ic3(),
+    exp_con_usf_2000_gf_bdd(),
+    exp_con_usf_2000_gf_ic3(),
+    exp_con_usf_5000_g_bdd(),
+    exp_con_usf_5000_g_ic3(),
+    exp_con_usf_5000_gf_bdd(),
+    exp_con_usf_5000_gf_ic3(),
+    exp_con_usf_10000_g_bdd(),
+    exp_con_usf_10000_g_ic3(),
+    exp_con_usf_10000_gf_bdd(),
+    exp_con_usf_10000_gf_ic3(),
+]
+
+def run_nuxmv_experiments_iters(iters = 10, timeout=500):
+    df = pd.DataFrame(columns=["Experiment", "Average", "STD"])
+    for experiment in experiments:
+        times = []
+        for _ in range(iters):
+            runtime = run_nuXmv_experiment(experiment, timeout)
+            times.append(runtime)
+        avg = np.average(times)
+        std = np.std(times)
+        df.loc[len(df)] = [experiment.name, avg, std]
+    df.to_csv("nuxmv_det.csv")
+
+if __name__ == "__main__":
+    run_nuxmv_experiments_iters()
