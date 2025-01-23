@@ -54,9 +54,11 @@ experiments = [
     # (term_loop_nd(), "term_loop_nd"),
     # (term_loop_nd_2(), "term_loop_nd_2"),
     # (term_loop_nd_y(), "term_loop_nd_y"),
-    (quadratic_nd(), "quadratic_nd"),
-    (cubic_nd(), "cubic_nd"),
-    (nlr_cond_nd(), "nlr_cond_nd"),
+    # (quadratic_nd(), "quadratic_nd"),
+    # (cubic_nd(), "cubic_nd"),
+    # (nlr_cond_nd(), "nlr_cond_nd"),
+    # (conic_nd(), "conic_nd"),
+    (disjunction_nd(), "disjunction_nd"),
     # (P1(), "P1"),
     # (P2(), "P2"),
     # (P3(), "P3"),
@@ -79,6 +81,8 @@ experiments_robot = [
 def compute_branching_abstract_system(trs, tem, explicit_classes):
     theta, eta = bisimulation_learning(trs, tem, 1000, explicit_classes)
     gamma = compute_adjacency_matrix(trs, tem, theta)
+    #print("Theta:", theta, "Eta:", eta, "Gamma:", gamma)
+    #visualize_branching(theta, tem)
 
 def compare_times(exp, iters = 10):
     trs, tem = exp
@@ -127,7 +131,7 @@ if __name__ == "__main__":
     
     iters = args.iters or 10 # default iterations is 10
     iters = int(iters)
-    verbose = args.verbose
+    verbose = True# args.verbose
     explicit_classes = not args.global_rank
     if explicit_classes:
         print(f"Running with {iters} iters with a ranking function for each partition")

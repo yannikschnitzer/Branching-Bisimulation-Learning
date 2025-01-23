@@ -1308,6 +1308,73 @@ def nlr_cond_nd():
 
     return transition_system, template
 
+def successor_conic_nd(s):
+    succ_s_act_1 = [v for v in s] 
+    succ_s_act_2 = [v for v in s] 
+    succ_s_act_3 = [v for v in s] 
+
+    terminated = s[0] < 0
+
+    succ_s_act_1[0] = If(terminated, 
+        s[0], 
+        If(Or(s[1] <= -s[0], s[0] <= s[1]), s[0] - 1, s[0])
+    )
+
+    succ_s_act_2[0] = s[0]
+
+    return [succ_s_act_1, succ_s_act_2]
+
+def conic_nd():
+
+    dim = 2
+
+    transition_system = BranchingTransitionSystem(
+        dim=dim,
+        successors=successor_conic_nd
+    )
+
+    template = BDTTemplate(
+        dim=dim,
+        bdt_classifier=bdt_conic,
+        num_coefficients=4,
+        num_params=2,
+        num_partitions=3,
+    )
+
+    return transition_system, template
+
+
+def successor_disjunction_nd(s):
+    succ_s_act_1 = [v for v in s] 
+    succ_s_act_2 = [v for v in s] 
+
+
+    succ_s_act_1[0] = simplify(If(Or(s[0] < s[1],s[0] < s[2]), s[0] + 1, s[0]))
+
+    succ_s_act_2[0] = s[0]
+
+    return [succ_s_act_1, succ_s_act_2]
+
+def disjunction_nd():
+
+    dim = 3
+
+    transition_system = BranchingTransitionSystem(
+        dim=dim,
+        successors=successor_disjunction_nd
+    )
+
+    template = BDTTemplate(
+        dim=dim,
+        bdt_classifier=bdt_disjunction,
+        num_coefficients=3,
+        num_params=1,
+        num_partitions=3,
+    )
+
+    return transition_system, template
+
+
 
 """
 Branching system termination (y)
