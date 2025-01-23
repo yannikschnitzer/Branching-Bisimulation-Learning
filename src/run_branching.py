@@ -41,8 +41,12 @@ if __name__ == "__main__":
     # trs, tem = term_loop_nd_y()
     # trs, tem = term_loop_nd_y()
     # trs, tem = P2()
+    # trs, tem = two_robots_axis()
+    # trs, tem = two_robots_axis_actions()
+    trs, tem = two_robots_axis_actions_quadratic()
+    # two_robots doesn't work
     # trs, tem = two_robots()
-    trs, tem = quadratic_nd()
+    # trs, tem = quadratic_nd()
     run_and_print(trs, tem, expl=True)
     # run_and_show(trs, tem)
     # for i in range(10):

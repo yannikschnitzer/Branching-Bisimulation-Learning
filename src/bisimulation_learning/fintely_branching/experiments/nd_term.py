@@ -1572,7 +1572,7 @@ def robots():
     )
     return trs, tem
 
-def successors_two_robots(s):
+def successors_two_robots_axis(s):
     succ_move_robot_1 = [x for x in s]
     succ_move_robot_2 = [x for x in s]
     clash = And(s[0] == IntVal(0), s[1] == IntVal(0))
@@ -1584,7 +1584,7 @@ def successors_two_robots(s):
     succ_move_robot_2[1] = If(clash, s[1], s[1] + 1)
     return [succ_move_robot_1, succ_move_robot_2]
 
-def bdt_two_robots(params, x, num_params, partitions):
+def bdt_two_robots_axis(params, x, num_params, partitions):
     """
     The BDT for robots (safety) has to discern the three
     abstract states of interest:
@@ -1637,13 +1637,118 @@ def bdt_two_robots(params, x, num_params, partitions):
     )
     return b.formula(), b
 
-def two_robots():
+def two_robots_axis():
     """
     Semplification of the example taken from section 4 (Case Study 1) from the paper
     of Carelli and Grumberg.
     It features two concurrent robots that change their position
     depending on a different linear transformation.
     """
+    dim = 2
+    trs = BranchingTransitionSystem(
+        dim = dim,
+        successors = successors_two_robots_axis
+    )
+    tem = BDTTemplate(
+        dim = dim,
+        bdt_classifier = bdt_two_robots_axis,
+        num_params = 1,
+        num_coefficients = 2,
+        num_partitions = 3
+    )
+    return trs, tem
+
+def two_robots_axis_actions_successors(s):
+    actions = [1, 2, 4]
+    successors_move_robot_1 = [[x for x in s] for _ in actions]
+    successors_move_robot_2 = [[x for x in s] for _ in actions]
+
+    clash = And(s[0] == IntVal(0), s[1] == IntVal(0))
+
+    for index, action in enumerate(actions):
+        successors_move_robot_1[index][0] = If(clash, s[0], s[0] + action)
+        successors_move_robot_2[index][1] = If(clash, s[1], s[1] + action)
+    
+    return successors_move_robot_1 + successors_move_robot_2
+
+def two_robots_axis_actions():
+    dim = 2
+
+    trs = BranchingTransitionSystem(
+        dim = dim,
+        successors=two_robots_axis_actions_successors
+    )
+    tem = BDTTemplate(
+        dim = dim,
+        bdt_classifier=bdt_two_robots_axis,
+        num_params=1,
+        num_coefficients=2,
+        num_partitions=3
+    )
+    return trs, tem
+
+def two_robots_axis_actions_quadratic_successors(s):
+    actions = [
+        lambda x: x + 1,
+        lambda x: x * 2,
+        lambda x: x * x
+    ]
+    successors_move_robot_1 = [[x for x in s] for _ in actions]
+    successors_move_robot_2 = [[x for x in s] for _ in actions]
+
+    clash = And(s[0] == IntVal(0), s[1] == IntVal(0))
+
+    for index, action in enumerate(actions):
+        successors_move_robot_1[index][0] = If(clash, s[0], If(s[0] > 0, action(s[0]), s[0] + 1))
+        successors_move_robot_2[index][1] = If(clash, s[1], If(s[1] > 0, action(s[1]), s[1] + 1))
+    
+    return successors_move_robot_1 + successors_move_robot_2
+
+def two_robots_axis_actions_quadratic():
+    dim = 2
+
+    trs = BranchingTransitionSystem(
+        dim = dim,
+        successors=two_robots_axis_actions_quadratic_successors
+    )
+    tem = BDTTemplate(
+        dim = dim,
+        bdt_classifier=bdt_two_robots_axis,
+        num_params=1,
+        num_coefficients=2,
+        num_partitions=3
+    )
+    return trs, tem
+
+def successors_two_robots(s):
+    # Encodings x, y as a tuple
+    # s[0] = 2^x + 3^y
+    # robot 1 moves only (+1, +1), hence
+    # succ_s[0] = s[0] * 2 * 3
+    #
+    # robot 2 moves only (+1, -2), hence
+    # succ_s[1] = s[1] * 2 / 9
+    succ_move_robot_1 = [x for x in s]
+    succ_move_robot_2 = [x for x in s]
+    clash = And(s[0] == s[1])
+    succ_move_robot_1[0] = If(clash, s[0], s[0] * 2 * 3)
+    succ_move_robot_2[1] = If(clash, s[1], s[1] * 2 / 9)
+    return [succ_move_robot_1, succ_move_robot_2]
+
+def bdt_two_robots(params, x, num_params, partitions):
+    b = BDTNodePolyEquality(
+        # if they are in the same place
+        [RealVal(1), RealVal(-1)], x, RealVal(0),
+        BDTLeave(partitions[0]), # G crash
+        BDTNodePoly(
+            [params[num_params],params[num_params+1]], x, params[0],
+            BDTLeave(partitions[1]),
+            BDTLeave(partitions[2])
+        ),
+    )
+    return b.formula(), b
+
+def two_robots():
     dim = 2
     trs = BranchingTransitionSystem(
         dim = dim,
