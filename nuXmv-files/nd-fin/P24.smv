@@ -1,6 +1,6 @@
 MODULE main
-    VAR w: --65536..65535;
-    VAR g: --65536..65535;
+    VAR w: integer;
+    VAR g: integer;
 
     TRANS (next(w) = w & next(g) = g)
         | (next(w) = (w > 0 ? 0 : 1)

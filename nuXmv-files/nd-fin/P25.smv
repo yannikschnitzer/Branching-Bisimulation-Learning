@@ -1,7 +1,7 @@
 MODULE main
-    VAR c: --65536..65535;
-    VAR r: --65536..65535;
-    VAR cs: --65536..65535;
+    VAR c: integer;
+    VAR r: integer;
+    VAR cs: integer;
 
     TRANS (cs <= 0 | c < cs
             ? next(c) = c & next(r) = r & next(cs) = cs

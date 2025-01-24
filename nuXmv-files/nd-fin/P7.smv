@@ -1,8 +1,8 @@
 MODULE main
-    VAR i: --65536..65535;
-    VAR p: --65536..65535;
-    VAR s: --65536..65535;
-    VAR u: --65536..65535;
+    VAR i: integer;
+    VAR p: integer;
+    VAR s: integer;
+    VAR u: integer;
 
     TRANS (next(i) = (i < p ? i : i + 1)
             & next(p) = p 

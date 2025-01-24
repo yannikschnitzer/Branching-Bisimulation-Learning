@@ -1,5 +1,5 @@
 MODULE main
-    VAR x : --65536..65535;
+    VAR x : integer;
     
     DEFINE terminated := x >= -1 & x <= 1;
 
