@@ -1,0 +1,118 @@
+,Experiment,Average,STD
+0,term-loop-1-term,Command 'nuxmv -source ../nuXmv-files/source_term-loop-1-term.txt' timed out after 500 seconds,
+1,term-loop-1-nonterm,Command 'nuxmv -source ../nuXmv-files/source_term-loop-1-nonterm.txt' timed out after 500 seconds,
+2,term-loop-2-term,Command 'nuxmv -source ../nuXmv-files/source_term-loop-2-term.txt' timed out after 500 seconds,
+3,term-loop-2-nonterm,Command 'nuxmv -source ../nuXmv-files/source_term-loop-2-nonterm.txt' timed out after 500 seconds,
+4,audio-compr-term,0.010982626202167011,0.000837947045810912
+5,audio-compr-nonterm,0.010071643501578364,6.4445284519108e-05
+6,euclid-term,Command 'nuxmv -source ../nuXmv-files/source_euclid-term.txt' timed out after 500 seconds,
+7,euclid-nonterm,Command 'nuxmv -source ../nuXmv-files/source_euclid-nonterm.txt' timed out after 500 seconds,
+8,greater-term,9.341843684802006,0.09096868705343045
+9,greater-nonterm,0.019907153298845515,0.0006518167576524724
+10,smaller-term,9.301345880501321,0.05545719031814004
+11,smaller-nonterm,0.019864350197894964,0.0011874975891329892
+12,conic-term,401.4949939503989,5.119996926990415
+13,conic-nonterm,0.020224380398576613,0.0010709187071688963
+14,disjunction,Command 'nuxmv -source ../nuXmv-files/source_disjunction.txt' timed out after 500 seconds,
+15,parallel,Command 'nuxmv -source ../nuXmv-files/source_parallel.txt' timed out after 500 seconds,
+16,quadratic,Command 'nuxmv -source ../nuXmv-files/source_quadratic.txt' timed out after 500 seconds,
+17,cubic-term,0.4779826780999429,0.0014988077523276054
+18,cubic-nonterm,0.03321933899860596,0.0007263244256208338
+19,non-linear-cond-term,0.476093309801945,0.001686622586617851
+20,non-linear-cond-nonterm,0.03316204859729623,0.0008574531004771136
+21,tte-sf-10-G-BDD,0.011239278195716906,0.0006834930536947542
+22,tte-sf-10-G-IC3,0.11656760180339916,0.0006652834632452463
+23,tte-sf-10-GF-BDD,0.012631322599190753,0.0007202878142977978
+24,tte-sf-10-GF-IC3,0.2934799860988278,0.0012619692953356274
+25,tte-sf-100-G-BDD,0.019674726999073754,0.0017729618107107238
+26,tte-sf-100-G-IC3,7.653764910601604,0.006371347801185598
+27,tte-sf-100-GF-BDD,0.12415921720239567,0.0028486266396452907
+28,tte-sf-100-GF-IC3,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_tte_sf_100_gf_ic3.txt' timed out after 500 seconds,
+29,tte-sf-1000-G-BDD,0.5890423561999342,0.006453581423994548
+30,tte-sf-1000-G-IC3,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_tte_sf_1000_g_ic3.txt' timed out after 500 seconds,
+31,tte-sf-1000-GF-BDD,18.334899329800102,0.4332837336371917
+32,tte-sf-1000-GF-IC3,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_tte_sf_1000_gf_ic3.txt' timed out after 500 seconds,
+33,tte-sf-2000-G-BDD,2.4113569285997074,0.21566645539768375
+34,tte-sf-2000-G-IC3,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_tte_sf_2000_g_ic3.txt' timed out after 500 seconds,
+35,tte-sf-2000-GF-BDD,84.61669754160394,1.0089261553255549
+36,tte-sf-2000-GF-IC3,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_tte_sf_2000_gf_ic3.txt' timed out after 500 seconds,
+37,tte-sf-5000-G-BDD,13.333077689597848,0.08169958314787482
+38,tte-sf-5000-G-IC3,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_tte_sf_5000_g_ic3.txt' timed out after 500 seconds,
+39,tte-sf-5000-GF-BDD,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_tte_sf_5000_gf_bdd.txt' timed out after 500 seconds,
+40,tte-sf-5000-GF-IC3,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_tte_sf_5000_gf_ic3.txt' timed out after 500 seconds,
+41,tte-sf-10000-G-BDD,57.188203158999386,1.874538071858952
+42,tte-sf-10000-G-IC3,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_tte_sf_10000_g_ic3.txt' timed out after 500 seconds,
+43,tte-sf-10000-GF-BDD,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_tte_sf_10000_gf_bdd.txt' timed out after 500 seconds,
+44,tte-sf-10000-GF-IC3,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_tte_sf_10000_gf_ic3.txt' timed out after 500 seconds,
+45,tte-usf-10-G-BDD,0.01529835379915312,0.0015117361138409714
+46,tte-usf-10-G-IC3,0.22433592640300049,0.007095303579620096
+47,tte-usf-10-GF-BDD,0.018484470700786914,0.0008656541728054436
+48,tte-usf-10-GF-IC3,0.2662372037986643,0.004038562534380274
+49,tte-usf-100-G-BDD,0.04116021790105151,0.002764392027143546
+50,tte-usf-100-G-IC3,15.306497057198431,0.2137982025025852
+51,tte-usf-100-GF-BDD,0.14376193129719467,0.0015203999205220568
+52,tte-usf-100-GF-IC3,9.122160280597745,0.04033614682281042
+53,tte-usf-1000-G-BDD,0.9843569851975189,0.006862232527157419
+54,tte-usf-1000-G-IC3,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_tte_usf_1000_g_ic3.txt' timed out after 500 seconds,
+55,tte-usf-1000-GF-BDD,19.51874804979743,0.1735836901872598
+56,tte-usf-1000-GF-IC3,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_tte_usf_1000_gf_ic3.txt' timed out after 500 seconds,
+57,tte-usf-2000-G-BDD,3.816464102298778,0.4674061353265172
+58,tte-usf-2000-G-IC3,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_tte_usf_2000_g_ic3.txt' timed out after 500 seconds,
+59,tte-usf-2000-GF-BDD,81.68604266389738,3.2113764569785532
+60,tte-usf-2000-GF-IC3,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_tte_usf_2000_gf_ic3.txt' timed out after 500 seconds,
+61,tte-usf-5000-G-BDD,20.2838681156034,0.3090368773033654
+62,tte-usf-5000-G-IC3,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_tte_usf_5000_g_ic3.txt' timed out after 500 seconds,
+63,tte-usf-5000-GF-BDD,421.85477466820157,4.167423019182561
+64,tte-usf-5000-GF-IC3,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_tte_usf_5000_gf_ic3.txt' timed out after 500 seconds,
+65,tte-usf-10000-G-BDD,83.32920667369908,1.061132465669548
+66,tte-usf-10000-G-IC3,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_tte_usf_10000_g_ic3.txt' timed out after 500 seconds,
+67,tte-usf-10000-GF-BDD,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_tte_usf_10000_gf_bdd.txt' timed out after 500 seconds,
+68,tte-usf-10000-GF-IC3,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_tte_usf_10000_gf_ic3.txt' timed out after 500 seconds,
+69,con-sf-10-G-BDD,0.011791757498576772,0.0011998111077250247
+70,con-sf-10-G-IC3,0.19053157570160692,0.0005399185768837655
+71,con-sf-10-GF-BDD,0.01267614000098547,0.001190137802849711
+72,con-sf-10-GF-IC3,0.25070519429864363,0.0011964176897805267
+73,con-sf-100-G-BDD,0.022136388400394936,0.0021878128645242264
+74,con-sf-100-G-IC3,14.208050470198213,0.01732627371759576
+75,con-sf-100-GF-BDD,0.09308027729712194,0.0013336131037878006
+76,con-sf-100-GF-IC3,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_con_sf_100_gf_ic3.txt' timed out after 500 seconds,
+77,con-sf-1000-G-BDD,1.3601754338000318,0.009434399468550552
+78,con-sf-1000-G-IC3,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_con_sf_1000_g_ic3.txt' timed out after 500 seconds,
+79,con-sf-1000-GF-BDD,13.27080023730232,0.16621989943632992
+80,con-sf-1000-GF-IC3,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_con_sf_1000_gf_ic3.txt' timed out after 500 seconds,
+81,con-sf-2000-G-BDD,5.6382151618992795,0.22106028527514293
+82,con-sf-2000-G-IC3,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_con_sf_2000_g_ic3.txt' timed out after 500 seconds,
+83,con-sf-2000-GF-BDD,53.92316385829618,0.2942642516201306
+84,con-sf-2000-GF-IC3,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_con_sf_2000_gf_ic3.txt' timed out after 500 seconds,
+85,con-sf-5000-G-BDD,32.424729176102844,1.0637718649995487
+86,con-sf-5000-G-IC3,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_con_sf_5000_g_ic3.txt' timed out after 500 seconds,
+87,con-sf-5000-GF-BDD,403.1412720769993,3.768538931619479
+88,con-sf-5000-GF-IC3,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_con_sf_5000_gf_ic3.txt' timed out after 500 seconds,
+89,con-sf-10000-G-BDD,137.1137108793977,4.742242338618034
+90,con-sf-10000-G-IC3,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_con_sf_10000_g_ic3.txt' timed out after 500 seconds,
+91,con-sf-10000-GF-BDD,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_con_sf_10000_gf_bdd.txt' timed out after 500 seconds,
+92,con-sf-10000-GF-IC3,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_con_sf_10000_gf_ic3.txt' timed out after 500 seconds,
+93,con-usf-10-G-BDD,0.016371391199936625,0.0012020448592216595
+94,con-usf-10-G-IC3,0.3257435718012857,0.004833221558433364
+95,con-usf-10-GF-BDD,0.01887014220119454,0.0011623223343744055
+96,con-usf-10-GF-IC3,0.2683068974001799,0.043305931848909004
+97,con-usf-100-G-BDD,0.02214470659964718,0.0012017142055807475
+98,con-usf-100-G-IC3,15.078454456699546,2.7512559651600017
+99,con-usf-100-GF-BDD,0.09267117979761678,0.003310484958598278
+100,con-usf-100-GF-IC3,22.857382752701234,2.170654354576509
+101,con-usf-1000-G-BDD,2.5107058292996953,0.0524172399064174
+102,con-usf-1000-G-IC3,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_con_usf_1000_g_ic3.txt' timed out after 500 seconds,
+103,con-usf-1000-GF-BDD,10.142672325798776,0.47334197791653687
+104,con-usf-1000-GF-IC3,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_con_usf_1000_gf_ic3.txt' timed out after 500 seconds,
+105,con-usf-2000-G-BDD,12.149388306798937,0.1369845951633997
+106,con-usf-2000-G-IC3,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_con_usf_2000_g_ic3.txt' timed out after 500 seconds,
+107,con-usf-2000-GF-BDD,39.21309309210337,3.5675820549187214
+108,con-usf-2000-GF-IC3,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_con_usf_2000_gf_ic3.txt' timed out after 500 seconds,
+109,con-usf-5000-G-BDD,59.554206274497844,0.3871698526951983
+110,con-usf-5000-G-IC3,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_con_usf_5000_g_ic3.txt' timed out after 500 seconds,
+111,con-usf-5000-GF-BDD,165.95739992659657,23.422314346702645
+112,con-usf-5000-GF-IC3,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_con_usf_5000_gf_ic3.txt' timed out after 500 seconds,
+113,con-usf-10000-G-BDD,160.97422382950026,0.7170304328506159
+114,con-usf-10000-G-IC3,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_con_usf_10000_g_ic3.txt' timed out after 500 seconds,
+115,con-usf-10000-GF-BDD,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_con_usf_10000_gf_bdd.txt' timed out after 500 seconds,
+116,con-usf-10000-GF-IC3,Command 'nuxmv -source ../nuXmv-files/synch_tte/source_con_usf_10000_gf_ic3.txt' timed out after 500 seconds,
