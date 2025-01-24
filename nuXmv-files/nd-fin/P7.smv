@@ -1,0 +1,19 @@
+MODULE main
+    VAR i: --65536..65535;
+    VAR p: --65536..65535;
+    VAR s: --65536..65535;
+    VAR u: --65536..65535;
+
+    TRANS (next(i) = (i < p ? i : i + 1)
+            & next(p) = p 
+            & next(s) = 1
+            & next(u) = (i < p ? 1 : u))
+        | (next(i) = i
+            & next(p) = p
+            & next(s) = 1
+            & next(u) = 1)
+        | (next(i) = i
+            & next(p) = p
+            & next(s) = 1
+            & next(u) = u)
+        ;

@@ -1,0 +1,11 @@
+MODULE main
+    VAR w: --65536..65535;
+    VAR g: --65536..65535;
+
+    TRANS (next(w) = (g < 1 ? (w >= 1 ? 0 : w) : 1) 
+            & next(g) = (g < 1 ? g : 0))
+        | (next(w) = (g < 1 ? (w >= 1 ? 0 : w) : w) 
+            & next(g) = (g < 1 ? g : 0))
+        ;
+
+    LTLSPEC G(F(w = 1))

@@ -1,0 +1,14 @@
+MODULE main
+    VAR x : --65536..65535;
+    VAR y : --65536..65535;
+    
+    DEFINE terminated := x <= 0;
+
+    TRANS (terminated           & next(x) = x & next(y) = y)
+        | (!terminated          & next(x) = x - 1 & next(y) = y)
+        | (!terminated & x >= 3 & next(x) = x + 1 & next(y) = y)
+        | (!terminated & x <  3 & next(x) = x - 1 & next(y) = y)
+        ;
+
+    
+

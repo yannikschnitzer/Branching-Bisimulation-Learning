@@ -1,0 +1,6 @@
+MODULE main
+    VAR x: --65536..65535;
+
+    TRANS (next(x) = x + 1)
+        | (next(x) = (x <= 5 & x > 2 ? x - 1 : x + 1))
+        ;
