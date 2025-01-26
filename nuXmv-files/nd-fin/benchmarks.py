@@ -111,18 +111,19 @@ experiments = [
     },
 ]
 
-def run_nuxmv_experiment(exp: str) -> bytes:
+def run_nuxmv_experiment_(exp: str) -> bytes:
     cmd = f"nuxmv -source check-inf-state.scr {exp}"
     outb = subprocess.check_output(cmd, shell=True, stderr=subprocess.DEVNULL, timeout=500)
     return outb
 
-def run_nuxmv_experiment_(exp: str) -> bytes:
-    p = subprocess.Popen(["/usr/bin/nuxmv", "-source", "check-inf-state.scr", exp], shell=True, stderr=subprocess.DEVNULL)
+def run_nuxmv_experiment(exp: str) -> bytes:
+    command = ' '.join(["/usr/bin/nuxmv", "-source", "check-inf-state.scr", exp])
+    p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     try:
-        p.wait(500)
-        return p.stdout
+        out, err = p.communicate(timeout=500)
+        return out
     except subprocess.TimeoutExpired as e:
-        p.terminate()
+        p.kill()
         raise e
 
 def measure_nuxmv_experiment(exp: str, formula_idx: int, formula: str, progr_state_size: int):
