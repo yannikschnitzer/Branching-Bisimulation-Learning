@@ -190,7 +190,7 @@ Memory around native instruction pointer (0x7c530b17c30d):0x7c530b17c2fd  18 48 
 =================================================================
 ",
 21,"{'name': 'test/cav13-ctl-examples/P2.t2', 'formula': '[EF](varA == 1 && [EG](varR != 5))'}",0.8169375896453858,0.0026249991216628805
-22,"{'name': 'test/cav13-ctl-examples/P2.t2', 'formula': '[!(EF](varA == 1 && [EG](varR != 5)))'}",Unimplemented Illegal Character '[,
+22,"{'name': 'test/cav13-ctl-examples/P2.t2', 'formula': '!([EF](varA == 1 && [EG](varR != 5)))'}",0.8146443367004395,0.005675127559822435
 23,"{'name': 'test/cav13-ctl-examples/P2.t2', 'formula': 'F(varA == 1 && G(varR != 5))'}","
 =================================================================
 	Native Crash Reporting
