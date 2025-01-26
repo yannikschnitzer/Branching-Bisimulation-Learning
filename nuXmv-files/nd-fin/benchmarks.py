@@ -116,6 +116,15 @@ def run_nuxmv_experiment(exp: str) -> bytes:
     outb = subprocess.check_output(cmd, shell=True, stderr=subprocess.DEVNULL, timeout=500)
     return outb
 
+def run_nuxmv_experiment_(exp: str) -> bytes:
+    p = subprocess.Popen(["/usr/bin/nuxmv", "-source", "check-inf-state.scr", exp], shell=True, stderr=subprocess.DEVNULL)
+    try:
+        p.wait(500)
+        return p.stdout
+    except subprocess.TimeoutExpired as e:
+        p.terminate()
+        raise e
+
 def measure_nuxmv_experiment(exp: str, formula_idx: int, formula: str, progr_state_size: int):
     file_to_check = f"{formula_idx}-size{progr_state_size}-{exp}"
     ctl_footer = f"    CTLSPEC {formula}"
