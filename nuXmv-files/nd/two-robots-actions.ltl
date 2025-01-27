@@ -1,0 +1,4 @@
+x_1 >= 1 -> G(!clash)
+y_1 >= 1 -> G(!clash)
+! (F G (!clash))
+F ((G clash) | (G !clash))

@@ -1,0 +1,19 @@
+MODULE main
+    VAR x_1 : integer;
+    DEFINE y_1 := 0;
+    DEFINE x_2 := 0;
+    VAR y_2 : integer;
+
+    INIT x_1 = -10000;
+    INIT y_2 = -10000;
+
+    DEFINE clash := x_1 = 0 & y_2 = 0;
+
+    TRANS (clash & next(x_1) = x_1 & next(y_2) = y_2)
+        | (!clash & next(x_1) = x_1 + 1)
+        | (!clash & next(x_1) = x_1 + 2)
+        | (!clash & next(x_1) = x_1 + 4)
+        | (!clash & next(y_1) = y_1 + 1)
+        | (!clash & next(y_1) = y_1 + 2)
+        | (!clash & next(y_1) = y_1 + 4);
+

@@ -9,88 +9,105 @@ import pandas as pd
 # nuxmv -source chech-inf-state.scr P19.smv
 
 experiments = [
+    # {
+    #     'experiment': "term-loop-nd.smv",
+    #     'formulas': "term-loop-nd.ltl"
+    # },
+    # {
+    #     'experiment': "term-loop-nd-2.smv",
+    #     'formulas': "term-loop-nd-2.ltl"
+    # },
+    # {
+    #     'experiment': "term-loop-nd-y.smv",
+    #     'formulas': "term-loop-nd-y.ltl"
+    # },
+    # {
+    #     'experiment': "quadratic-nd.smv",
+    #     'formulas': "quadratic-nd.ltl"
+    # },
+    # {
+    #     'experiment': "cubic-nd.smv",
+    #     'formulas': "cubic-nd.ltl"
+    # },
+    # {
+    #     'experiment': "nlr-cond-nd.smv",
+    #     'formulas': "nlr-cond-nd.ltl"
+    # },
+    # {
+    #     'experiment': "P1.smv",
+    #     'formulas': "P1.ltl"
+    # },
+    # {
+    #     'experiment': "P2.smv",
+    #     'formulas': "P2.ltl"
+    # },
+    # {
+    #     'experiment': "P3.smv",
+    #     'formulas': "P3.ltl"
+    # },
+    # {
+    #     'experiment': "P4.smv",
+    #     'formulas': "P4.ltl"
+    # },
+    # {
+    #     'experiment': "P5.smv",
+    #     'formulas': "P5.ltl"
+    # },
+    # {
+    #     'experiment': "P6.smv",
+    #     'formulas': "P6.ltl"
+    # },
+    # {
+    #     'experiment': "P7.smv",
+    #     'formulas': "P7.ltl"
+    # },
+    # {
+    #     'experiment': "P17.smv",
+    #     'formulas': "P17.ltl"
+    # },
+    # {
+    #     'experiment': "P18.smv",
+    #     'formulas': "P18.ltl"
+    # },
+    # {
+    #     'experiment': "P19.smv",
+    #     'formulas': "P19.ltl"
+    # },
+    # {
+    #     'experiment': "P20.smv",
+    #     'formulas': "P20.ltl"
+    # },
+    # {
+    #     'experiment': "P21.smv",
+    #     'formulas': "P21.ltl"
+    # },
+    # {
+    #     'experiment': "P25.smv",
+    #     'formulas': "P25.ltl"
+    # },
     {
-        'experiment': "term-loop-nd.smv",
-        'formulas': "term-loop-nd.ltl"
+        'experiment': "two-robots.smv",
+        'formulas': "two-robots.ltl"
     },
     {
-        'experiment': "term-loop-nd-2.smv",
-        'formulas': "term-loop-nd-2.ltl"
+        'experiment': "two-robots-actions.smv",
+        'formulas': "two-robots-actions.ltl"
     },
     {
-        'experiment': "term-loop-nd-y.smv",
-        'formulas': "term-loop-nd-y.ltl"
-    },
-    {
-        'experiment': "quadratic-nd.smv",
-        'formulas': "quadratic-nd.ltl"
-    },
-    {
-        'experiment': "cubic-nd.smv",
-        'formulas': "cubic-nd.ltl"
-    },
-    {
-        'experiment': "nlr-cond-nd.smv",
-        'formulas': "nlr-cond-nd.ltl"
-    },
-    {
-        'experiment': "P1.smv",
-        'formulas': "P1.ltl"
-    },
-    {
-        'experiment': "P2.smv",
-        'formulas': "P2.ltl"
-    },
-    {
-        'experiment': "P3.smv",
-        'formulas': "P3.ltl"
-    },
-    {
-        'experiment': "P4.smv",
-        'formulas': "P4.ltl"
-    },
-    {
-        'experiment': "P5.smv",
-        'formulas': "P5.ltl"
-    },
-    {
-        'experiment': "P6.smv",
-        'formulas': "P6.ltl"
-    },
-    {
-        'experiment': "P7.smv",
-        'formulas': "P7.ltl"
-    },
-    {
-        'experiment': "P17.smv",
-        'formulas': "P17.ltl"
-    },
-    {
-        'experiment': "P18.smv",
-        'formulas': "P18.ltl"
-    },
-    {
-        'experiment': "P19.smv",
-        'formulas': "P19.ltl"
-    },
-    {
-        'experiment': "P20.smv",
-        'formulas': "P20.ltl"
-    },
-    {
-        'experiment': "P21.smv",
-        'formulas': "P21.ltl"
-    },
-    {
-        'experiment': "P25.smv",
-        'formulas': "P25.ltl"
+        'experiment': "two-robots-quadratic.smv",
+        'formulas': "two-robots-quadratic.ltl"
     },
 ]
 
 def run_nuxmv_experiment(exp: str) -> bytes:
     cmd = f"nuxmv -source check-inf-state.scr {exp}"
-    outb = subprocess.check_output(cmd, shell=True, stderr=subprocess.DEVNULL, timeout=500)
-    return outb
+    p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    try:
+        out, err = p.communicate(timeout=500)
+        return out
+    except subprocess.TimeoutExpired as e:
+        p.kill()
+        raise e
 
 def measure_nuxmv_experiment(exp: str, formula_idx: int, formula: str):
     file_to_check = f"{formula_idx}-{exp}"
