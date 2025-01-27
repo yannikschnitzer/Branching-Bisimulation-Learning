@@ -32,6 +32,7 @@ WORKDIR /CAV25
 RUN git clone --depth=1 https://github.com/ultimate-pa/ultimate.git
 WORKDIR /CAV25/ultimate/releaseScripts/default
 RUN ./makeFresh.sh
+# TODO rm -rf /ultimate/trunk/examples to save space
 
 # To run ultimate-ltl
 WORKDIR /
@@ -58,19 +59,20 @@ RUN wget https://cpachecker.sosy-lab.org/CPAchecker-2.3-unix.zip && \
     apt-get install -y openjdk-17-jdk openjdk-17-jre
 
 # Intstall Z3
-# WORKDIR /
-# RUN git clone --depth=1 https://github.com/Z3Prover/z3.git 
-# WORKDIR /z3
-# RUN python3 ./scripts/mk_make.py
-# WORKDIR /z3/build
-# RUN make && \
-#     make install
+WORKDIR /
+RUN git clone --depth=1 https://github.com/Z3Prover/z3.git 
+WORKDIR /z3
+RUN python3 ./scripts/mk_make.py
+WORKDIR /z3/build
+RUN make && \
+    make install
 
 # Get artifact and libraries 
 WORKDIR /CAV25 
+
+# RUN git clone https://github.com/yannikschnitzer/Bisimulation-Learning.git 
 RUN mkdir Bisimulation-Learning
 COPY requirements.txt ./Bisimulation-Learning/
-# RUN git clone https://github.com/yannikschnitzer/Bisimulation-Learning.git 
 RUN pip install -r Bisimulation-Learning/requirements.txt
 
 COPY . ./Bisimulation-Learning
