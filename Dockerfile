@@ -32,7 +32,7 @@ WORKDIR /CAV25
 RUN git clone --depth=1 https://github.com/ultimate-pa/ultimate.git
 WORKDIR /CAV25/ultimate/releaseScripts/default
 RUN ./makeFresh.sh
-# TODO rm -rf /ultimate/trunk/examples to save space
+RUN rm -rf /CAV25/ultimate/trunk/examples
 
 # To run ultimate-ltl
 WORKDIR /

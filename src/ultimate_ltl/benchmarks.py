@@ -9,81 +9,93 @@ import pandas as pd
 # ultimate-ltl P19.c
 
 experiments = [
+    # {
+    #     'experiment': "term-loop-nd.c",
+    #     'formulas': "term-loop-nd.ltl"
+    # },
+    # {
+    #     'experiment': "term-loop-nd-2.c",
+    #     'formulas': "term-loop-nd-2.ltl"
+    # },
+    # {
+    #     'experiment': "term-loop-nd-y.c",
+    #     'formulas': "term-loop-nd-y.ltl"
+    # },
+    # {
+    #     'experiment': "quadratic-nd.c",
+    #     'formulas': "quadratic-nd.ltl"
+    # },
+    # {
+    #     'experiment': "cubic-nd.c",
+    #     'formulas': "cubic-nd.ltl"
+    # },
+    # {
+    #     'experiment': "nlr-cond-nd.c",
+    #     'formulas': "nlr-cond-nd.ltl"
+    # },
+    # {
+    #     'experiment': "P1.c",
+    #     'formulas': "P1.ltl"
+    # },
+    # {
+    #     'experiment': "P2.c",
+    #     'formulas': "P2.ltl"
+    # },
+    # {
+    #     'experiment': "P3.c",
+    #     'formulas': "P3.ltl"
+    # },
+    # {
+    #     'experiment': "P4.c",
+    #     'formulas': "P4.ltl"
+    # },
+    # {
+    #     'experiment': "P5.c",
+    #     'formulas': "P5.ltl"
+    # },
+    # {
+    #     'experiment': "P6.c",
+    #     'formulas': "P6.ltl"
+    # },
+    # {
+    #     'experiment': "P7.c",
+    #     'formulas': "P7.ltl"
+    # },
+    # {
+    #     'experiment': "P17.c",
+    #     'formulas': "P17.ltl"
+    # },
+    # {
+    #     'experiment': "P18.c",
+    #     'formulas': "P18.ltl"
+    # },
+    # {
+    #     'experiment': "P19.c",
+    #     'formulas': "P19.ltl"
+    # },
+    # {
+    #     'experiment': "P20.c",
+    #     'formulas': "P20.ltl"
+    # },
+    # {
+    #     'experiment': "P21.c",
+    #     'formulas': "P21.ltl"
+    # },
+    # {
+    #     'experiment': "P25.c",
+    #     'formulas': "P25.ltl"
+    # },
     {
-        'experiment': "term-loop-nd.c",
-        'formulas': "term-loop-nd.ltl"
+        'experiment': "two-robots.c",
+        'formulas': "two-robots.ltl"
     },
     {
-        'experiment': "term-loop-nd-2.c",
-        'formulas': "term-loop-nd-2.ltl"
+        'experiment': "two-robots-actions.c",
+        'formulas': "two-robots-actions.ltl"
     },
     {
-        'experiment': "term-loop-nd-y.c",
-        'formulas': "term-loop-nd-y.ltl"
-    },
-    {
-        'experiment': "quadratic-nd.c",
-        'formulas': "quadratic-nd.ltl"
-    },
-    {
-        'experiment': "cubic-nd.c",
-        'formulas': "cubic-nd.ltl"
-    },
-    {
-        'experiment': "nlr-cond-nd.c",
-        'formulas': "nlr-cond-nd.ltl"
-    },
-    {
-        'experiment': "P1.c",
-        'formulas': "P1.ltl"
-    },
-    {
-        'experiment': "P2.c",
-        'formulas': "P2.ltl"
-    },
-    {
-        'experiment': "P3.c",
-        'formulas': "P3.ltl"
-    },
-    {
-        'experiment': "P4.c",
-        'formulas': "P4.ltl"
-    },
-    {
-        'experiment': "P5.c",
-        'formulas': "P5.ltl"
-    },
-    {
-        'experiment': "P6.c",
-        'formulas': "P6.ltl"
-    },
-    {
-        'experiment': "P7.c",
-        'formulas': "P7.ltl"
-    },
-    {
-        'experiment': "P17.c",
-        'formulas': "P17.ltl"
-    },
-    {
-        'experiment': "P18.c",
-        'formulas': "P18.ltl"
-    },
-    {
-        'experiment': "P19.c",
-        'formulas': "P19.ltl"
-    },
-    {
-        'experiment': "P20.c",
-        'formulas': "P20.ltl"
-    },
-    {
-        'experiment': "P21.c",
-        'formulas': "P21.ltl"
-    },
-    {
-        'experiment': "P25.c",
-        'formulas': "P25.ltl"
+        'experiment': "two-robots-quadratic.c",
+        'formulas': "two-robots-quadratic.ltl"
     },
 ]
 
@@ -91,10 +103,10 @@ def run_ultimate_ltl_experiment(exp: str, formula: str, formula_idx: int):
     file_to_check = f"{formula_idx}-{exp}"
     ltl_header = f"""//#Safe\n//@ ltl invariant positive: {formula};"""
     cmd = f"""
-    rm -f "{file_to_check}" \\
-        && echo "{ltl_header}" >> "{file_to_check}" \\
-        && cat "{exp}" >> "{file_to_check}" \\
-        && ultimate-ltl "{file_to_check}"
+    rm -f '{file_to_check}' \\
+        && echo '{ltl_header}' >> '{file_to_check}' \\
+        && cat '{exp}' >> '{file_to_check}' \\
+        && ultimate-ltl '{file_to_check}'
     """
     outb = subprocess.check_output(cmd, shell=True, stderr=subprocess.DEVNULL, timeout=500)
     out = outb.decode("utf-8")
