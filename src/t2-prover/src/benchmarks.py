@@ -211,6 +211,10 @@ experiments = [
     # 'name': "test/cav13-ctl-examples/P7.t2",
     # 'formula': "G(varS != 1 || F(varU == 1))"
     # },
+    {
+    'name': "test/cav13-ctl-examples/P7.t2",
+    'formula': "E G(varS != 1 || F(varU == 1) || E F(varU == 1))"
+    },
 
 
     # {
@@ -225,6 +229,10 @@ experiments = [
     # 'name': "test/cav13-ctl-examples/P17.t2",
     # 'formula': "G(F(varW >= 1))"
     # },
+    {
+    'name': "test/cav13-ctl-examples/P17.t2",
+    'formula': "E G( F(varW >= 1) || A G (E F(varW >= 1)))"
+    },
 
     # {
     # 'name': "test/cav13-ctl-examples/P18.t2",
@@ -238,6 +246,10 @@ experiments = [
     # 'name': "test/cav13-ctl-examples/P18.t2",
     # 'formula': "F(G(varW < 1))"
     # },
+    {
+    'name': "test/cav13-ctl-examples/P18.t2",
+    'formula': "E F(F(varW >= 1)) || A F (E G(varW < 1)))"
+    },
 
 
     # {
@@ -252,6 +264,10 @@ experiments = [
     # 'name': "test/cav13-ctl-examples/P19.t2",
     # 'formula': "G(F(varW >=1))"
     # },
+    {
+    'name': "test/cav13-ctl-examples/P19.t2",
+    'formula': "E G(F(varW >=1) || E F (A G(varW >=1)))"
+    },
 
     # {
     # 'name': "test/cav13-ctl-examples/P20.t2",
@@ -265,6 +281,10 @@ experiments = [
     # 'name': "test/cav13-ctl-examples/P20.t2",
     # 'formula': "F(G(varW < 1))"
     # },
+    {
+    'name': "test/cav13-ctl-examples/P20.t2",
+    'formula': "E F(F(varW >= 1) || A F (E G(varW < 1)))"
+    },
 
     # {
     # 'name': "test/cav13-ctl-examples/P21.t2",
@@ -278,6 +298,10 @@ experiments = [
     # 'name': "test/cav13-ctl-examples/P21.t2",
     # 'formula': "G(F(varW == 1))"
     # },
+    {
+    'name': "test/cav13-ctl-examples/P21.t2",
+    'formula': "E G(F(varW == 1) || E G (E F(varW == 1)))"
+    },
 
     # {
     # 'name': "test/cav13-ctl-examples/P22.t2",
@@ -291,6 +315,10 @@ experiments = [
     # 'name': "test/cav13-ctl-examples/P22.t2",
     # 'formula': "F(G(varW != 1))"
     # },
+    {
+    'name': "test/cav13-ctl-examples/P22.t2",
+    'formula': "E F(F(varW == 1) || E F (A G(varW != 1)))"
+    },
 
     # {
     # 'name': "test/cav13-ctl-examples/P23.t2",
@@ -304,6 +332,10 @@ experiments = [
     # 'name': "test/cav13-ctl-examples/P23.t2",
     # 'formula': "G(F(varW == 1))"
     # },
+    {
+    'name': "test/cav13-ctl-examples/P23.t2",
+    'formula': "E G(F(varW == 1) || E G (E F(varW == 1)))"
+    },
 
     # {
     # 'name': "test/cav13-ctl-examples/P24.t2",
@@ -317,19 +349,27 @@ experiments = [
     # 'name': "test/cav13-ctl-examples/P24.t2",
     # 'formula': "F(G(varW != 1))"
     # },
+    {
+    'name': "test/cav13-ctl-examples/P24.t2",
+    'formula': "F(F(varW == 1) || E F (A G(varW != 1)))"
+    },
 
     # {
     # 'name': "test/cav13-ctl-examples/P25.t2",
     # 'formula': "(varC > 5) -> ([AF](varR > 5))"
     # },
-    {
-    'name': "test/cav13-ctl-examples/P25.t2",
-    'formula': "(varC > 5) && ![AF](varR > 5)"
-    },
+    # {
+    # 'name': "test/cav13-ctl-examples/P25.t2",
+    # 'formula': "(varC > 5) && ![AF](varR > 5)"
+    # },
     # {
     # 'name': "test/cav13-ctl-examples/P25.t2",
     # 'formula': "(varC > 5) -> (F(varR > 5))"
     # },
+    {
+    'name': "test/cav13-ctl-examples/P25.t2",
+    'formula': "A G((varC > 5) -> (G(F(varR > 5))))"
+    },
 
     # {
     # 'name': "test/cav13-ctl-examples/P26.t2",
@@ -343,6 +383,10 @@ experiments = [
     # 'name': "test/cav13-ctl-examples/P26.t2",
     # 'formula': "(varC > 5) && G(varR <= 5)"
     # },
+    {
+    'name': "test/cav13-ctl-examples/P26.t2",
+    'formula': "E F((varC > 5) && G(F(varR <= 5)))"
+    },
 
     # {
     # 'name': "test/cav13-ctl-examples/P27.t2",
@@ -356,6 +400,10 @@ experiments = [
     # 'name': "test/cav13-ctl-examples/P27.t2",
     # 'formula': "(varC <= 5) || F(varR > 5)"
     # },
+    {
+    'name': "test/cav13-ctl-examples/P27.t2",
+    'formula': "E G((varC <= 5) || G(F(varR > 5)))"
+    },
 
     # {
     # 'name': "test/cav13-ctl-examples/P28.t2",
@@ -369,6 +417,10 @@ experiments = [
     # 'name': "test/cav13-ctl-examples/P28.t2",
     # 'formula': "(varC > 5) && G(varR <= 5)",
     # },
+    {
+    'name': "test/cav13-ctl-examples/P28.t2",
+    'formula': "E F((varC > 5) && G(F(varR <= 5)))",
+    },
 
 ]
 

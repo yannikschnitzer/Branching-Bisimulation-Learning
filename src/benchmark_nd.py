@@ -58,7 +58,7 @@ experiments = [
     # (cubic_nd(), "cubic_nd"),
     # (nlr_cond_nd(), "nlr_cond_nd"),
     # (conic_nd(), "conic_nd"),
-    (disjunction_nd(), "disjunction_nd"),
+    # (disjunction_nd(), "disjunction_nd"),
     # (P1(), "P1"),
     # (P2(), "P2"),
     # (P3(), "P3"),
@@ -71,7 +71,14 @@ experiments = [
     # (P19(), "P19"),
     # (P20(), "P20"),
     # (P21(), "P21"),
+    (P22(), "P22"),
+    (P23(), "P23"),
+    (P24(), "P24"),
     # (P25(), "P25"),
+    (P28(), "P28"),
+    # (two_robots_axis(), "two_robots_axis"),
+    # (two_robots_axis_actions(), "two_robots_axis_actions"),
+    # (two_robots_axis_actions_quadratic(), "two_robots_axis_actions_quadratic"),
 ]
 
 experiments_robot = [
