@@ -163,7 +163,8 @@ def measure_nuxmv_ctl_experiment(exp, formula_idx, formula, progr_state_size, ou
         avg = np.average(times)
         std = np.std(times)
         print(f"--- Experiment {exp} Formula {formula} \n\taverage = {avg} \n\tstd = {std}")
-        output.loc[len(output)] = [exp, formula, avg, std]
+        state_size = 2**progr_state_size
+        output.loc[len(output)] = [exp, f"{state_size}..{state_size - 1}", formula, avg, std]
     except subprocess.TimeoutExpired:
         print(f"Experiment {exp} Formula {formula}: OOT")
     except Exception as e:
@@ -173,6 +174,7 @@ def measure_nuxmv_ctl_experiment(exp, formula_idx, formula, progr_state_size, ou
 def run_nuxmv_experiments():
     output = pd.DataFrame({
         'Experiment': [],
+        'State Size': [],
         'Formula': [],
         'Runtime': [],
         'StD': []
@@ -182,7 +184,7 @@ def run_nuxmv_experiments():
             with open(exp['formulas']) as f_formulas:
                 formulas = [line.rstrip() for line in f_formulas]
                 for idx, formula in enumerate(formulas):
-                    for progr_state_size in [12, 14, 16]:
+                    for progr_state_size in [8, 10]:
                         measure_nuxmv_ctl_experiment(exp['experiment'], idx, formula, progr_state_size, output)
         except Exception as e:
             print(f"Skipped experiment {exp} one iteration failed\nReason was: {e}")
