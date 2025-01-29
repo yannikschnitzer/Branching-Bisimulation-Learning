@@ -263,40 +263,109 @@ Memory around native instruction pointer (0x7b58f057c30d):0x7b58f057c2fd  18 48 
 41,"{'name': 'test/cav13-ctl-examples/P7.t2', 'formula': '[AG](varS != 1 || [EF](varU == 1))'}",0.47255911827087405,0.0019468314572693003
 42,"{'name': 'test/cav13-ctl-examples/P7.t2', 'formula': '!([AG](varS != 1 || [EF](varU == 1)))'}",0.4508891820907593,0.0019997836597595887
 43,"{'name': 'test/cav13-ctl-examples/P7.t2', 'formula': 'G(varS != 1 || F(varU == 1))'}",0.46311352252960203,0.0015104389874177238
+0,"{'name': 'test/cav13-ctl-examples/P7.t2', 'formula': 'E G(varS != 1 || F(varU == 1) || E F(varU == 1))'}",1.2530120478736029,0.10367786370365976
 44,"{'name': 'test/cav13-ctl-examples/P17.t2', 'formula': '[AG]([AF](varW >= 1))'}",0.5819309711456299,0.002112053095347675
 45,"{'name': 'test/cav13-ctl-examples/P17.t2', 'formula': '!([AG]([AF](varW >= 1)))'}",0.5808359622955322,0.0016147794394130127
 46,"{'name': 'test/cav13-ctl-examples/P17.t2', 'formula': 'G(F(varW >= 1))'}",0.8548455238342285,0.0030287682355045276
+1,"{'name': 'test/cav13-ctl-examples/P17.t2', 'formula': 'E G( F(varW >= 1) || A G (E F(varW >= 1)))'}",2.245136547088623,0.026158751837462184
 47,"{'name': 'test/cav13-ctl-examples/P18.t2', 'formula': '[EF]([EG](varW < 1))'}",0.7546195030212403,0.0014903623003735384
 48,"{'name': 'test/cav13-ctl-examples/P18.t2', 'formula': '!([EF]([EG](varW < 1)))'}",0.7524932146072387,0.0031472622578771372
 49,"{'name': 'test/cav13-ctl-examples/P18.t2', 'formula': 'F(G(varW < 1))'}",3.568121385574341,0.013686781566763468
+2,"{'name': 'test/cav13-ctl-examples/P18.t2', 'formula': 'E F(F(varW >= 1)) || A F (E G(varW < 1)))'}",2.536599278450012,0.0202002743808079
 50,"{'name': 'test/cav13-ctl-examples/P19.t2', 'formula': '[AG]([EF](varW >=1))'}",3.6421578884124757,0.00902261352373667
 51,"{'name': 'test/cav13-ctl-examples/P19.t2', 'formula': '!([AG]([EF](varW >=1)))'}",3.651308560371399,0.011002429422313293
-52,"{'name': 'test/cav13-ctl-examples/P19.t2', 'formula': 'G(F(varW >=1))'}","Timeout after 300.000000 seconds
-",
+52,"{'name': 'test/cav13-ctl-examples/P19.t2', 'formula': 'G(F(varW >=1))'}","Timeout after 300.000000 seconds",
+3,"{'name': 'test/cav13-ctl-examples/P19.t2', 'formula': 'E G(F(varW >=1) || E F (A G(varW >=1)))'}",OOT,
 53,"{'name': 'test/cav13-ctl-examples/P20.t2', 'formula': '[EF]([AG](varW < 1))'}",0.7348413228988647,0.0024409664548854797
 54,"{'name': 'test/cav13-ctl-examples/P20.t2', 'formula': '!([EF]([AG](varW < 1)))'}",0.8834099054336548,0.0018645016087273187
 55,"{'name': 'test/cav13-ctl-examples/P20.t2', 'formula': 'F(G(varW < 1))'}",OOT,
+4,"{'name': 'test/cav13-ctl-examples/P20.t2', 'formula': 'E F(G(varW >= 1)) || A G(F(varW >= 1))'}",71.79827823638917,0.5878434387019528
 56,"{'name': 'test/cav13-ctl-examples/P21.t2', 'formula': '[AG]([AF](varW == 1))'}",0.42909414768218995,0.11498030107779351
 57,"{'name': 'test/cav13-ctl-examples/P21.t2', 'formula': '!([AG]([AF](varW == 1)))'}",0.3879630327224731,0.004044939300235048
 58,"{'name': 'test/cav13-ctl-examples/P21.t2', 'formula': 'G(F(varW == 1))'}",0.43859946727752686,0.010948034028738039
+5,"{'name': 'test/cav13-ctl-examples/P21.t2', 'formula': 'E F(G(varW >= 1)) || A G(F(varW >= 1))'}",OOT,
 59,"{'name': 'test/cav13-ctl-examples/P22.t2', 'formula': '[EF]([EG](varW != 1))'}",0.7771450996398925,0.013758757472258614
 60,"{'name': 'test/cav13-ctl-examples/P22.t2', 'formula': '!([EF]([EG](varW != 1)))'}",0.7799875974655152,0.013323676243750159
 61,"{'name': 'test/cav13-ctl-examples/P22.t2', 'formula': 'F(G(varW != 1))'}",0.7290150880813598,0.011215138449048598
+6,"{'name': 'test/cav13-ctl-examples/P22.t2', 'formula': 'E F(G(varW >= 1)) || A G(F(varW >= 1))'}",OOT,
 62,"{'name': 'test/cav13-ctl-examples/P23.t2', 'formula': '[AG]([EF](varW == 1))'}",0.4262589693069458,0.0015904737116628073
 63,"{'name': 'test/cav13-ctl-examples/P23.t2', 'formula': '!([AG]([EF](varW == 1)))'}",0.42328007221221925,0.0018350815608512401
 64,"{'name': 'test/cav13-ctl-examples/P23.t2', 'formula': 'G(F(varW == 1))'}",3.1378660678863524,0.014852346480479896
+7,"{'name': 'test/cav13-ctl-examples/P23.t2', 'formula': 'E F(G(varW >= 1)) || A G(F(varW >= 1))'}",3.1174997329711913,0.04783656942917939
 65,"{'name': 'test/cav13-ctl-examples/P24.t2', 'formula': '[EF]([AG](varW != 1))'}",0.4147690534591675,0.001838296169605204
 66,"{'name': 'test/cav13-ctl-examples/P24.t2', 'formula': '!([EF]([AG](varW != 1)))'}",0.41717185974121096,0.001980367651944487
 67,"{'name': 'test/cav13-ctl-examples/P24.t2', 'formula': 'F(G(varW != 1))'}",0.9595803022384644,0.004622914024093525
+8,"{'name': 'test/cav13-ctl-examples/P24.t2', 'formula': 'E F(G(varW >= 1)) || A G(F(varW >= 1))'}",12.04995105266571,0.1558076357008623
 68,"{'name': 'test/cav13-ctl-examples/P25.t2', 'formula': '(varC > 5) -> ([AF](varR > 5))'}",0.17841808795928954,0.0014386643384232524
 69,"{'name': 'test/cav13-ctl-examples/P25.t2', 'formula': '(varC > 5) && ![AF](varR > 5)'}",Check was unsuccessful: T2-output was '',
 70,"{'name': 'test/cav13-ctl-examples/P25.t2', 'formula': '(varC > 5) -> (F(varR > 5))'}",0.22309770584106445,0.0008175422040314899
+9,"{'name': 'test/cav13-ctl-examples/P25.t2', 'formula': 'E G (F(varC == 5) || G (varC > 5) && F (G (varR > 5)))'}",2.921249270439148,0.29581361340411805
 71,"{'name': 'test/cav13-ctl-examples/P26.t2', 'formula': '(varC > 5) && [EG](varR <= 5)'}",0.5220293760299682,0.002903088804878193
 72,"{'name': 'test/cav13-ctl-examples/P26.t2', 'formula': '!((varC > 5) && [EG](varR <= 5))'}",0.5225184917449951,0.001277813507257057
 73,"{'name': 'test/cav13-ctl-examples/P26.t2', 'formula': '(varC > 5) && G(varR <= 5)'}",0.5408797979354858,0.00164602851271735
+10,"{'name': 'test/cav13-ctl-examples/P26.t2', 'formula': 'E G (F(varC == 5) || G (varC > 5) && F (G (varR > 5)))'}",1.2847447872161866,0.013552533991471325
 74,"{'name': 'test/cav13-ctl-examples/P27.t2', 'formula': '(varC <= 5) || [EF](varR > 5)'}",0.6428711414337158,0.0012531071990308851
 75,"{'name': 'test/cav13-ctl-examples/P27.t2', 'formula': '!((varC <= 5) || [EF](varR > 5))'}",0.6461024522781372,0.0024289022192580823
 76,"{'name': 'test/cav13-ctl-examples/P27.t2', 'formula': '(varC <= 5) || F(varR > 5)'}",0.6687844753265381,0.1410608676574096
+11,"{'name': 'test/cav13-ctl-examples/P27.t2', 'formula': 'E G (F(varC == 5) || G (varC > 5) && F (G (varR > 5)))'}","Check was unsuccessful: T2-output was '
+=================================================================
+	Native Crash Reporting
+=================================================================
+Got a SIGSEGV while executing native code. This usually indicates
+a fatal error in the mono runtime or one of the native libraries 
+used by your application.
+=================================================================
+
+=================================================================
+	Native stacktrace:
+=================================================================
+	0x5a81465d9eb5 - /usr/bin/mono : (null)
+	0x5a81465da250 - /usr/bin/mono : (null)
+	0x5a8146587129 - /usr/bin/mono : (null)
+	0x5a81465d39c1 - /usr/bin/mono : (null)
+	0x7796d317c30d - /opt/T2/src/bin/Debug/libz3.so : (null)
+	0x5a816b625108 - Unknown
+
+=================================================================
+	Telemetry Dumper:
+=================================================================
+Pkilling 0x7796d9200700 from 0x7796dc051780
+Entering thread summarizer pause from 0x7796dc051780
+Finished thread summarizer pause from 0x7796dc051780.
+
+Waiting for dumping threads to resume
+
+=================================================================
+	Basic Fault Address Reporting
+=================================================================
+Memory around native instruction pointer (0x7796d317c30d):0x7796d317c2fd  18 48 8b 46 10 48 8d 35 4f 05 c1 00 48 8b 40 10  .H.F.H.5O...H.@.
+0x7796d317c30d  48 8b 40 08 48 8b 38 48 8d 50 08 e8 c3 15 bf 00  H.@.H.8H.P......
+0x7796d317c31d  84 c0 0f 85 bb 00 00 00 4c 8b 63 18 4c 8b 4b 10  ........L.c.L.K.
+0x7796d317c32d  4c 8b 45 18 66 41 83 7c 24 04 00 49 8b 41 08 44  L.E.fA.|$..I.A.D
+
+=================================================================
+	Managed Stacktrace:
+=================================================================
+	  at <unknown> <0xffffffff>
+	  at LIB:Z3_fixedpoint_dec_ref <0x000a5>
+	  at Microsoft.Z3.Native:Z3_fixedpoint_dec_ref <0x00037>
+	  at DecRefQueue:DecRef <0x0003f>
+	  at Microsoft.Z3.IDecRefQueue:Clear <0x000ea>
+	  at Microsoft.Z3.Context:Dispose <0x0018b>
+	  at MuZWrapper:CallSpacer <0x00945>
+	  at MuZWrapper:Microsoft-Research-T2-SafetyInterface-SafetyProver-ErrorLocationReachable <0x001e7>
+	  at Microsoft.Research.T2.Termination:prover <0x018c3>
+	  at Microsoft.Research.T2.Termination:bottomUp <0x016cb>
+	  at Microsoft.Research.T2.Termination:starBottomUp <0x004f3>
+	  at Microsoft.Research.T2.Termination:starBottomUp <0x00deb>
+	  at Microsoft.Research.T2.Termination:starBottomUp <0x00e67>
+	  at Microsoft.Research.T2.Termination:starBottomUp <0x008a3>
+	  at Microsoft.Research.T2.Termination:CTLStar_Prover <0x01c7b>
+	  at Microsoft.Research.T2.Main:main <0x01e47>
+	  at <Module>:runtime_invoke_int_object <0x00091>
+=================================================================
+'",
 77,"{'name': 'test/cav13-ctl-examples/P28.t2', 'formula': '(varC > 5) && [AG](varR <= 5)'}",0.42707607746124265,0.001319033582120936
 78,"{'name': 'test/cav13-ctl-examples/P28.t2', 'formula': '!((varC > 5) && [AG](varR <= 5))'}",0.42154314517974856,0.0006895510098084981
 79,"{'name': 'test/cav13-ctl-examples/P28.t2', 'formula': '(varC > 5) && G(varR <= 5)'}",0.4778069734573364,0.001196186157620765
+12,"{'name': 'test/cav13-ctl-examples/P28.t2', 'formula': 'E G (F(varC == 5) || G (varC > 5) && F (G (varR > 5)))'}",OOT,

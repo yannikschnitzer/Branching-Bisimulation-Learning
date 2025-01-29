@@ -283,7 +283,7 @@ experiments = [
     # },
     {
     'name': "test/cav13-ctl-examples/P20.t2",
-    'formula': "E F(F(varW >= 1) || A F (E G(varW < 1)))"
+    'formula': "E F(G(varW >= 1)) || A G(F(varW >= 1))"
     },
 
     # {
@@ -300,7 +300,7 @@ experiments = [
     # },
     {
     'name': "test/cav13-ctl-examples/P21.t2",
-    'formula': "E G(F(varW == 1) || E G (E F(varW == 1)))"
+    'formula': "E F(G(varW >= 1)) || A G(F(varW >= 1))"
     },
 
     # {
@@ -317,7 +317,7 @@ experiments = [
     # },
     {
     'name': "test/cav13-ctl-examples/P22.t2",
-    'formula': "E F(F(varW == 1) || E F (A G(varW != 1)))"
+    'formula': "E F(G(varW >= 1)) || A G(F(varW >= 1))"
     },
 
     # {
@@ -334,7 +334,7 @@ experiments = [
     # },
     {
     'name': "test/cav13-ctl-examples/P23.t2",
-    'formula': "E G(F(varW == 1) || E G (E F(varW == 1)))"
+    'formula': "E F(G(varW >= 1)) || A G(F(varW >= 1))"
     },
 
     # {
@@ -351,7 +351,7 @@ experiments = [
     # },
     {
     'name': "test/cav13-ctl-examples/P24.t2",
-    'formula': "F(F(varW == 1) || E F (A G(varW != 1)))"
+    'formula': "E F(G(varW >= 1)) || A G(F(varW >= 1))"
     },
 
     # {
@@ -368,7 +368,7 @@ experiments = [
     # },
     {
     'name': "test/cav13-ctl-examples/P25.t2",
-    'formula': "A G((varC > 5) -> (G(F(varR > 5))))"
+    'formula': "E G (F(varC == 5) || G (varC > 5) && F (G (varR > 5)))"
     },
 
     # {
@@ -385,7 +385,7 @@ experiments = [
     # },
     {
     'name': "test/cav13-ctl-examples/P26.t2",
-    'formula': "E F((varC > 5) && G(F(varR <= 5)))"
+    'formula': "E G (F(varC == 5) || G (varC > 5) && F (G (varR > 5)))"
     },
 
     # {
@@ -402,7 +402,7 @@ experiments = [
     # },
     {
     'name': "test/cav13-ctl-examples/P27.t2",
-    'formula': "E G((varC <= 5) || G(F(varR > 5)))"
+    'formula': "E G (F(varC == 5) || G (varC > 5) && F (G (varR > 5)))"
     },
 
     # {
@@ -419,7 +419,7 @@ experiments = [
     # },
     {
     'name': "test/cav13-ctl-examples/P28.t2",
-    'formula': "E F((varC > 5) && G(F(varR <= 5)))",
+    'formula': "E G (F(varC == 5) || G (varC > 5) && F (G (varR > 5)))",
     },
 
 ]
