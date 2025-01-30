@@ -9,14 +9,14 @@ import pandas as pd
 # nuxmv -source chech-inf-state.scr P19.smv
 
 experiments = [
-    {
-        'experiment': "term-loop-nd.smv",
-        'formulas': "term-loop-nd.ctl"
-    },
-    {
-        'experiment': "term-loop-nd-2.smv",
-        'formulas': "term-loop-nd-2.ctl"
-    },
+    # {
+    #     'experiment': "term-loop-nd.smv",
+    #     'formulas': "term-loop-nd.ctl"
+    # },
+    # {
+    #     'experiment': "term-loop-nd-2.smv",
+    #     'formulas': "term-loop-nd-2.ctl"
+    # },
     {
         'experiment': "term-loop-nd-y.smv",
         'formulas': "term-loop-nd-y.ctl"
@@ -33,82 +33,82 @@ experiments = [
     #     'experiment': "nlr-cond-nd.smv",
     #     'formulas': "nlr-cond-nd.ctl"
     # },
-    {
-        'experiment': "P1.smv",
-        'formulas': "P1.ctl"
-    },
-    {
-        'experiment': "P2.smv",
-        'formulas': "P2.ctl"
-    },
-    {
-        'experiment': "P3.smv",
-        'formulas': "P3.ctl"
-    },
-    {
-        'experiment': "P4.smv",
-        'formulas': "P4.ctl"
-    },
-    {
-        'experiment': "P5.smv",
-        'formulas': "P5.ctl"
-    },
-    {
-        'experiment': "P6.smv",
-        'formulas': "P6.ctl"
-    },
-    {
-        'experiment': "P7.smv",
-        'formulas': "P7.ctl"
-    },
-    {
-        'experiment': "P17.smv",
-        'formulas': "P17.ctl"
-    },
-    {
-        'experiment': "P18.smv",
-        'formulas': "P18.ctl"
-    },
-    {
-        'experiment': "P19.smv",
-        'formulas': "P19.ctl"
-    },
-    {
-        'experiment': "P20.smv",
-        'formulas': "P20.ctl"
-    },
-    {
-        'experiment': "P21.smv",
-        'formulas': "P21.ctl"
-    },
-    {
-        'experiment': "P22.smv",
-        'formulas': "P22.ctl"
-    },
-    {
-        'experiment': "P23.smv",
-        'formulas': "P23.ctl"
-    },
-    {
-        'experiment': "P24.smv",
-        'formulas': "P24.ctl"
-    },
-    {
-        'experiment': "P25.smv",
-        'formulas': "P25.ctl"
-    },
-    {
-        'experiment': "P26.smv",
-        'formulas': "P26.ctl"
-    },
-    {
-        'experiment': "P27.smv",
-        'formulas': "P27.ctl"
-    },
-    {
-        'experiment': "P28.smv",
-        'formulas': "P28.ctl"
-    },
+    # {
+    #     'experiment': "P1.smv",
+    #     'formulas': "P1.ctl"
+    # },
+    # {
+    #     'experiment': "P2.smv",
+    #     'formulas': "P2.ctl"
+    # },
+    # {
+    #     'experiment': "P3.smv",
+    #     'formulas': "P3.ctl"
+    # },
+    # {
+    #     'experiment': "P4.smv",
+    #     'formulas': "P4.ctl"
+    # },
+    # {
+    #     'experiment': "P5.smv",
+    #     'formulas': "P5.ctl"
+    # },
+    # {
+    #     'experiment': "P6.smv",
+    #     'formulas': "P6.ctl"
+    # },
+    # {
+    #     'experiment': "P7.smv",
+    #     'formulas': "P7.ctl"
+    # },
+    # {
+    #     'experiment': "P17.smv",
+    #     'formulas': "P17.ctl"
+    # },
+    # {
+    #     'experiment': "P18.smv",
+    #     'formulas': "P18.ctl"
+    # },
+    # {
+    #     'experiment': "P19.smv",
+    #     'formulas': "P19.ctl"
+    # },
+    # {
+    #     'experiment': "P20.smv",
+    #     'formulas': "P20.ctl"
+    # },
+    # {
+    #     'experiment': "P21.smv",
+    #     'formulas': "P21.ctl"
+    # },
+    # {
+    #     'experiment': "P22.smv",
+    #     'formulas': "P22.ctl"
+    # },
+    # {
+    #     'experiment': "P23.smv",
+    #     'formulas': "P23.ctl"
+    # },
+    # {
+    #     'experiment': "P24.smv",
+    #     'formulas': "P24.ctl"
+    # },
+    # {
+    #     'experiment': "P25.smv",
+    #     'formulas': "P25.ctl"
+    # },
+    # {
+    #     'experiment': "P26.smv",
+    #     'formulas': "P26.ctl"
+    # },
+    # {
+    #     'experiment': "P27.smv",
+    #     'formulas': "P27.ctl"
+    # },
+    # {
+    #     'experiment': "P28.smv",
+    #     'formulas': "P28.ctl"
+    # },
 ]
 
 def run_nuxmv_experiment_(exp: str) -> bytes:
