@@ -1,0 +1,135 @@
+\begin{tabular}{|N|E||N|N||N|N|}
+    \cline{2-6}
+    \multicolumn{1}{c|}{} & Benchmark  & \multicolumn{2}{c||}{T2} &
+    \multicolumn{2}{c|}{Bisimulation Learning} \\
+    \multicolumn{1}{c|}{} & & $\Phi$ & Runtime & Branching Monolithic & Branching Piecewise 
+    \\\hline
+    & & \color{orange}\tiny\texttt{G(varX > 1 || varX < -1)} & 0.5\tiny$\pm 0.005$ &  & \\
+    & & \color{orange}\tiny\texttt{F(G(varX <= 1) || G(varX >= -1))} & 7.0 & &\\
+    & & \color{orange}\tiny\texttt{G(F(varX > 1))} & oot & &\\
+    & & \color{teal}\tiny\texttt{[EG](varX > 1 || varX < -1)} & 0.6\tiny$\pm 0.004$ &  & \\
+    &term-loop-nd    & \color{teal}\tiny\texttt{!([EG](varX > 1 || varX < -1))} & 1.1\tiny$\pm 0.09$ &  0.3\tiny$\pm 0.1$ & 0.4\tiny$\pm 0.1$  \\
+    & & \color{teal}\tiny\texttt{[AF]([AG](varX <= 1) \&\& [AG] (varX >= -1))} & 2.4 & &\\
+    & & \color{purple}\tiny\texttt{A F(G(F(varX <= 1)) || G(F(varX >= -1)))} & 55.0 & &\\
+    \cline{2-6}
+    
+     
+    Ours &term-loop-nd-2 & 
+    
+      \tiny\texttt{G(F(varX == 0))} & 3.0 & &  \\
+      & & \tiny\texttt{F(G(varX <= 1) || G(varX >= -1))} & oot & &\\
+      &&\tiny\texttt{[EG]([AF](varX == 0))} & 1.5\tiny$\pm 0.009$ & &  \\
+    &&\tiny\texttt{!([EG]([AF](varX == 0))}) & 2.5\tiny$\pm 0.2$ &  0.6\tiny$\pm 0.2$ & 1.0\tiny$\pm 0.3$  \\
+    & & \tiny\texttt{[AF]([AG](varX <= 1) \&\& [AG] (varX >= -1))} & 1.5 & &\\
+    & & \tiny\texttt{A F(E G( F(varX <= 1)) \&\& A G (F (varX >= -1)))'} & oot & &\\
+    
+     
+    \cline{2-6}
+    
+    &  & \tiny\texttt{[EG]([AF](varX == 0))} & 1.6\tiny$\pm 0.07$ &  &   \\
+    &term-loop-nd-y    & \tiny\texttt{!([EG]([AF](varX == 0)))} & 2.6\tiny$\pm 0.4$ &  oot & 0.9\tiny$\pm 0.2$  \\
+    &  & \tiny\texttt{G(F(varX == 0))} & 2.1\tiny$\pm 0.09$ &  & \\
+    &  & \tiny\texttt{E G(F(varX == 0) \&\& F(G (varX != 0)))} & 8.0\tiny$\pm 0.09$ &  & \\
+    
+    \hline
+    & & \tiny\texttt{[AG](varA != 1 || [AF](varR == 1))} & 0.8\tiny$\pm 0.005$ &  &  \\
+    &P1   & \tiny\texttt{!([AG](varA != 1 || [AF](varR == 1)))} & 1.0\tiny$\pm 0.06$ &  0.4\tiny$\pm 0.1$ & 0.9\tiny$\pm 0.1$  \\
+    & & \tiny\texttt{G(varA != 1 || F(varR == 1))} & 1.0\tiny$\pm 0.03$ & & \\
+    & & \tiny\texttt{E G(F(varA != 1 || F(varR == 1)))} & 2.1\tiny$\pm 0.03$ & & \\
+    
+    \cline{2-6}
+    & & \tiny\texttt{[EF](varA == 1 \&\& [EG](varR != 5))} & 0.9\tiny$\pm 0.04$ & & \\
+    &P2  & \tiny\texttt{[!(EF](varA == 1 \&\& [EG](varR != 5)))} & 1.1\tiny$\pm 0.07$ &  0.5\tiny$\pm 0.1$ & 0.9\tiny$\pm 0.1$  \\
+    &  & \tiny\texttt{F(varA == 1 \&\& G(varR != 5))} & 2.0 & & \\
+    
+    &  & \tiny\texttt{E G (F(varA == 1 \&\& E G(varR != 5)))'} & oot & & \\
+    
+    \cline{2-6}
+    &   & \tiny\texttt{[AG](varA != 1 || [EF](varR == 1))} & 0.6\tiny$\pm 0.003$ & &  \\
+    &P3   & \tiny\texttt{!([AG](varA != 1 || [EF](varR == 1)))} & 0.8\tiny$\pm 0.04$ &  0.2\tiny$\pm 0.1$ & 0.3\tiny$\pm 0.1$  \\
+    &   & \tiny\texttt{G(varA != 1 || F(varR == 1))} & 1.1\tiny$\pm 0.1$ &  & \\
+    
+    &   & \tiny\texttt{E F( G(varA != 1 || A G(varR == 1)))} & 10.1\tiny$\pm 0.1$ &  & \\
+    
+    \cline{2-6}
+    
+    &   & \tiny\texttt{[EF](varA == 1 \&\& [AG](varR != 1))} & 0.5 & &  \\
+    &P4   & \tiny\texttt{!([EF](varA == 1 \&\& [AG](varR != 1)))} & 0.5 & 1.2\tiny$\pm 0.1$ & oot  \\
+    &   & \tiny\texttt{F(varA == 1 \&\& G(varR != 1))} & 0.09\tiny$\pm 0.007$ & &  \\
+    &   & \tiny\texttt{E G (F(varA == 1 \&\& E G(varR != 1)))} & 2.0\tiny$\pm 0.007$ & &  \\
+    \cline{2-6}
+    
+    & & \tiny\texttt{[AG](varS != 1 || [AF](varU == 1))} & 0.8\tiny$\pm 0.05$ &  & \\
+    &P5  & \tiny\texttt{!([AG](varS != 1 || [AF](varU == 1)))} & 1.3\tiny$\pm 0.04$ &  0.8\tiny$\pm 0.1$ & 1.4\tiny$\pm 0.1$  \\
+    & & \tiny\texttt{G(varS != 1 || F(varU == 1))} & 0.2 & &  \\
+    & & \tiny\texttt{E F (G(varS != 1 || A F(varU == 1)))} & 0.2 & &  \\
+    
+    \cline{2-6}
+    
+    &  & \tiny\texttt{[EF](varS == 1 || [EG](varU != 1))} & 0.8\tiny$\pm 0.006$ &  & \\
+    &P6  & \tiny\texttt{!([EF](varS == 1 || [EG](varU != 1)))} & 1.4\tiny$\pm 0.06$ &  0.3\tiny$\pm 0.1$ & 0.4\tiny$\pm 0.1$  \\
+    &  & \tiny\texttt{F(varS == 1 || G(varU != 1))} & 1.5 &  & \\
+    &  & \tiny\texttt{E G (F(varS == 1 \&\& E F(varU != 1)))} & 0.5 &  & \\
+    
+    \cline{2-6}
+    &  & \tiny\texttt{[AG](varS != 1 || [EF](varU == 1))} & 0.7\tiny$\pm 0.006$ &  0.3\tiny$\pm 0.1$ & 0.4\tiny$\pm 0.1$  \\
+    &P7  & \tiny\texttt{!([AG](varS != 1 || [EF](varU == 1)))} & 1.2\tiny$\pm 0.02$ &  0.3\tiny$\pm 0.1$ & 0.4\tiny$\pm 0.1$  \\
+    &  & \tiny\texttt{G(varS != 1 || F(varU == 1))} & 0.7\tiny$\pm 0.05$ &  0.3\tiny$\pm 0.1$ & 0.4\tiny$\pm 0.1$  \\
+    \cline{2-6}
+    &   & \tiny\texttt{[AG]([AF](varW >= 1))} & 0.8\tiny$\pm 0.003$ &  & \\
+    &P17   & \tiny\texttt{!([AG]([AF](varW >= 1)))} & 1.5\tiny$\pm 0.07$ &  0.3\tiny$\pm 0.1$ & 0.4\tiny$\pm 0.1$  \\
+    &   & \tiny\texttt{G(F(varW >= 1))} & 1.2\tiny$\pm 0.006$ & &  \\
+    
+    &   & \tiny\texttt{[EF]([EG](varW < 1))} & 1.1\tiny$\pm 0.01$ & &  \\
+    &P18   & \tiny\texttt{!([EF]([EG](varW < 1)))} & 1.9\tiny$\pm 0.03$ &  0.3\tiny$\pm 0.1$ & 0.3\tiny$\pm 0.1$  \\
+    Industrial &   & \tiny\texttt{F(G(varW < 1))} & - &  &  \\
+    
+    Code~\cite{DBLP:conf/cav/BeyenePR13,DBLP:conf/tacas/BrockschmidtCIK16}&  & \tiny\texttt{[AG]([EF](varW >=1))} & 5.3\tiny$\pm 0.2$ &  &  \\
+    &P19   & \tiny\texttt{!([AG]([EF](varW >=1)))} & 9.6\tiny$\pm 0.6$ &  0.3\tiny$\pm 0.1$ & 0.5\tiny$\pm 0.2$  \\
+    &   & \tiny\texttt{G(F(varW >=1))} & - &  &  \\
+    
+    &  & \tiny\texttt{[EF]([AG](varW < 1))} & 1.1\tiny$\pm 0.009$ &  &  \\
+    &P20  & \tiny\texttt{!([EF]([AG](varW < 1)))} & 1.6\tiny$\pm 0.1$ &  0.4\tiny$\pm 0.1$ & 0.7\tiny$\pm 0.1$  \\
+    &  & \tiny\texttt{F(G(varW < 1))} & - &  &  \\
+    \cline{2-6}
+    &  & \tiny\texttt{[AG]([AF](varW == 1))} & 0.6\tiny$\pm 0.005$ &  &\\
+    &P21  & \tiny\texttt{!([AG]([AF](varW == 1)))} & 0.7\tiny$\pm 0.07$ &  0.3\tiny$\pm 0.1$ & 0.4\tiny$\pm 0.1$  \\
+    &  & \tiny\texttt{G(F(varW == 1))} & 0.7\tiny$\pm 0.001$ &  & \\
+    
+    &  & \tiny\texttt{[EF]([EG](varW != 1))} & 1.1\tiny$\pm 0.005$ &  & \\
+    &P22  & \tiny\texttt{!([EF]([EG](varW != 1)))} & 1.6\tiny$\pm 0.3$ &  0.4\tiny$\pm 0.1$ & 0.8\tiny$\pm 0.1$  \\
+    &  & \tiny\texttt{F(G(varW != 1))} & 1.0\tiny$\pm 0.01$ & &\\
+    
+    &  & \tiny\texttt{[AG]([EF](varW == 1))} & 0.6\tiny$\pm 0.006$ &  & \\
+    &P23  & \tiny\texttt{!([AG]([EF](varW == 1)))} & 1.0\tiny$\pm 0.1$ &  0.9\tiny$\pm 0.3$ & 1.7\tiny$\pm 0.6$  \\
+    &  & \tiny\texttt{G(F(varW == 1))} & 4.7\tiny$\pm 0.3$ &  &  \\
+    
+    &  & \tiny\texttt{[EF]([AG](varW != 1))} & 0.6\tiny$\pm 0.005$ &  &  \\
+    &P24  & \tiny\texttt{!([EF]([AG](varW != 1)))} & 0.8\tiny$\pm 0.04$ &  0.1\tiny$\pm 0.0$ & 0.2\tiny$\pm 0.0$  \\
+    &  & \tiny\texttt{F(G(varW != 1))} & 1.4\tiny$\pm 0.01$ &  &  \\
+    \cline{2-6}
+    &   & \tiny\texttt{(varC > 5) -> ([AF](varR > 5))} & 0.2\tiny$\pm 0.003$ & &  \\
+    &P25   & \tiny\texttt{!((varC > 5) -> ([AF](varR > 5)))} & - & 0.2\tiny$\pm 0.1$ & 0.3\tiny$\pm 0.1$  \\
+    &   & \tiny\texttt{(varC > 5) -> (F(varR > 5))} & 0.3\tiny$\pm 0.008$ & & \\
+    
+    &   & \tiny\texttt{(varC > 5) \&\& [EG](varR <= 5)} & 0.6\tiny$\pm 0.005$& &  \\
+    &P26   & \tiny\texttt{!((varC > 5) \&\& [EG](varR <= 5))} & 1.2\tiny$\pm 0.1$& 0.2\tiny$\pm 0.1$ & 0.3\tiny$\pm 0.1$  \\
+    &   & \tiny\texttt{(varC > 5) \&\& G(varR <= 5)} & 0.8\tiny$\pm 0.02$& & \\
+    
+    &   & \tiny\texttt{(varC <= 5) || [EF](varR > 5)} & 0.8\tiny$\pm 0.08$ & &  \\
+    &P27   & \tiny\texttt{!((varC <= 5) || [EF](varR > 5))} & 1.7\tiny$\pm 0.2$ & 0.2\tiny$\pm 0.1$ & 0.3\tiny$\pm 0.1$  \\
+    &   & \tiny\texttt{(varC <= 5) || F(varR > 5)} & 1.0\tiny$\pm 0.2$ & &  \\
+    
+    &    & \tiny\texttt{(varC > 5) \&\& [AG](varR <= 5)} & 0.6\tiny$\pm 0.007$ & &  \\
+    &P28    & \tiny\texttt{!((varC > 5) \&\& [AG](varR <= 5))} & 0.8\tiny$\pm 0.06$ & 0.2\tiny$\pm 0.1$ & 0.3\tiny$\pm 0.1$  \\
+    &    & \tiny\texttt{(varC > 5) \&\& G(varR <= 5)} & 0.7\tiny$\pm 0.006$ & &  \\
+    \hline
+    &Robots ($k = 3$)   & & &  & 0.7\tiny$\pm 0.2$  \\
+    &Robots ($k = 6$)   & & &  & 1.3\tiny$\pm 0.4$  \\
+    &Robots ($k = 12$)   & & &  & 2.2\tiny$\pm 0.6$  \\
+    Robots~\cite{DBLP:journals/corr/carelligrumberg}&Robots ($k = 18$)   & & & oot some runs  & 2.4\tiny$\pm 0.7$  \\
+    &Robots ($k = 27$)   & & &  & 4.0\tiny$\pm 0.9$  \\
+    &Robots ($k = 75$)   & & &  & 10.3\tiny$\pm 3.1$  \\
+    &Robots ($k = 147$)   & & &  & 16.4\tiny$\pm 4.0$  \\
+    \hline
+    \end{tabular}
