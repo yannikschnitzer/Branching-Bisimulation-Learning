@@ -1,0 +1,6 @@
+MODULE main
+    VAR w: integer;
+    VAR g: integer;
+
+    TRANS next(w) = 1 & next(g) = (g >= 1 ? 0 : g);
+

@@ -23,7 +23,7 @@ def run_ultimate_experiment(exp : Ultimate_Experiment):
         """
             Runs Ultimate with given experiment.
         """
-        cmd = "sudo update-java-alternatives --set java-1.11.0-openjdk-amd64 && ../../ultimate/releaseScripts/default/UAutomizer-linux/Ultimate -tc ../../ultimate/releaseScripts/default/UAutomizer-linux/config/AutomizerTermination.xml -i ../C-Programs/" + exp.file
+        cmd = "sudo update-java-alternatives --set java-1.21.0-openjdk-amd64 && ../../ultimate/releaseScripts/default/UAutomizer-linux/Ultimate -tc ../../ultimate/releaseScripts/default/UAutomizer-linux/config/AutomizerTermination.xml -i ../C-Programs/" + exp.file
         os.system("")
         print("------------------------------------")
         print("Running Experiment: ", exp.name)
@@ -32,6 +32,9 @@ def run_ultimate_experiment(exp : Ultimate_Experiment):
         matches = re.findall(time_pattern, out)
         if matches:
             print("Ultimate Automizer Analysis Time:", matches[0],"")
+            return float(matches[0])
+        else:
+            raise Exception("No match")
 
         if exp.print_res:
             res_pattern = r"TerminationAnalysisResult: (.*)"

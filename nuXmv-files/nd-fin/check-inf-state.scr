@@ -1,0 +1,4 @@
+go_msat
+build_model
+check_ctlspec
+quit

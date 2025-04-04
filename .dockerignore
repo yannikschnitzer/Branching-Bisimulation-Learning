@@ -1,0 +1,7 @@
+venv
+**/venv
+**/__pycache__
+src/figures
+**/results
+**/.history
+**/.DS_Store

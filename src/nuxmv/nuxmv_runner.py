@@ -20,30 +20,32 @@ class nuXmv_Experiment:
         self.file = file
         self.print_res = print_res
 
-def run_cmd(cmd):
-    out = subprocess.check_output(cmd, shell = True, text = True, stderr=subprocess.DEVNULL)
-    return out
+
+def run_subprocess(cmd: str) -> bytes:
+    p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    try:
+        out, err = p.communicate(timeout=500)
+        return out
+    except subprocess.TimeoutExpired as e:
+        p.kill()
+        raise e
 
 def run_nuXmv_experiment(exp : nuXmv_Experiment, timeout = 500):
-        """
-            Runs nuXmv with given experiment.
-        """
-        cmd = "../../nuXmv-2.0.0-Linux/bin/nuXmv -source ../nuXmv-files/" + exp.file
-        
-        print("------------------------------------")
-        print("Running Experiment: ", exp.name)
-        
-        t1 = time.perf_counter()
-        p = multiprocessing.Process(target=run_cmd, name="Runner", args=(cmd, ))
-        p.start()
-        p.join(timeout)
-        t2 = time.perf_counter()
+    """
+        Runs nuXmv with given experiment.
+    """
+    cmd = "nuxmv -source ../nuXmv-files/" + exp.file
     
-        if p.is_alive():
-            print("Timeout after",timeout,"seconds")
-            p.terminate()
-            p.join()
-
-        print("Runtime: ", t2 - t1,"seconds")
-        print("------------------------------------")
+    print("------------------------------------")
+    print("Running Experiment: ", exp.name)
+    
+    t1 = time.perf_counter()
+    # subprocess.check_output(cmd, shell = True, text = True, stderr=subprocess.DEVNULL, timeout=timeout)
+    run_subprocess(cmd)
+    t2 = time.perf_counter()
+    
+    runtime = t2 - t1
+    print("Runtime: ", runtime,"seconds")
+    print("------------------------------------")
+    return runtime
 

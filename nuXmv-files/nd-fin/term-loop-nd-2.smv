@@ -1,0 +1,14 @@
+MODULE main
+    VAR x : integer;
+    VAR y : integer;
+    
+    DEFINE terminated := x <= 0;
+
+    TRANS (terminated           & next(x) = x & next(y) = y)
+        | (!terminated          & next(x) = x - 1 & next(y) = y)
+        | (!terminated & x >= 3 & next(x) = x + 1 & next(y) = y)
+        | (!terminated & x <  3 & next(x) = x - 1 & next(y) = y)
+        ;
+
+    
+

@@ -1,0 +1,235 @@
+,Experiment,Average,StD
+0,"{'name': 'bl_tests/term_loop_nd.t2', 'formula': 'G(F(varX > 1))'}",OOT,
+1,"{'name': 'test/cav13-ctl-examples/P1.t2', 'formula': 'G(varA != 1 || F(varR == 1))'}",1.0449601809183757,0.04812806510932516
+2,"{'name': 'test/cav13-ctl-examples/P1.t2', 'formula': 'E G(F(varA != 1 || F(varR == 1)))'}",2.333146265574864,0.05529152019396092
+3,"{'name': 'test/cav13-ctl-examples/P2.t2', 'formula': 'F(varA == 1 && G(varR != 5))'}",1.0572031603919134,0.012941436509527263
+4,"{'name': 'test/cav13-ctl-examples/P2.t2', 'formula': 'E G (F(varA == 1 && E G(varR != 5)))'}","Check was unsuccessful: T2-output was '
+=================================================================
+	Native Crash Reporting
+=================================================================
+Got a SIGSEGV while executing native code. This usually indicates
+a fatal error in the mono runtime or one of the native libraries 
+used by your application.
+=================================================================
+
+=================================================================
+	Native stacktrace:
+=================================================================
+	0x5d891585feb5 - /usr/bin/mono : (null)
+	0x5d8915860250 - /usr/bin/mono : (null)
+	0x5d891580d129 - /usr/bin/mono : (null)
+	0x5d89158599c1 - /usr/bin/mono : (null)
+	0x7bce2f17c30d - /opt/T2/src/bin/Debug/libz3.so : (null)
+	0x5d894eae03b8 - Unknown
+
+=================================================================
+	Telemetry Dumper:
+=================================================================
+Pkilling 0x7bce35600700 from 0x7bce381ea780
+Entering thread summarizer pause from 0x7bce381ea780
+Finished thread summarizer pause from 0x7bce381ea780.
+
+Waiting for dumping threads to resume
+
+=================================================================
+	Basic Fault Address Reporting
+=================================================================
+Memory around native instruction pointer (0x7bce2f17c30d):0x7bce2f17c2fd  18 48 8b 46 10 48 8d 35 4f 05 c1 00 48 8b 40 10  .H.F.H.5O...H.@.
+0x7bce2f17c30d  48 8b 40 08 48 8b 38 48 8d 50 08 e8 c3 15 bf 00  H.@.H.8H.P......
+0x7bce2f17c31d  84 c0 0f 85 bb 00 00 00 4c 8b 63 18 4c 8b 4b 10  ........L.c.L.K.
+0x7bce2f17c32d  4c 8b 45 18 66 41 83 7c 24 04 00 49 8b 41 08 44  L.E.fA.|$..I.A.D
+
+=================================================================
+	Managed Stacktrace:
+=================================================================
+	  at <unknown> <0xffffffff>
+	  at LIB:Z3_fixedpoint_dec_ref <0x000a5>
+	  at Microsoft.Z3.Native:Z3_fixedpoint_dec_ref <0x00037>
+	  at DecRefQueue:DecRef <0x0003f>
+	  at Microsoft.Z3.IDecRefQueue:Clear <0x000ea>
+	  at Microsoft.Z3.Context:Dispose <0x0018b>
+	  at MuZWrapper:CallSpacer <0x00945>
+	  at MuZWrapper:Microsoft-Research-T2-SafetyInterface-SafetyProver-ErrorLocationReachable <0x001e7>
+	  at Microsoft.Research.T2.Termination:prover <0x018c3>
+	  at Microsoft.Research.T2.Termination:bottomUp <0x016cb>
+	  at Microsoft.Research.T2.Termination:starBottomUp <0x004f3>
+	  at Microsoft.Research.T2.Termination:starBottomUp <0x008a3>
+	  at Microsoft.Research.T2.Termination:CTLStar_Prover <0x01c7b>
+	  at Microsoft.Research.T2.Main:main <0x01e47>
+	  at <Module>:runtime_invoke_int_object <0x00091>
+=================================================================
+'",
+5,"{'name': 'test/cav13-ctl-examples/P3.t2', 'formula': 'G(varA != 1 || F(varR == 1))'}",0.9735537105136447,0.0020641413187521313
+6,"{'name': 'test/cav13-ctl-examples/P3.t2', 'formula': 'E F( G(varA != 1 || A G(varR == 1)))'}",8.57587468624115,0.04411781664833363
+7,"{'name': 'test/cav13-ctl-examples/P4.t2', 'formula': '[EF](varA == 1 && [AG](varR != 1))'}","Check was unsuccessful: T2-output was '
+=================================================================
+	Native Crash Reporting
+=================================================================
+Got a SIGSEGV while executing native code. This usually indicates
+a fatal error in the mono runtime or one of the native libraries 
+used by your application.
+=================================================================
+
+=================================================================
+	Native stacktrace:
+=================================================================
+	0x5c5617857eb5 - /usr/bin/mono : (null)
+	0x5c5617858250 - /usr/bin/mono : (null)
+	0x5c5617805129 - /usr/bin/mono : (null)
+	0x5c56178519c1 - /usr/bin/mono : (null)
+	0x782a6b17c30d - /opt/T2/src/bin/Debug/libz3.so : (null)
+	0x5c563f2765a8 - Unknown
+
+=================================================================
+	Telemetry Dumper:
+=================================================================
+Pkilling 0x782a70a00700 from 0x782a73939780
+Entering thread summarizer pause from 0x782a73939780
+Finished thread summarizer pause from 0x782a73939780.
+
+Waiting for dumping threads to resume
+
+=================================================================
+	Basic Fault Address Reporting
+=================================================================
+Memory around native instruction pointer (0x782a6b17c30d):0x782a6b17c2fd  18 48 8b 46 10 48 8d 35 4f 05 c1 00 48 8b 40 10  .H.F.H.5O...H.@.
+0x782a6b17c30d  48 8b 40 08 48 8b 38 48 8d 50 08 e8 c3 15 bf 00  H.@.H.8H.P......
+0x782a6b17c31d  84 c0 0f 85 bb 00 00 00 4c 8b 63 18 4c 8b 4b 10  ........L.c.L.K.
+0x782a6b17c32d  4c 8b 45 18 66 41 83 7c 24 04 00 49 8b 41 08 44  L.E.fA.|$..I.A.D
+
+=================================================================
+	Managed Stacktrace:
+=================================================================
+	  at <unknown> <0xffffffff>
+	  at LIB:Z3_fixedpoint_dec_ref <0x000a5>
+	  at Microsoft.Z3.Native:Z3_fixedpoint_dec_ref <0x00037>
+	  at DecRefQueue:DecRef <0x0003f>
+	  at Microsoft.Z3.IDecRefQueue:Clear <0x000ea>
+	  at Microsoft.Z3.Context:Dispose <0x0018b>
+	  at MuZWrapper:CallSpacer <0x00945>
+	  at MuZWrapper:Microsoft-Research-T2-SafetyInterface-SafetyProver-ErrorLocationReachable <0x001e7>
+	  at Microsoft.Research.T2.Termination:prover <0x018c3>
+	  at Microsoft.Research.T2.Termination:bottomUp <0x016cb>
+	  at Microsoft.Research.T2.Termination:bottomUp <0x01f1b>
+	  at Microsoft.Research.T2.Termination:bottomUp <0x00297>
+	  at Microsoft.Research.T2.Termination:bottomUpProver <0x0052b>
+	  at Microsoft.Research.T2.Main:main <0x01a4b>
+	  at <Module>:runtime_invoke_int_object <0x00091>
+=================================================================
+'",
+8,"{'name': 'test/cav13-ctl-examples/P4.t2', 'formula': '!([EF](varA == 1 && [AG](varR != 1)))'}","Check was unsuccessful: T2-output was '
+=================================================================
+	Native Crash Reporting
+=================================================================
+Got a SIGSEGV while executing native code. This usually indicates
+a fatal error in the mono runtime or one of the native libraries 
+used by your application.
+=================================================================
+
+=================================================================
+	Native stacktrace:
+=================================================================
+	0x591e85542eb5 - /usr/bin/mono : (null)
+	0x591e85543250 - /usr/bin/mono : (null)
+	0x591e854f0129 - /usr/bin/mono : (null)
+	0x591e8553c9c1 - /usr/bin/mono : (null)
+	0x7327df17c30d - /opt/T2/src/bin/Debug/libz3.so : (null)
+	0x591eb972c5d8 - Unknown
+
+=================================================================
+	Telemetry Dumper:
+=================================================================
+Pkilling 0x7327e4e00700 from 0x7327e79b6780
+Entering thread summarizer pause from 0x7327e79b6780
+Finished thread summarizer pause from 0x7327e79b6780.
+
+Waiting for dumping threads to resume
+
+=================================================================
+	Basic Fault Address Reporting
+=================================================================
+Memory around native instruction pointer (0x7327df17c30d):0x7327df17c2fd  18 48 8b 46 10 48 8d 35 4f 05 c1 00 48 8b 40 10  .H.F.H.5O...H.@.
+0x7327df17c30d  48 8b 40 08 48 8b 38 48 8d 50 08 e8 c3 15 bf 00  H.@.H.8H.P......
+0x7327df17c31d  84 c0 0f 85 bb 00 00 00 4c 8b 63 18 4c 8b 4b 10  ........L.c.L.K.
+0x7327df17c32d  4c 8b 45 18 66 41 83 7c 24 04 00 49 8b 41 08 44  L.E.fA.|$..I.A.D
+
+=================================================================
+	Managed Stacktrace:
+=================================================================
+	  at <unknown> <0xffffffff>
+	  at LIB:Z3_fixedpoint_dec_ref <0x000a5>
+	  at Microsoft.Z3.Native:Z3_fixedpoint_dec_ref <0x00037>
+	  at DecRefQueue:DecRef <0x0003f>
+	  at Microsoft.Z3.IDecRefQueue:Clear <0x000ea>
+	  at Microsoft.Z3.Context:Dispose <0x0018b>
+	  at MuZWrapper:CallSpacer <0x00945>
+	  at MuZWrapper:Microsoft-Research-T2-SafetyInterface-SafetyProver-ErrorLocationReachable <0x001e7>
+	  at Microsoft.Research.T2.Termination:prover <0x018c3>
+	  at Microsoft.Research.T2.Termination:bottomUp <0x00647>
+	  at Microsoft.Research.T2.Termination:bottomUp <0x01f1b>
+	  at Microsoft.Research.T2.Termination:bottomUp <0x0132b>
+	  at Microsoft.Research.T2.Termination:bottomUpProver <0x0052b>
+	  at Microsoft.Research.T2.Main:main <0x01a4b>
+	  at <Module>:runtime_invoke_int_object <0x00091>
+=================================================================
+'",
+9,"{'name': 'test/cav13-ctl-examples/P4.t2', 'formula': 'E G (F(varA == 1 && E G(varR != 1)))'}",2.0206499894460044,0.049148945028336714
+10,"{'name': 'test/cav13-ctl-examples/P5.t2', 'formula': 'G(varS != 1 || F(varU == 1))'}","Check was unsuccessful: T2-output was '
+=================================================================
+	Native Crash Reporting
+=================================================================
+Got a SIGSEGV while executing native code. This usually indicates
+a fatal error in the mono runtime or one of the native libraries 
+used by your application.
+=================================================================
+
+=================================================================
+	Native stacktrace:
+=================================================================
+	0x5d42d9496eb5 - /usr/bin/mono : (null)
+	0x5d42d9497250 - /usr/bin/mono : (null)
+	0x5d42d9444129 - /usr/bin/mono : (null)
+	0x5d42d94909c1 - /usr/bin/mono : (null)
+	0x77cf1ad7c30d - /opt/T2/src/bin/Debug/libz3.so : (null)
+	0x5d42e546a1b8 - Unknown
+
+=================================================================
+	Telemetry Dumper:
+=================================================================
+Pkilling 0x77cf20600700 from 0x77cf232ec780
+Entering thread summarizer pause from 0x77cf232ec780
+Finished thread summarizer pause from 0x77cf232ec780.
+
+Waiting for dumping threads to resume
+
+=================================================================
+	Basic Fault Address Reporting
+=================================================================
+Memory around native instruction pointer (0x77cf1ad7c30d):0x77cf1ad7c2fd  18 48 8b 46 10 48 8d 35 4f 05 c1 00 48 8b 40 10  .H.F.H.5O...H.@.
+0x77cf1ad7c30d  48 8b 40 08 48 8b 38 48 8d 50 08 e8 c3 15 bf 00  H.@.H.8H.P......
+0x77cf1ad7c31d  84 c0 0f 85 bb 00 00 00 4c 8b 63 18 4c 8b 4b 10  ........L.c.L.K.
+0x77cf1ad7c32d  4c 8b 45 18 66 41 83 7c 24 04 00 49 8b 41 08 44  L.E.fA.|$..I.A.D
+
+=================================================================
+	Managed Stacktrace:
+=================================================================
+	  at <unknown> <0xffffffff>
+	  at LIB:Z3_fixedpoint_dec_ref <0x000a5>
+	  at Microsoft.Z3.Native:Z3_fixedpoint_dec_ref <0x00037>
+	  at DecRefQueue:DecRef <0x0003f>
+	  at Microsoft.Z3.IDecRefQueue:Clear <0x000ea>
+	  at Microsoft.Z3.Context:Dispose <0x0018b>
+	  at MuZWrapper:CallSpacer <0x00945>
+	  at MuZWrapper:Microsoft-Research-T2-SafetyInterface-SafetyProver-ErrorLocationReachable <0x001e7>
+	  at Microsoft.Research.T2.Termination:prover <0x018c3>
+	  at Microsoft.Research.T2.Termination:bottomUp <0x013b7>
+	  at Microsoft.Research.T2.Termination:starBottomUp <0x004f3>
+	  at Microsoft.Research.T2.Termination:CTLStar_Prover <0x01c7b>
+	  at Microsoft.Research.T2.Main:main <0x01e47>
+	  at <Module>:runtime_invoke_int_object <0x00091>
+=================================================================
+'",
+11,"{'name': 'test/cav13-ctl-examples/P18.t2', 'formula': 'F(G(varW < 1))'}",3.568121385574341,0.013686781566763468
+12,"{'name': 'test/cav13-ctl-examples/P20.t2', 'formula': '!([EF]([AG](varW < 1)))'}",0.8834099054336548,0.0018645016087273187
+13,"{'name': 'test/cav13-ctl-examples/P20.t2', 'formula': 'F(G(varW < 1))'}",OOT,
+14,"{'name': 'test/cav13-ctl-examples/P25.t2', 'formula': '(varC > 5) && ![AF](varR > 5)'}",Check was unsuccessful: T2-output was '',

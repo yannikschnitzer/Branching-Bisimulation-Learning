@@ -1,0 +1,18 @@
+MODULE main
+    VAR a : integer;
+    VAR r : integer;
+    VAR n : integer;
+
+    INIT r = 0;
+    INIT n >= 16;
+
+    TRANS (next(a) = a & next(r) = r & next(n) = n)
+        | (n > 0
+            & next(a) = 1 & next(r) = r & next(n) = n - 1)
+        | (n <= 0
+            & next(a) = 1 & next(r) = 1 & next(n) = n)
+        ;
+
+
+
+    

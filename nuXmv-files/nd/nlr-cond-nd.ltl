@@ -1,0 +1,3 @@
+F(terminated)
+(G(!terminated))
+(x > 1 -> F G(terminated))

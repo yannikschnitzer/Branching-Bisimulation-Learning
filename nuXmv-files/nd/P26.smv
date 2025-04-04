@@ -1,0 +1,19 @@
+MODULE main
+    VAR c: integer;
+    VAR r: integer;
+    VAR cs: integer;
+
+    INIT c = 100 & cs = 40 & r = 5;
+
+    TRANS (cs <= 0 | c < cs
+            ? next(c) = c & next(r) = r & next(cs) = cs
+            : next(c) = c - 1 & next(r) = r + 1 & next(cs) = cs - 1)
+        | (next(c) = c & next(r) = r & (cs <= 0 | c < cs
+            ? next(cs) = cs
+            : next(cs) = cs - 1))
+        ;
+    
+    --LTLSPEC (F c < 5)
+    --LTLSPEC (G c > 5)
+    --LTLSPEC (G F r >= 5)
+    LTLSPEC (F G c > 5)

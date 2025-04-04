@@ -1,0 +1,1 @@
+sudo update-java-alternatives --set java-1.17.0-openjdk-amd64 && /CAV25/CPAchecker-2.3-unix/scripts/cpa.sh -config /CAV25/CPAchecker-2.3-unix/config/terminationAnalysis.properties $1 -nolog -stats

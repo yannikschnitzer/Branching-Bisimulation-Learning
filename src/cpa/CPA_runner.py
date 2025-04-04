@@ -21,7 +21,7 @@ def run_cpa_experiment(exp : CPA_Experiment):
         """
             Runs CPA Checker with given experiment.
         """
-        cmd = "sudo update-java-alternatives --set java-1.17.0-openjdk-amd64 &&  ../../CPAchecker-2.3-unix/scripts/cpa.sh -config ../../CPAchecker-2.3-unix/config/terminationAnalysis.properties ../C-Programs/" + exp.file +  " -nolog -stats"
+        cmd = "cpa ../C-Programs/" + exp.file
 
         print("------------------------------------")
         print("Running Experiment: ", exp.name)
@@ -30,6 +30,9 @@ def run_cpa_experiment(exp : CPA_Experiment):
         matches = re.findall(time_pattern, out)
         if matches:
             print("CPA Checker Analysis Time:", matches[0],"")
+            return float(matches[0])
+        else:
+            raise Exception("Unknown error (time pattern got no matches)")
 
         if exp.print_res:
             res_pattern = r"Verification result: (TRUE|FALSE|UNKNOWN)"

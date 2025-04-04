@@ -1,0 +1,11 @@
+MODULE main
+    VAR a: integer;
+    VAR r: integer;
+    VAR n: integer;
+
+    INIT a = 1 & r = 0 & n > 100;
+
+    TRANS (next(a) = a & next(r) = r & next(n) = n)
+        | (next(a) = 1 & next(r) = (next(n) <= 0 ? 1 : 0) & next(n) = n - 1)
+        | (next(a) = 1 & next(r) = (next(n) <= 0 ? 1 : 0) & next(n) = n)
+        ;

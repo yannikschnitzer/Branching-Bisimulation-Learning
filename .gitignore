@@ -1,0 +1,7 @@
+**/venv
+**/__pycache__
+src/figures
+**/results
+**/.history
+aws-pull.sh
+aws-push.sh
