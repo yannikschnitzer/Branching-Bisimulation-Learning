@@ -1,17 +1,17 @@
 
-# Bisimulation Learning
+# Branching Bisimulation Learning
 
-This is the artifact for the paper **"Bisimulation Learning"** (CAV 2024). 
+This is the artifact for the paper **"Branching Bisimulation Learning"** (CAV 2025). 
 
-The corresponding Git repository is: https://github.com/yannikschnitzer/Bisimulation-Learning
+The corresponding Git repository is: https://github.com/yannikschnitzer/Branching-Bisimulation-Learning
 
 We claim the artifact to be available, functional and reusable. We describe the structure and usage below.
 
 
 
 
-![alt text](https://i.postimg.cc/mg4cvRpw/program.png)
-![alt text](https://i.postimg.cc/D0sZNYqH/partition.pngg)
+![alt text](https://i.postimg.cc/KjggVQ7r/quotient.png)
+![alt text](https://i.postimg.cc/BQ064qJG/Screenshot-2025-04-04-at-10-45-36.png)
 ## Artifact Requirements
 
 The artifact comes as a `Dockerfile`, which automatically sets up a container containing all relevant files, software, and dependencies. 
