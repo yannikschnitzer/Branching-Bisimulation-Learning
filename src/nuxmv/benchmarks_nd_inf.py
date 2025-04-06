@@ -8,6 +8,7 @@ import pandas as pd
 
 # nuxmv -source chech-inf-state.scr P19.smv
 
+# Nondeterministic infinite state with LTL properties
 experiments = [
     {
         'experiment': "term-loop-nd.smv",

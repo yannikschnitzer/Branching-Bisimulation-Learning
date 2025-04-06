@@ -3,7 +3,7 @@
 """
 import numpy as np
 import pandas as pd
-from nuxmv_runner import *
+from nuxmv.nuxmv_runner import *
 
 __author__ = "Yannik Schnitzer"
 __copyright__ = "Copyright 2024, Yannik Schnitzer"
@@ -1096,7 +1096,7 @@ experiments = [
     exp_con_usf_10000_gf_ic3(),
 ]
 
-def run_nuxmv_experiments_iters(iters = 10, timeout=500):
+def run_nuxmv_experiments_iters(experiments, iters = 10, timeout=500):
     df = pd.DataFrame(columns=["Experiment", "Average", "STD"])
     for experiment in experiments:
         avg = None
@@ -1113,7 +1113,8 @@ def run_nuxmv_experiments_iters(iters = 10, timeout=500):
             avg = str(e)
             std = ""
         df.loc[len(df)] = [experiment.name, avg, std]
-    df.to_csv("nuxmv_det.csv")
+    return df
 
 if __name__ == "__main__":
-    run_nuxmv_experiments_iters()
+    df = run_nuxmv_experiments_iters(experiments)
+    df.to_csv("nuxmv_det.csv")
