@@ -1,7 +1,10 @@
 from argparse import ArgumentParser
 import nuxmv.nuxmv_experiments as nuxmv_det
+import nuxmv.benchmarks_nd_inf as nuxmv_nd_inf
+import nuxmv.benchmarks_nd_fin as nuxmv_nd_fin
 import cpa.CPA_experiments as cpa
 import ultimate.ultimate_experiments as ultimate_det
+import ultimate_ltl.benchmarks as ultimate_nd_inf
 import benchmark_det as bl_det
 import benchmark_nd as bl_brn
 from time import time
@@ -132,6 +135,19 @@ def run_nuxmv_det_benchmarks(args, experiments):
         iters=args.iters,
         timeout=args.timeout)
 
+def run_nuxmv_nd_inf_benchmarks(args):
+    return nuxmv_nd_inf.run_nuxmv_experiments(
+        iters=args.iters,
+        timeout=args.timeout
+    )
+
+def run_nuxmv_nd_fin_benchmarks(args):
+    return nuxmv_nd_fin.run_nuxmv_experiments(
+        iters=args.iters,
+        timeout=args.timeout,
+        allowed_sizes=[args.size]
+    )
+
 def run_cpa_benchmarks(args, experiments):
     return cpa.run_cpa_experiment_iters(
         experiments=experiments,
@@ -146,6 +162,11 @@ def run_ultimate_det_benchmarks(args, experiments):
         timeout=args.timeout
     )
 
+def run_ultimate_nd_inf_benchmarks(args, experiments):
+    return ultimate_nd_inf.run_ultimate_ltl_experiments(
+        iters=args.iters,
+        timeout=args.timeout
+    )
 
 def run_det_bisimulation_learning(args, experiments):
     return bl_det.run_experiments(
@@ -222,7 +243,29 @@ def run_term_benchmarks(args):
                 return run_det_bisimulation_learning(args, dataset)
         case _:
             raise Exception(f"[ERROR] Unexpected tool: {args.tool}")
-            
+
+def run_nd_inf_benchmarks(args):
+    if args.tool == 'nuxmv':
+        return run_nuxmv_nd_inf_benchmarks(args)
+    elif args.tool == 'ultimate':
+        return run_ultimate_nd_inf_benchmarks(args)
+    else:
+        dataset = bl_brn.nd_inf_experiments
+        return run_brn_bisimulation_learning(args, dataset)
+
+def run_nd_fin_benchmarks(args):
+    if args.tool == 'nuxmv':
+        return run_nuxmv_nd_fin_benchmarks(args)
+    else:
+        dataset = bl_brn.nd_fin_experiments
+        return run_brn_bisimulation_learning(args, dataset)
+
+def run_t2_benchmarks(args):
+    if args.tool == 't2':
+        raise Exception(f"T2 experiments are to be run in another container.")
+    else:
+        dataset = bl_brn.t2_experiments
+        return run_brn_bisimulation_learning(args, dataset)
 
 def run_benchmarks(args):
     match args.dataset:
@@ -230,6 +273,12 @@ def run_benchmarks(args):
             return run_clock_benchmarks(args)
         case 'term':
             return run_term_benchmarks(args)
+        case 'nd-inf':
+            return run_nd_inf_benchmarks(args)
+        case 'nd-fin':
+            return run_nd_fin_benchmarks(args)
+        case 'nd-inf-t2':
+            return run_t2_benchmarks(args)
         case _:
             raise Exception(f"Dataset {args.dataset} not implemented yet.")
         
@@ -244,7 +293,7 @@ if __name__ == "__main__":
     parser.add_argument("-m", "--mode", help="The tool's mode. Available values: 'ic3', 'bdd' for 'nuxmv' and 'det', 'brn' for 'bisimulation-learning'")
     parser.add_argument("-s", "--size", help="Sizes for the nondeterministic finite state systems. Available state sizes are 9, 11, 13, 15 and 17")
     parser.add_argument("-i", "--iters", help="Number of iterations to run a single test to get the average. Default value is 10")
-    parser.add_argument("--timeout", help="Timeout of a single test, in seconds. Default 300 seconds")
+    parser.add_argument("--timeout", help="Timeout of a single test, in seconds. Default is 300 seconds")
     parser.add_argument("-o", "--output", help="Output csv file. Default is CURRENT_DATE-DATASET-TOOL[-MODE][-FORMULA][-SIZE].csv")
     parser.add_argument("--global-rank", action="store_true", help="In Branching Bisimulation Learning, it enables to use a single ranking function rather than a different ranking function for each class.")
 
