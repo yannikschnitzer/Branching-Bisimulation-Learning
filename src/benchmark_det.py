@@ -67,6 +67,19 @@ def compare_times(exp, iters = 10, explicit_classes = True):
     print(f"--- Deterministic Formulas - Average expired time is {det_avg}s - STD: {det_std}")
     return exp.name, det_avg, det_std
 
+def run_experiments(exps, iters = 10, timeout = 500, global_rank = False):
+    df = pd.DataFrame(columns=["Experiment", "Avg", "STD"])
+    for experiment in experiments:
+        print(f"Running experiment {experiment.name}")
+        try:
+            name, det_avg, det_std = compare_times(experiment, iters, not global_rank)
+            print(f"End experiment {experiment.name}\n")
+            df.loc[len(df)] = [name, det_avg, det_std]
+        except Exception as e:
+            print(f"Experiment {experiment.name} had an error: {e}")
+            df.loc[len(df)] = [experiment.name, "error", ""]
+    return df
+
 if __name__ == "__main__":
     arg_parser = ArgumentParser(
         prog = "Branching Bisimulation Learning - Deterministic Benchmarks",
@@ -85,17 +98,7 @@ if __name__ == "__main__":
     else:
         print(f"Running with {iters} iters with a global ranking function")
 
-
-    df = pd.DataFrame(columns=["Experiment", "Avg", "STD"])
-    for experiment in experiments:
-        print(f"Running experiment {experiment.name}")
-        try:
-            name, det_avg, det_std = compare_times(experiment, iters, explicit_classes)
-            print(f"End experiment {experiment.name}\n")
-            df.loc[len(df)] = [name, det_avg, det_std]
-        except Exception as e:
-            print(f"Experiment {experiment.name} had an error: {e}")
-            df.loc[len(df)] = [experiment.name, "error", ""]
+    df = run_experiments(experiments, iters)
 
     df.to_csv("deterministic_bl.csv")
 

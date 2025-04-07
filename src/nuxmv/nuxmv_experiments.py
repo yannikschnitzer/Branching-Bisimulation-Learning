@@ -972,8 +972,7 @@ def exp_con_usf_10000_gf_ic3():
     )
     return exp
 
-
-experiments = [
+experiments_term = [
     exp_term_loop_1_term(),
     exp_term_loop_1_nonterm(),
     exp_term_loop_2_term(),
@@ -995,6 +994,9 @@ experiments = [
     exp_cubic_nonterm(),
     exp_non_linear_cond_term(),
     exp_non_linear_cond_nonterm(),
+]
+
+experiments_clock = [
     exp_tte_sf_10_g_bdd(),
     exp_tte_sf_10_g_ic3(),
     exp_tte_sf_10_gf_bdd(),
@@ -1096,6 +1098,8 @@ experiments = [
     exp_con_usf_10000_gf_ic3(),
 ]
 
+all_experiments = experiments_term + experiments_clock
+
 def run_nuxmv_experiments_iters(experiments, iters = 10, timeout=500):
     df = pd.DataFrame(columns=["Experiment", "Average", "STD"])
     for experiment in experiments:
@@ -1116,5 +1120,5 @@ def run_nuxmv_experiments_iters(experiments, iters = 10, timeout=500):
     return df
 
 if __name__ == "__main__":
-    df = run_nuxmv_experiments_iters(experiments)
+    df = run_nuxmv_experiments_iters(all_experiments)
     df.to_csv("nuxmv_det.csv")

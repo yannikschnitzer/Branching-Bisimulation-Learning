@@ -1,5 +1,7 @@
 from argparse import ArgumentParser
 import nuxmv.nuxmv_experiments as nuxmv_det
+import benchmark_det as bl_det
+import benchmark_nd as bl_brn
 from time import time
 
 usage = """
@@ -24,76 +26,6 @@ You can run different datasets specifying the tool and the property to check. No
     - 'bisimulation-learning' ('brn' mode only)
 """
 
-def run_nuxmv_benchmarks(args):
-    if args.mode not in ['ic3', 'bdd']:
-        raise Exception(f"Mode {args.mode} not available for nuxmv")
-    if args.dataset == 'clock':
-        args.formula = args.formula or 'safe'
-        if args.formula not in ['safe', 'synch']:
-            raise Exception(f"Formula {args.formula} not available for clock dataset on nuxmv tool")
-    if args.dataset == 'term':
-        if args.mode != 'ic3':
-            raise Exception(f"Mode {args.mode} not available on term dataset")
-        args.formula = args.formula or 'term'
-        if args.formula not in ['term', 'nonterm']:
-            raise Exception(f"Formula ${args.formula} not available for term dataset on nuxmv tool")
-    if args.dataset == 'nd-inf' and args.mode != 'ic3':
-        raise Exception(f"Mode {args.mode} not available on term dataset")
-    if args.dataset == 'nd-fin' and args.mode != 'bdd':
-        raise Exception(f"Mode {args.mode} not available on term dataset")
-    set_output_filename(args)
-    if args.dataset in ['clock', 'term']:
-        # if its a deterministic dataset get it from nuxmv_det
-        dataset = []
-        phi = 'g' if args.formula == 'safe' else 'gf'
-        for prt in ['tte', 'con']:
-            for st in ['sf', 'usf']:
-                for size in ['10', '100', '1000', '2000', '5000', '10000']:
-                    exp = getattr(nuxmv_det, f'exp_{prt}_{st}_{size}_{phi}_{args.mode}')
-                    dataset.append(exp())
-        # dataset built just with the relevant ones
-        df = nuxmv_det.run_nuxmv_experiments_iters(
-            experiments=dataset,
-            iters=args.iters,
-            timeout=args.timeout)
-        return df
-    else:
-        return None
-        
-
-
-
-def validate_bisimulation_learning(args):
-    if args.mode not in ['det', 'brn']:
-        raise Exception(f"Mode {args.mode} not available for bisimulation learning")
-    if args.dataset == 'nd-inf' and args.mode != 'brn':
-        raise Exception(f"Mode {args.mode} not available on term dataset")
-    if args.dataset == 'nd-fin' and args.mode != 'brn':
-        raise Exception(f"Mode {args.mode} not available on term dataset")
-
-def run_clock_benchmarks(args):
-    if args.tool not in ['nuxmv', 'bisimulation-learning']:
-        raise Exception(f"Tool {args.tool} not allowed for clock dataset")
-    else:
-        if args.tool == 'nuxmv':
-            args.mode = args.mode or 'ic3'
-            run_nuxmv_benchmarks(args)
-        else:
-            args.mode = args.mode or 'det'
-            validate_bisimulation_learning(args)
-
-def run_benchmarks(args):
-    args.dataset = args.dataset or 'clock'
-    args.iters = int(args.iters or 10)
-    args.timeout = int(args.timeout or 300)
-    if args.tool == 'bl':
-        args.tool = 'bisimulation-learning'
-    match args.dataset:
-        case 'clock':
-            run_clock_benchmarks(args)
-        case _:
-            raise Exception(f"Dataset {args.dataset} not implemented yet.")
-
 def set_output_filename(args):
     if args.output is None:
         args.output = args.output or f"{time()}-{args.dataset}-{args.tool}"
@@ -103,6 +35,153 @@ def set_output_filename(args):
             args.output += "-" + args.formula
         if args.size is not None:
             args.output += "-" + args.size
+
+def validate(args):
+    args.iters = int(args.iters or 10)
+    args.timeout = int(args.timeout or 300)
+    if args.tool == 'bl':
+        args.tool = 'bisimulation-learning'
+    match args.dataset:
+        case 'clock':
+            return validate_clock(args)
+        case 'term':
+            return validate_term(args)
+        case 'nd-inf':
+            return validate_nd_inf(args)
+        case 'nd-fin':
+            return validate_nd_fin(args)
+        case 'nd-inf-t2':
+            return validate_nd_inf_t2(args)
+        case _:
+            raise Exception(f"Dataset {args.dataset} is not a valid dataset")
+
+def validate_clock(args):
+    if args.tool == 'nuxmv':
+        args.mode = args.mode or 'ic3'
+        if args.mode not in ['ic3', 'bdd']:
+            raise Exception(f"Mode {args.mode} not available for nuxmv / clock")
+        args.formula = args.formula or 'safe'
+        if args.formula not in ['safe', 'synch']:
+            raise Exception(f"Formula {args.formula} not available nuxmv / clock")
+    elif args.tool == 'bisimulation-learning':
+        args.mode = args.mode or 'brn'
+        if args.mode not in ['brn', 'det']:
+            raise Exception(f"Mode {args.mode} not available for bisimulation learning / clock")
+    else:
+        raise Exception(f"Tool {args.tool} not valid for 'clock' dataset")
+    return args
+
+def validate_term(args):
+    if args.tool == 'nuxmv':
+        print(f"[INFO] Only available mode for nuxmv / term is 'ic3': setting up...")
+        args.mode = 'ic3'
+    if args.tool in ['nuxmv', 'cpa', 'ultimate']:
+        args.formula = args.formula or 'term'
+        if args.formula not in ['term', 'nonterm']:
+            raise Exception(f"Formula {args.formula} not available {args.tool} / term")
+    elif args.tool == 'bisimulation-learning':
+        args.mode = args.mode or 'brn'
+        if args.mode not in ['brn', 'det']:
+            raise Exception(f"Mode {args.mode} not available for bisimulation learning / term")
+    else:
+        raise Exception(f"Tool {args.tool} not valid for 'term' dataset")
+    return args
+
+    
+def validate_nd_inf(args):
+    if args.tool == 'nuxmv':
+        print(f"[INFO] Only available mode for nuxmv / nd-inf is 'ic3': setting up...")
+        args.mode = 'ic3'
+    elif args.tool == 'bisimulation-learning':
+        print(f"[INFO] Only available mode for bisimulation learning / nd-inf is 'brn': setting up...")
+        args.mode = 'brn'
+    elif args.tool == 't2':
+        raise Exception(f"T2 has a dedicated dataset: 'nd-inf-t2. Try run the program with that dataset: please note that T2 also might require a different container to run. See the README for more information.")
+    elif args.tool != 'ultimate':
+        raise Exception(f"Tool {args.tool} not valid for 'nd-inf' dataset")
+    return args
+
+def validate_nd_inf_t2(args):
+    if args.tool == 'bisimulation-learning':
+        print(f"[INFO] Only available mode for bisimulation learning / nd-inf-t2 is 'brn': setting up...")
+        args.mode = 'brn'
+    elif args.tool in ['ultimate', 'cpa', 'nuxmv']:
+        raise Exception(f"This is the t2 dedicated dataset. Other tools should run on the general 'nd-inf' dataset. Try run the program with that dataset: please note that T2 also requires a different container to run. See the README for more information.")
+    elif args.tool != 't2':
+        raise Exception(f"Tool {args.tool} not valid for 'nd-inf-t2' dataset")
+    return args
+
+def validate_nd_fin(args):
+    if args.tool == 'nuxmv':
+        print(f"[INFO] Only available mode for nuxmv / nd-fin is 'bdd': setting up...")
+        args.mode = 'bdd'
+        args.size = int(args.size or 9)
+    elif args.tool == 'bisimulation-learning':
+        print(f"[INFO] Only available mode for bisimulation learning / nd-fin is 'brn': setting up...")
+        args.mode = 'brn'
+    else:
+        raise Exception(f"Tool {args.tool} not valid for 'nd-fin' dataset")
+    return args
+
+
+def run_nuxmv_det_benchmarks(args, experiments):
+    return nuxmv_det.run_nuxmv_experiments_iters(
+        experiments=experiments,
+        iters=args.iters,
+        timeout=args.timeout)
+
+
+def run_det_bisimulation_learning(args, experiments):
+    return bl_det.run_experiments(
+        experiments=experiments,
+        iters=args.iters,
+        timeout=args.timeout
+    )
+
+def run_brn_bisimulation_learning(args, experiments):
+    return bl_brn.run_experiments(
+        experiments=experiments,
+        explicit_classes=not args.global_rank,
+        iters=args.iters,
+        timeout=args.timeout
+    )
+    
+
+def run_clock_benchmarks(args):
+    if args.tool == 'nuxmv':
+        dataset = []
+        phi = 'g' if args.formula == 'safe' else 'gf'
+        for prt in ['tte', 'con']:
+            for st in ['sf', 'usf']:
+                for size in ['10', '100', '1000', '2000', '5000', '10000']:
+                    exp = getattr(nuxmv_det, f'exp_{prt}_{st}_{size}_{phi}_{args.mode}')
+                    dataset.append(exp())
+        return run_nuxmv_det_benchmarks(args, dataset)
+    elif args.mode == 'det':
+        dataset = []
+        for prt in ['tte', 'con']:
+            for st in ['sf', 'usf']:
+                for size in ['10', '100', '1000', '2000', '5000', '10000']:
+                    exp = getattr(nuxmv_det, f'exp_{prt}_{st}_{size}')
+                    dataset.append(exp())
+        return run_det_bisimulation_learning(args, dataset)
+    else:
+        dataset = []
+        for prt in ['tte', 'con']:
+            for st in ['sf', 'usf']:
+                exp_fn = getattr(nuxmv_det, f'exp_{prt}_{st}_{size}')
+                for size in [10, 100, 1000, 2000, 5000, 10000]:
+                    dataset.append(exp_fn(size))
+        return run_brn_bisimulation_learning(args, dataset)
+
+def run_benchmarks(args):
+    match args.dataset:
+        case 'clock':
+            return run_clock_benchmarks(args)
+        case 'term':
+            return run_term_benchmarks(args)
+        case _:
+            raise Exception(f"Dataset {args.dataset} not implemented yet.")
         
 if __name__ == "__main__":
     parser = ArgumentParser("CAV 25 Artifact Evaluation",
@@ -117,10 +196,13 @@ if __name__ == "__main__":
     parser.add_argument("-i", "--iters", help="Number of iterations to run a single test to get the average. Default value is 10")
     parser.add_argument("--timeout", help="Timeout of a single test, in seconds. Default 300 seconds")
     parser.add_argument("-o", "--output", help="Output csv file. Default is CURRENT_DATE-DATASET-TOOL[-MODE][-FORMULA][-SIZE].csv")
+    parser.add_argument("--global-rank", action="store_true", help="In Branching Bisimulation Learning, it enables to use a single ranking function rather than a different ranking function for each class.")
 
     args = parser.parse_args()
 
     try:
+        args = validate(args)
+        set_output_filename(args)
         df = run_benchmarks(args)
         df.to_csv(args.output)
     except Exception as e:
