@@ -10,7 +10,22 @@ from bisimulation_learning.fact_det.experiments import *
 from bisimulation_learning.fact_det.cegis_solver import *
 set_param('smt.random_seed', 42)
 
-experiments = [
+term_experiments = [
+    exp_term_loop_1(),
+    exp_term_loop_2(),
+    exp_audio_compr(),
+    exp_euclid(),
+    exp_greater(),
+    exp_smaller(),
+    exp_conic(),
+    exp_disjunction(),
+    exp_parallel(),
+    exp_quadratic(),
+    exp_cubic(),
+    exp_nlr_cond()
+]
+
+all_experiments = [
     exp_term_loop_1(),
     exp_term_loop_2(),
     exp_audio_compr(),
@@ -69,7 +84,7 @@ def compare_times(exp, iters = 10, explicit_classes = True):
 
 def run_experiments(exps, iters = 10, timeout = 500, global_rank = False):
     df = pd.DataFrame(columns=["Experiment", "Avg", "STD"])
-    for experiment in experiments:
+    for experiment in all_experiments:
         print(f"Running experiment {experiment.name}")
         try:
             name, det_avg, det_std = compare_times(experiment, iters, not global_rank)
@@ -98,7 +113,7 @@ if __name__ == "__main__":
     else:
         print(f"Running with {iters} iters with a global ranking function")
 
-    df = run_experiments(experiments, iters)
+    df = run_experiments(all_experiments, iters)
 
     df.to_csv("deterministic_bl.csv")
 

@@ -972,6 +972,33 @@ def exp_con_usf_10000_gf_ic3():
     )
     return exp
 
+term_experiments = [
+    exp_term_loop_1_term(),
+    exp_term_loop_2_term(),
+    exp_audio_compr_term(),
+    exp_euclid_term(),
+    exp_greater_term(),
+    exp_smaller_term(),
+    exp_conic_term(),
+    exp_disjunct(),
+    exp_parallel(),
+    exp_quadratic(),
+    exp_cubic_term(),
+    exp_non_linear_cond_term(),
+]
+
+nonterm_experiments = [
+    exp_term_loop_1_nonterm(),
+    exp_term_loop_2_nonterm(),
+    exp_audio_compr_nonterm(),
+    exp_euclid_nonterm(),
+    exp_greater_nonterm(),
+    exp_smaller_nonterm(),
+    exp_conic_nonterm(),
+    exp_cubic_nonterm(),
+    exp_non_linear_cond_nonterm(),
+]
+
 experiments_term = [
     exp_term_loop_1_term(),
     exp_term_loop_1_nonterm(),

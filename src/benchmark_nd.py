@@ -9,6 +9,21 @@ from bisimulation_learning.deterministic.experiments import *
 from bisimulation_learning.fintely_branching.experiments import *
 from bisimulation_learning.fintely_branching.cegis_solver import *
 
+term_experiments = [
+    term_loop_1(),
+    term_loop_2(),
+    audio_compr(),
+    euclid(),
+    greater(),
+    smaller(),
+    conic(),
+    disjunction(),
+    parallel(),
+    quadratic(),
+    cubic(),
+    nlr_cond()
+]
+
 all_experiments = [
     # (term_loop_1(), "term_loop_1"),
     # (term_loop_2(), "term_loop_2"),

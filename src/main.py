@@ -1,5 +1,7 @@
 from argparse import ArgumentParser
 import nuxmv.nuxmv_experiments as nuxmv_det
+import cpa.CPA_experiments as cpa
+import ultimate.ultimate_experiments as ultimate_det
 import benchmark_det as bl_det
 import benchmark_nd as bl_brn
 from time import time
@@ -130,6 +132,20 @@ def run_nuxmv_det_benchmarks(args, experiments):
         iters=args.iters,
         timeout=args.timeout)
 
+def run_cpa_benchmarks(args, experiments):
+    return cpa.run_cpa_experiment_iters(
+        experiments=experiments,
+        iters=args.iters,
+        timeout=args.timeout
+    )
+
+def run_ultimate_det_benchmarks(args, experiments):
+    return ultimate_det.run_ultimate_experiment_iters(
+        experiments=experiments,
+        iters=args.iters,
+        timeout=args.timeout
+    )
+
 
 def run_det_bisimulation_learning(args, experiments):
     return bl_det.run_experiments(
@@ -173,6 +189,40 @@ def run_clock_benchmarks(args):
                 for size in [10, 100, 1000, 2000, 5000, 10000]:
                     dataset.append(exp_fn(size))
         return run_brn_bisimulation_learning(args, dataset)
+
+def run_term_benchmarks(args):
+    match args.tool:
+        case 'nuxmv':
+            dataset = []
+            if args.formula == 'term':
+                dataset = nuxmv_det.term_experiments
+            else:
+                dataset = nuxmv_det.nonterm_experiments
+            return run_nuxmv_det_benchmarks(args, dataset)
+        case 'cpa':
+            dataset = []
+            if args.formula == 'term':
+                dataset = cpa.term_experiments
+            else:
+                dataset = cpa.nonterm_experiments
+            return run_cpa_benchmarks(args, dataset)
+        case 'ultimate':
+            dataset = []
+            if args.formula == 'term':
+                dataset = ultimate_det.term_experiments
+            else:
+                dataset = ultimate_det.nonterm_experiments
+            return run_ultimate_det_benchmarks(args, dataset)
+        case 'bisimulation-learning':
+            if args.mode == 'brn':
+                dataset = bl_brn.term_experiments
+                return run_brn_bisimulation_learning(args, dataset)
+            else:
+                dataset = bl_det.term_experiments
+                return run_det_bisimulation_learning(args, dataset)
+        case _:
+            raise Exception(f"[ERROR] Unexpected tool: {args.tool}")
+            
 
 def run_benchmarks(args):
     match args.dataset:

@@ -195,7 +195,34 @@ def exp_nlr_cond_nonterm():
     )
     return exp
 
-experiments = [
+term_experiments = [
+    exp_term_loop_1_term(),
+    exp_term_loop_2_term(),
+    exp_audio_compr_term(),
+    exp_euclid_term(),
+    exp_greater_term(),
+    exp_smaller_term(),
+    exp_conic_term(),
+    exp_disjunction_term(),
+    exp_parallel_term(),
+    exp_quadratic_term(),
+    exp_cubic_term(),
+    exp_nlr_cond_term(),
+]
+
+nonterm_experiments = [
+    exp_term_loop_1_nonterm(),
+    exp_term_loop_2_nonterm(),
+    exp_audio_compr_nonterm(),
+    exp_euclid_nonterm(),
+    exp_greater_nonterm(),
+    exp_smaller_nonterm(),
+    exp_conic_nonterm(),
+    exp_cubic_nonterm(),
+    exp_nlr_cond_nonterm()
+]
+
+all_experiments = [
     exp_term_loop_1_term(),
     exp_term_loop_1_nonterm(),
     exp_term_loop_2_term(),
@@ -219,7 +246,7 @@ experiments = [
     exp_nlr_cond_nonterm()
 ]
 
-def run_cpa_experiment_iters(iters = 10):
+def run_cpa_experiment_iters(experiments, iters = 10, timeout=300):
     df = pd.DataFrame(columns=["Experiment", "Average", "STD"])
     for experiment in experiments:
         avg = None
@@ -236,7 +263,8 @@ def run_cpa_experiment_iters(iters = 10):
             avg = str(e)
             std = ""
         df.loc[len(df)] = [experiment.name, avg, std]
-    df.to_csv("cpa-benchmarks.csv")
+    return df
 
 if __name__ == "__main__":
-    run_cpa_experiment_iters()
+    df = run_cpa_experiment_iters(all_experiments)
+    df.to_csv("cpa-benchmarks.csv")
