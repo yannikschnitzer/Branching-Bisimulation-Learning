@@ -65,8 +65,6 @@ industrial_exps = [
 
 ]
 
-print("Blup")
-
 nd_inf_experiments = [
     *term_loop_nd_exps,
     *cond_term_nd_exps,
@@ -85,8 +83,6 @@ nd_fin_experiments = [
     *term_loop_nd_exps,
     *industrial_exps
 ]
-
-print("Blip")
 
 all_experiments = [
     # (term_loop_1(), "term_loop_1"),
@@ -204,7 +200,7 @@ def compare_times(exp, iters = 10):
 
     return (impl_avg, impl_std, expl_avg, expl_std)
 
-def run_bisimulation_learning_experiment(exp, explicit_classes = True, iters = 10, timeout = 300):
+def run_bisimulation_learning_experiment(exp, explicit_classes = True, iters = 10, timeout = 300, verbose=False):
     trs, tem = exp
     branching_times_impl = []
     for i in range(iters):
@@ -219,7 +215,7 @@ def run_bisimulation_learning_experiment(exp, explicit_classes = True, iters = 1
             print(f"--- Branching Implicit Formula {i} error: {e}")
     avg = np.average(branching_times_impl)
     std = np.std(branching_times_impl)
-    print(f"--- Branching Implicit Formulas - Average expired time is {impl_avg}s - STD: {impl_std}")
+    print(f"--- Branching Implicit Formulas - Average expired time is {avg}s - STD: {std}")
     return avg, std
 
 def run_experiments(experiments, explicit_classes, iters, timeout):

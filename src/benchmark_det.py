@@ -68,7 +68,7 @@ def compute_branching_abstract_system(trs, tem, explicit_classes):
     theta, eta = bisimulation_learning(trs, tem, 1000, explicit_classes)
     gamma = compute_adjacency_matrix(trs, tem, theta)
 
-def compare_times(exp, iters = 10, explicit_classes = True):
+def compare_times(exp, iters = 10, explicit_classes = True, verbose = False):
 
     deterministic_times = []
     for i in range(iters):
@@ -76,15 +76,16 @@ def compare_times(exp, iters = 10, explicit_classes = True):
         run_experiment(exp)
         branching_end_time = time.time()
         deterministic_times.append(branching_end_time - branching_start_time)
-        print(f"--- Deterministic Formula {i}: {deterministic_times[-1]}s expired ")
+        if verbose:
+            print(f"--- Deterministic Formula {i}: {deterministic_times[-1]}s expired ")
     det_avg = np.average(deterministic_times)
     det_std = np.std(deterministic_times)
     print(f"--- Deterministic Formulas - Average expired time is {det_avg}s - STD: {det_std}")
     return exp.name, det_avg, det_std
 
-def run_experiments(exps, iters = 10, timeout = 500, global_rank = False):
+def run_experiments(experiments, iters = 10, timeout = 500, global_rank = False):
     df = pd.DataFrame(columns=["Experiment", "Avg", "STD"])
-    for experiment in all_experiments:
+    for experiment in experiments:
         print(f"Running experiment {experiment.name}")
         try:
             name, det_avg, det_std = compare_times(experiment, iters, not global_rank)

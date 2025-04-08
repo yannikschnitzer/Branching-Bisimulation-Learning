@@ -202,16 +202,16 @@ def run_clock_benchmarks(args):
         for prt in ['tte', 'con']:
             for st in ['sf', 'usf']:
                 for size in ['10', '100', '1000', '2000', '5000', '10000']:
-                    exp = getattr(nuxmv_det, f'exp_{prt}_{st}_{size}')
+                    exp = getattr(bl_det, f'exp_{prt}_{st}_{size}')
                     dataset.append(exp())
         return run_det_bisimulation_learning(args, dataset)
     else:
         dataset = []
         for prt in ['tte', 'con']:
             for st in ['sf', 'usf']:
-                exp_fn = getattr(nuxmv_det, f'exp_{prt}_{st}_{size}')
+                exp_fn = getattr(bl_brn, f'{prt}_{st}')
                 for size in [10, 100, 1000, 2000, 5000, 10000]:
-                    dataset.append(exp_fn(size))
+                    dataset.append((exp_fn(size), f'{prt}_{st}_{size}'))
         return run_brn_bisimulation_learning(args, dataset)
 
 def run_term_benchmarks(args):
