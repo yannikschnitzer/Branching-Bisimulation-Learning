@@ -4,7 +4,7 @@
 import numpy as np
 import pandas as pd
 
-from ultimate_runner import *
+from ultimate.ultimate_runner import *
 
 __author__ = "Yannik Schnitzer"
 __copyright__ = "Copyright 2024, Yannik Schnitzer"

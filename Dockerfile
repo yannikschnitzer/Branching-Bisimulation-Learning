@@ -68,20 +68,21 @@ RUN make && \
     make install
 
 # Get artifact and libraries 
-WORKDIR /CAV25 
 
-# RUN git clone https://github.com/yannikschnitzer/Bisimulation-Learning.git 
-RUN mkdir Bisimulation-Learning
-COPY requirements.txt ./Bisimulation-Learning/
-RUN pip install -r Bisimulation-Learning/requirements.txt
+ARG BL_HOME=/CAV25/Branching-Bisimulation-Learning
 
-COPY . ./Bisimulation-Learning
+WORKDIR ${BL_HOME}
+COPY requirements.txt ${BL_HOME}
+RUN pip install -r ${BL_HOME}/requirements.txt
 
-RUN mv /CAV25/Bisimulation-Learning/src/ultimate_ltl/ultimate-ltl /usr/local/bin/
+COPY . ${BL_HOME}
+
+RUN mv ${BL_HOME}/src/ultimate_ltl/ultimate-ltl /usr/local/bin/
 RUN chmod 757 /usr/local/bin/ultimate-ltl
 
-RUN mv /CAV25/Bisimulation-Learning/src/cpa/cpa /usr/local/bin/
+RUN mv ${BL_HOME}/src/cpa/cpa /usr/local/bin/
 RUN chmod 757 /usr/local/bin/cpa
 
-WORKDIR /CAV25/Bisimulation-Learning/src/
+WORKDIR ${BL_HOME}/src/
+RUN chmod +x main.py
 

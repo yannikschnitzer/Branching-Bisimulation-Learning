@@ -1,3 +1,4 @@
+#! /usr/bin/python3
 from argparse import ArgumentParser
 import nuxmv.nuxmv_experiments as nuxmv_det
 import nuxmv.benchmarks_nd_inf as nuxmv_nd_inf
@@ -5,7 +6,9 @@ import nuxmv.benchmarks_nd_fin as nuxmv_nd_fin
 import cpa.CPA_experiments as cpa
 import ultimate.ultimate_experiments as ultimate_det
 import ultimate_ltl.benchmarks as ultimate_nd_inf
+print("Preparing deterministic benchmarks...")
 import benchmark_det as bl_det
+print("Preparing nondeterministic benchmarks...")
 import benchmark_nd as bl_brn
 from time import time
 
@@ -302,6 +305,10 @@ if __name__ == "__main__":
     try:
         args = validate(args)
         set_output_filename(args)
+        print(f"""
+        Running benchmark with following configuration:
+        {args}
+        """)
         df = run_benchmarks(args)
         df.to_csv(args.output)
     except Exception as e:

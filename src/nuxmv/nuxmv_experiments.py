@@ -1127,9 +1127,10 @@ experiments_clock = [
 
 all_experiments = experiments_term + experiments_clock
 
-def run_nuxmv_experiments_iters(experiments, iters = 10, timeout=500):
+def run_nuxmv_experiments_iters(experiments, iters = 10, timeout=300):
     df = pd.DataFrame(columns=["Experiment", "Average", "STD"])
     for experiment in experiments:
+        print(f"Measuring experiment {experiment.name}")
         avg = None
         std = None
         try:
@@ -1139,6 +1140,7 @@ def run_nuxmv_experiments_iters(experiments, iters = 10, timeout=500):
                 times.append(runtime)
             avg = np.average(times)
             std = np.std(times)
+            print(f"Experiment {experiment.name} ran successfully: avg={avg} ; std={std}")
         except Exception as e:
             print(f"Experiment {experiment.name} failed one iteration: {e}")
             avg = str(e)

@@ -21,31 +21,34 @@ class nuXmv_Experiment:
         self.print_res = print_res
 
 
-def run_subprocess(cmd: str) -> bytes:
+def run_subprocess(cmd: str, timeout=300) -> bytes:
     p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     try:
-        out, err = p.communicate(timeout=500)
+        out, err = p.communicate(timeout=timeout)
         return out
     except subprocess.TimeoutExpired as e:
         p.kill()
         raise e
 
-def run_nuXmv_experiment(exp : nuXmv_Experiment, timeout = 500):
+def run_nuXmv_experiment(exp : nuXmv_Experiment, timeout = 300, verbose = False):
     """
         Runs nuXmv with given experiment.
     """
     cmd = "nuxmv -source ../nuXmv-files/" + exp.file
     
-    print("------------------------------------")
-    print("Running Experiment: ", exp.name)
+
+    if verbose:
+        print("------------------------------------")
+        print("Running Experiment: ", exp.name)
     
     t1 = time.perf_counter()
     # subprocess.check_output(cmd, shell = True, text = True, stderr=subprocess.DEVNULL, timeout=timeout)
-    run_subprocess(cmd)
+    run_subprocess(cmd, timeout)
     t2 = time.perf_counter()
     
     runtime = t2 - t1
-    print("Runtime: ", runtime,"seconds")
-    print("------------------------------------")
+    if verbose:
+        print("Runtime: ", runtime,"seconds")
+        print("------------------------------------")
     return runtime
 
