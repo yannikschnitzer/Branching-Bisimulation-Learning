@@ -34,15 +34,38 @@ You can run different datasets specifying the tool and the property to check. No
     - 'bisimulation-learning' ('brn' mode only)
 """
 
+def pretty_print(args):
+    and_rank_function ="one single global ranking function" if args.global_rank else "a function for each class (i.e. 'piecewise' ranking function)"
+    out = f"""
+    Running benchmarks with following configuration:
+    - Dataset: {args.dataset}
+    - Tool: {args.tool} {'with ' + and_rank_function if args.tool == 'bisimulation-learning' else ''}
+    """
+    if args.formula is not None:
+        out += f" - Formula: {args.formula}\n"
+    if args.mode is not None:
+        out += f"- Mode: {args.mode}\n"
+    if args.size is not None:
+        out += f"- Size: {args.size}\n"
+
+    out += f"""
+
+    Each test will be repeated {args.iters} times with a maximum running time of {args.timeout}.
+    Output file: {args.output}
+    """
+    return out
+
+
 def set_output_filename(args):
     if args.output is None:
-        args.output = args.output or f"{time()}-{args.dataset}-{args.tool}"
+        args.output = args.output or f"{int(time())}-{args.dataset}-{args.tool}"
         if args.mode is not None:
             args.output += "-" + args.mode
         if args.formula is not None:
             args.output += "-" + args.formula
         if args.size is not None:
             args.output += "-" + args.size
+        args.output += ".csv"
 
 def validate(args):
     args.iters = int(args.iters or 10)
@@ -165,7 +188,7 @@ def run_ultimate_det_benchmarks(args, experiments):
         timeout=args.timeout
     )
 
-def run_ultimate_nd_inf_benchmarks(args, experiments):
+def run_ultimate_nd_inf_benchmarks(args):
     return ultimate_nd_inf.run_ultimate_ltl_experiments(
         iters=args.iters,
         timeout=args.timeout
@@ -305,10 +328,7 @@ if __name__ == "__main__":
     try:
         args = validate(args)
         set_output_filename(args)
-        print(f"""
-        Running benchmark with following configuration:
-        {args}
-        """)
+        print(pretty_print(args))
         df = run_benchmarks(args)
         df.to_csv(args.output)
     except Exception as e:

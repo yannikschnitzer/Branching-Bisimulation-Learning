@@ -160,7 +160,7 @@ def run_nuxmv_experiments(iters = 10, timeout = 300):
     })
     for exp in experiments:
         try:
-            with open(exp['formulas']) as f_formulas:
+            with open(nuxmvHome + "/" + exp['formulas']) as f_formulas:
                 formulas = [line.rstrip() for line in f_formulas]
                 for idx, formula in enumerate(formulas):
                     measure_nuxmv_ltl_experiment(exp['experiment'], idx, formula, output, iters, timeout)

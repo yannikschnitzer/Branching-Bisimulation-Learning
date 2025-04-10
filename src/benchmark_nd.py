@@ -10,58 +10,58 @@ from bisimulation_learning.fintely_branching.experiments import *
 from bisimulation_learning.fintely_branching.cegis_solver import *
 
 term_experiments = [
-    term_loop_1(),
-    term_loop_2(),
-    audio_compr(),
-    euclid(),
-    greater(),
-    smaller(),
-    conic(),
-    disjunction(),
-    parallel(),
-    quadratic(),
-    cubic(),
-    nlr_cond()
+    (term_loop_1(), "term_loop_1"),
+    (term_loop_2(), "term_loop_2"),
+    (audio_compr(), "audio_compr"),
+    (euclid(), "euclid"),
+    (greater(), "greater"),
+    (smaller(), "smaller"),
+    (conic(), "conic"),
+    (disjunction(), "disjunction"),
+    (parallel(), "parallel"),
+    (quadratic(), "quadratic"),
+    (cubic(), "cubic"),
+    (nlr_cond(), "nlr_cond")
 ]
 
 term_loop_nd_exps = [
-    term_loop_nd(),
-    term_loop_nd_2(),
-    term_loop_nd_y()
+    (term_loop_nd(), "term_loop_nd"),
+    (term_loop_nd_2(), "term_loop_nd_2"),
+    (term_loop_nd_y(), "term_loop_nd_y")
 ]
 
 cond_term_nd_exps = [
-    quadratic_nd(),
-    cubic_nd(),
-    nlr_cond_nd(),
-    # conic_nd(),
-    # disjunction_nd(),
+    (quadratic_nd(), "quadratic_nd"),
+    (cubic_nd(), "cubic_nd"),
+    (nlr_cond_nd(), "nlr_cond_nd"),
+    # (conic_nd(), "conic_nd"),
+    # (disjunction_nd(), "disjunction_nd"),
 ]
 
 robot_exps = [
-    two_robots_axis(),
-    two_robots_axis_actions(),
-    two_robots_axis_actions_quadratic()
+    (two_robots_axis(), "two_robots_axis"),
+    (two_robots_axis_actions(), "two_robots_axis_actions"),
+    (two_robots_axis_actions_quadratic(), "two_robots_axis_actions_quadratic")
 ]
 
 industrial_exps = [
-    P1(),
-    P2(),
-    P3(),
-    P4(),
-    P5(),
-    P6(),
-    P7(),
-    P17(),
-    P18(),
-    P19(),
-    P20(),
-    P21(),
-    # P22(),
-    # P23(),
-    # P24(),
-    P25(),
-    # P28(),
+    (P1(), "P1"),
+    (P2(), "P2"),
+    (P3(), "P3"),
+    (P4(), "P4"),
+    (P5(), "P5"),
+    (P6(), "P6"),
+    (P7(), "P7"),
+    (P17(), "P17"),
+    (P18(), "P18"),
+    (P19(), "P19"),
+    (P20(), "P20"),
+    (P21(), "P21"),
+    # (P22(), "P22"),
+    # (P23(), "P23"),
+    # (P24(), "P24"),
+    (P25(), "P25"),
+    # (P28(), "P28"),
 
 ]
 
@@ -75,7 +75,7 @@ nd_inf_experiments = [
 t2_experiments = [
     *term_loop_nd_exps,
     *industrial_exps,
-    P28(),
+    (P28(), "P28"),
 ]
 
 
@@ -228,6 +228,7 @@ def run_experiments(experiments, explicit_classes, iters, timeout):
             df.loc[len(df)] = [name, avg, std]
         except Exception as e:
             print(f"Experiment {name} unexpected error: {e}")
+    return df
 
 if __name__ == "__main__":
     arg_parser = ArgumentParser(
