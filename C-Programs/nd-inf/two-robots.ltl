@@ -1,4 +1,4 @@
 AP (x_1 >= 1) ==> [] AP (!clash)
 AP (y_2 >= 1) ==> [] AP (!clash)
 ! (<> [] AP (!clash))
-<> (([] AP (clash)) | ([] AP (!clash)))
+<> (([] AP (clash)) || ([] AP (!clash)))

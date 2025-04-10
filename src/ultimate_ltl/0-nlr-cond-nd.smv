@@ -1,2 +1,0 @@
-//#Safe
-//@ ltl invariant positive: <> AP(x * x * x > 10000);

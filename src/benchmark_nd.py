@@ -1,5 +1,6 @@
 from argparse import ArgumentParser
 import time
+import signal # we are on unix
 import numpy as np
 import pandas as pd
 
@@ -160,6 +161,9 @@ experiments_robot = [
     robots
 ]
 
+def timeout_handler(signum, frame):
+    raise Exception("Timeout occurred.")
+
 def compute_branching_abstract_system(trs, tem, explicit_classes):
     theta, eta = bisimulation_learning(trs, tem, 1000, explicit_classes)
     gamma = compute_adjacency_matrix(trs, tem, theta)
@@ -205,8 +209,11 @@ def run_bisimulation_learning_experiment(exp, explicit_classes = True, iters = 1
     branching_times_impl = []
     for i in range(iters):
         try:
+            signal.signal(signal.SIGALRM, timeout_handler)
+            signal.alarm(timeout)
             branching_start_time = time.time()
             compute_branching_abstract_system(trs, tem, explicit_classes)
+            signal.alarm(0)
             branching_end_time = time.time()
             branching_times_impl.append(branching_end_time - branching_start_time)
             if verbose:
@@ -218,12 +225,12 @@ def run_bisimulation_learning_experiment(exp, explicit_classes = True, iters = 1
     print(f"--- Branching Implicit Formulas - Average expired time is {avg}s - STD: {std}")
     return avg, std
 
-def run_experiments(experiments, explicit_classes, iters, timeout):
+def run_experiments(experiments, explicit_classes, iters = 10, timeout = 300, verbose=False):
     df = pd.DataFrame(columns=["Experiment", "Avg", "STD"])
     for exp, name in experiments:
         try:
             print(f"Running experiment {name}")
-            avg, std = run_bisimulation_learning_experiment(exp, explicit_classes, iters, timeout)
+            avg, std = run_bisimulation_learning_experiment(exp, explicit_classes, iters, timeout, verbose=verbose)
             print(f"End experiment {name}\n")
             df.loc[len(df)] = [name, avg, std]
         except Exception as e:

@@ -116,8 +116,10 @@ def run_nuxmv_experiment_(exp: str) -> bytes:
     outb = subprocess.check_output(cmd, shell=True, stderr=subprocess.DEVNULL, timeout=500)
     return outb
 
+nuxmvHome = "/CAV25/Branching-Bisimulation-Learning/nuXmv-files/nd-fin"
+
 def run_nuxmv_experiment(exp: str, timeout=300) -> bytes:
-    command = ' '.join(["/usr/bin/nuxmv", "-source", "/CAV25/Branching-Bisimulation-Learning/nuXmv-files/nd-fin/check-fin-state.scr", exp])
+    command = ' '.join(["/usr/bin/nuxmv", "-source", f"{nuxmvHome}/check-fin-state.scr", exp])
     p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     try:
         out, err = p.communicate(timeout=timeout)
@@ -126,15 +128,15 @@ def run_nuxmv_experiment(exp: str, timeout=300) -> bytes:
         p.kill()
         raise e
 
-def measure_nuxmv_experiment(exp: str, formula_idx: int, formula: str, progr_state_size: int, timeout=300):
-    file_to_check = f"{formula_idx}-size{progr_state_size}-{exp}"
+def measure_nuxmv_experiment(exp: str, formula_idx: int, formula: str, progr_state_size: int, timeout=300, verbose=False):
+    file_to_check = f"{nuxmvHome}/{formula_idx}-size{progr_state_size}-{exp}"
     ctl_footer = f"    CTLSPEC {formula}"
     state_size = 2**progr_state_size
-    type = f"-{state_size}..{state_size-1}"
-    substitution = "${var//integer/'%s'}" % type
+    typ = f"-{state_size}..{state_size-1}"
+    substitution = "${var//integer/'%s'}" % typ
     cmds = [
         f"""rm -f "{file_to_check}" """,
-        f"""var=$(< "{exp}");echo "{substitution}" >> "{file_to_check}" """,
+        f"""var=$(< "{nuxmvHome}/{exp}");echo "{substitution}" >> "{file_to_check}" """,
         f"""echo "{ctl_footer}" >> "{file_to_check}" """
     ]
     if verbose:
@@ -152,11 +154,11 @@ def measure_nuxmv_experiment(exp: str, formula_idx: int, formula: str, progr_sta
         print(outb.decode("utf-8"))
     return stop_time - start_time
 
-def measure_nuxmv_ctl_experiment(exp, formula_idx, formula, progr_state_size, output: pd.DataFrame, iters = 10, timeout = 300):
+def measure_nuxmv_ctl_experiment(exp, formula_idx, formula, progr_state_size, output: pd.DataFrame, iters = 10, timeout = 300, verbose=False):
     times = []
     try:
         for i in range(iters):
-            time = measure_nuxmv_experiment(exp, formula_idx, formula, progr_state_size, timeout=timeout)
+            time = measure_nuxmv_experiment(exp, formula_idx, formula, progr_state_size, timeout=timeout, verbose=verbose)
             times.append(time)
             if verbose:
                 print(f"--- Experiment {exp} Formula {formula} - {i}th run expired in {times[-1]}s")
@@ -164,14 +166,14 @@ def measure_nuxmv_ctl_experiment(exp, formula_idx, formula, progr_state_size, ou
         std = np.std(times)
         print(f"--- Experiment {exp} Formula {formula} \n\taverage = {avg} \n\tstd = {std}")
         state_size = 2**progr_state_size
-        output.loc[len(output)] = [exp, f"{state_size}..{state_size - 1}", formula, avg, std]
+        output.loc[len(output)] = [exp, f"-{state_size}..{state_size - 1}", formula, avg, std]
     except subprocess.TimeoutExpired:
         print(f"Experiment {exp} Formula {formula}: OOT")
     except Exception as e:
-        print(f"Skipped experiment {exp} Formula {formula} one iteration failed: {e}")
+        print(f"Skipped experiment {exp} Formula {formula} one iteration failed. Reason: {e}")
         pass
 
-def run_nuxmv_experiments(allowed_sizes = [8, 10], iters = 10, timeout = 300):
+def run_nuxmv_experiments(allowed_sizes = [8, 10], iters = 10, timeout = 300, verbose = False):
     output = pd.DataFrame({
         'Experiment': [],
         'State Size': [],
@@ -181,11 +183,11 @@ def run_nuxmv_experiments(allowed_sizes = [8, 10], iters = 10, timeout = 300):
     })
     for exp in experiments:
         try:
-            with open(exp['formulas']) as f_formulas:
+            with open(nuxmvHome + "/" + exp['formulas']) as f_formulas:
                 formulas = [line.rstrip() for line in f_formulas]
                 for idx, formula in enumerate(formulas):
                     for progr_state_size in allowed_sizes:
-                        measure_nuxmv_ctl_experiment(exp['experiment'], idx, formula, progr_state_size, output, iters=iters, timeout=timeout)
+                        measure_nuxmv_ctl_experiment(exp['experiment'], idx, formula, progr_state_size, output, iters=iters, timeout=timeout, verbose=verbose)
         except Exception as e:
             print(f"Skipped experiment {exp} one iteration failed\nReason was: {e}")
     return output

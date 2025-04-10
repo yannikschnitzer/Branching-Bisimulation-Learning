@@ -36,21 +36,20 @@ You can run different datasets specifying the tool and the property to check. No
 
 def pretty_print(args):
     and_rank_function ="one single global ranking function" if args.global_rank else "a function for each class (i.e. 'piecewise' ranking function)"
-    out = f"""
-    Running benchmarks with following configuration:
+    out = f"""Running benchmarks with following configuration:
     - Dataset: {args.dataset}
-    - Tool: {args.tool} {'with ' + and_rank_function if args.tool == 'bisimulation-learning' else ''}
-    """
+    - Tool: {args.tool} {'with ' + and_rank_function if args.tool == 'bisimulation-learning' else ''}"""
+    
     if args.formula is not None:
-        out += f" - Formula: {args.formula}\n"
+        out += f"\n    - Formula: {args.formula}"
     if args.mode is not None:
-        out += f"- Mode: {args.mode}\n"
+        out += f"\n    - Mode: {args.mode}"
     if args.size is not None:
-        out += f"- Size: {args.size}\n"
+        out += f"\n    - Size: {args.size}"
 
     out += f"""
 
-    Each test will be repeated {args.iters} times with a maximum running time of {args.timeout}.
+    Each test will be repeated {args.iters} times with a maximum running time of {args.timeout} seconds.
     Output file: {args.output}
     """
     return out
@@ -58,14 +57,14 @@ def pretty_print(args):
 
 def set_output_filename(args):
     if args.output is None:
-        args.output = args.output or f"{int(time())}-{args.dataset}-{args.tool}"
+        args.output = args.output or f"{args.tool}-{args.dataset}"
         if args.mode is not None:
             args.output += "-" + args.mode
         if args.formula is not None:
             args.output += "-" + args.formula
         if args.size is not None:
-            args.output += "-" + args.size
-        args.output += ".csv"
+            args.output += "-" + str(args.size)
+        args.output += f"-{int(time())}.csv"
 
 def validate(args):
     args.iters = int(args.iters or 10)
@@ -159,18 +158,22 @@ def run_nuxmv_det_benchmarks(args, experiments):
     return nuxmv_det.run_nuxmv_experiments_iters(
         experiments=experiments,
         iters=args.iters,
-        timeout=args.timeout)
+        timeout=args.timeout,
+        verbose=args.verbose
+    )
 
 def run_nuxmv_nd_inf_benchmarks(args):
     return nuxmv_nd_inf.run_nuxmv_experiments(
         iters=args.iters,
-        timeout=args.timeout
+        timeout=args.timeout,
+        verbose=args.verbose
     )
 
 def run_nuxmv_nd_fin_benchmarks(args):
     return nuxmv_nd_fin.run_nuxmv_experiments(
         iters=args.iters,
         timeout=args.timeout,
+        verbose=args.verbose,
         allowed_sizes=[args.size]
     )
 
@@ -178,27 +181,31 @@ def run_cpa_benchmarks(args, experiments):
     return cpa.run_cpa_experiment_iters(
         experiments=experiments,
         iters=args.iters,
-        timeout=args.timeout
+        timeout=args.timeout,
+        verbose=args.verbose
     )
 
 def run_ultimate_det_benchmarks(args, experiments):
     return ultimate_det.run_ultimate_experiment_iters(
         experiments=experiments,
         iters=args.iters,
-        timeout=args.timeout
+        timeout=args.timeout,
+        verbose=args.verbose
     )
 
 def run_ultimate_nd_inf_benchmarks(args):
     return ultimate_nd_inf.run_ultimate_ltl_experiments(
         iters=args.iters,
-        timeout=args.timeout
+        timeout=args.timeout,
+        verbose=args.verbose
     )
 
 def run_det_bisimulation_learning(args, experiments):
     return bl_det.run_experiments(
         experiments=experiments,
-        iters=args.iters,
-        timeout=args.timeout
+        iters=args.iters, 
+        timeout=args.timeout,
+        verbose=args.verbose
     )
 
 def run_brn_bisimulation_learning(args, experiments):
@@ -206,7 +213,8 @@ def run_brn_bisimulation_learning(args, experiments):
         experiments=experiments,
         explicit_classes=not args.global_rank,
         iters=args.iters,
-        timeout=args.timeout
+        timeout=args.timeout,
+        verbose=args.verbose
     )
     
 
@@ -322,8 +330,16 @@ if __name__ == "__main__":
     parser.add_argument("--timeout", help="Timeout of a single test, in seconds. Default is 300 seconds")
     parser.add_argument("-o", "--output", help="Output csv file. Default is CURRENT_DATE-DATASET-TOOL[-MODE][-FORMULA][-SIZE].csv")
     parser.add_argument("--global-rank", action="store_true", help="In Branching Bisimulation Learning, it enables to use a single ranking function rather than a different ranking function for each class.")
+    parser.add_argument("-v", "--verbose", action="store_true", help="Prints additional messages. Useful for debugging.")
 
     args = parser.parse_args()
+
+
+    # args = validate(args)
+    # set_output_filename(args)
+    # print(pretty_print(args))
+    # df = run_benchmarks(args)
+    # df.to_csv(args.output)
 
     try:
         args = validate(args)

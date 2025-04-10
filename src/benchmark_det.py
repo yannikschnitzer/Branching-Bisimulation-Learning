@@ -83,12 +83,12 @@ def compare_times(exp, iters = 10, explicit_classes = True, verbose = False):
     print(f"--- Deterministic Formulas - Average expired time is {det_avg}s - STD: {det_std}")
     return exp.name, det_avg, det_std
 
-def run_experiments(experiments, iters = 10, timeout = 500, global_rank = False):
+def run_experiments(experiments, iters = 10, timeout = 500, global_rank = False, verbose=False):
     df = pd.DataFrame(columns=["Experiment", "Avg", "STD"])
     for experiment in experiments:
         print(f"Running experiment {experiment.name}")
         try:
-            name, det_avg, det_std = compare_times(experiment, iters, not global_rank)
+            name, det_avg, det_std = compare_times(experiment, iters, not global_rank, verbose=verbose)
             print(f"End experiment {experiment.name}\n")
             df.loc[len(df)] = [name, det_avg, det_std]
         except Exception as e:

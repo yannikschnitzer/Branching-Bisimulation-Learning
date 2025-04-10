@@ -99,26 +99,34 @@ experiments = [
     },
 ]
 
+ultimateHome = "/CAV25/Branching-Bisimulation-Learning/C-Programs/nd-inf"
+
 def run_ultimate_ltl_experiment(exp: str, formula: str, formula_idx: int, timeout=300):
-    file_to_check = f"{formula_idx}-{exp}"
+    file_to_check = f"{ultimateHome}/{formula_idx}-{exp}"
     ltl_header = f"""//#Safe\n//@ ltl invariant positive: {formula};"""
     cmd = f"""
     rm -f '{file_to_check}' \\
         && echo '{ltl_header}' >> '{file_to_check}' \\
-        && cat '{exp}' >> '{file_to_check}' \\
+        && cat '{ultimateHome}/{exp}' >> '{file_to_check}' \\
         && ultimate-ltl '{file_to_check}'
     """
-    outb = subprocess.check_output(cmd, shell=True, stderr=subprocess.DEVNULL, timeout=timeout)
-    out = outb.decode("utf-8")
-    time_pattern = r"Automizer plugin needed (\d+\.\d+)"
-    matches = re.findall(time_pattern, out)
-    return float(matches[0])
+    p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    try:
+        out, err = p.communicate(timeout=timeout)
+        time_pattern = r"Automizer plugin needed (\d+\.\d+)"
+        matches = re.findall(time_pattern, out.decode("utf-8"))
+        if len(matches) == 0:
+            raise Exception(f"Couldn't find the execution time from UltimateAutomizer output. STDOUT was: {out.decode('utf-8')}")
+        return float(matches[0])
+    except subprocess.TimeoutExpired as e:
+        p.kill()
+        raise e
 
-def measure_ultimate_ltl_experiment(exp: str, formula: str, formula_idx: str, output: pd.DataFrame, timeout=300):
+def measure_ultimate_ltl_experiment(exp: str, formula: str, formula_idx: str, output: pd.DataFrame, iters=10, timeout=300, verbose=False):
     times = []
     try:
         for i in range(iters):
-            time = run_ultimate_ltl_experiment(exp, formula, formula_idx, timeout)
+            time = run_ultimate_ltl_experiment(exp, formula, formula_idx, timeout=timeout)
             times.append(time)
             if verbose:
                 print(f"--- Experiment {exp} Formula {formula} - {i}th run expired in {times[-1]}s")
@@ -138,10 +146,10 @@ def run_ultimate_ltl_experiments(iters=10, timeout=300, verbose=False) -> pd.Dat
     })
     for exp in experiments:
         try:
-            with open(exp['formulas']) as f_formulas:
+            with open(ultimateHome + "/" + exp['formulas']) as f_formulas:
                 formulas = [line.rstrip() for line in f_formulas]
                 for idx, formula in enumerate(formulas):
-                    measure_ultimate_ltl_experiment(exp['experiment'], formula, idx, output, timeout)
+                    measure_ultimate_ltl_experiment(exp['experiment'], formula, idx, output, iters=iters, timeout=timeout, verbose=verbose)
         except Exception as e:
             print(f"Skipped experiment {exp} one iteration failed\nReason was: {e}")
     return output

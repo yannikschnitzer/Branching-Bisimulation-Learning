@@ -1127,7 +1127,7 @@ experiments_clock = [
 
 all_experiments = experiments_term + experiments_clock
 
-def run_nuxmv_experiments_iters(experiments, iters = 10, timeout=300):
+def run_nuxmv_experiments_iters(experiments, iters = 10, timeout=300, verbose=False):
     df = pd.DataFrame(columns=["Experiment", "Average", "STD"])
     for experiment in experiments:
         print(f"Measuring experiment {experiment.name}")
@@ -1136,7 +1136,7 @@ def run_nuxmv_experiments_iters(experiments, iters = 10, timeout=300):
         try:
             times = []
             for _ in range(iters):
-                runtime = run_nuXmv_experiment(experiment, timeout)
+                runtime = run_nuXmv_experiment(experiment, timeout=timeout, verbose=verbose)
                 times.append(runtime)
             avg = np.average(times)
             std = np.std(times)
