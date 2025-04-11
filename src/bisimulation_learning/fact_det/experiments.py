@@ -52,7 +52,7 @@ clock_sync_experiments = [
 
 ]
 
-def run_experiment(exp: shr.Experiment, iters, verbose):
+def run_experiment(exp: shr.Experiment, iters=10, verbose=False):
     trs, tem = shr.experiment_to_dts(exp)
     times = []
     for i in range(iters):
