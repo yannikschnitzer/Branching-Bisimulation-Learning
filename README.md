@@ -31,29 +31,47 @@ The artifact can run the experiments separately, i.e., produce the individual co
 
 The artifact contains a `Dockerfile` which automatically sets up the environment for evaluation. The environment is structured as follows
 
-* **CAV24** - Main Folder containing the artifact.
-  * ***Bisimulation Learning***: Repository containing our implementation and experiments.
+* **CAV25** - Main Folder containing the artifact.
+  * ***Branching-Bisimulation-Learning***: Repository containing our implementation and experiments.
     * **src**: Source code for our tool.
       * *run.py*: Main file for running experiments from command line.
-      * *experiment.py*: Experiment class for defining experiments and parameters.
-      * *experiment_runner.py*: Toolchain for running experiments, benchmarking time and subsequently saving/visualizing the results.
-      * *visualization.py*: Toolchain for visualizing the resulting partitions of 2D experiments.
-      * *utils.py*: Utility functions for type conversion, result extraction and visualization.
-      * *binary_decision_trees.py*: BDT class representing binary decision trees with aribtrary real-valued predicates and a special class for linear predicates.
-      * *cegis_solver.py*: Contains main algorithms and procedures for Bisimulation Learning. 
-      * *conditional_termination_succ_trees.py*: Contains one-step transitions functions and BDT templates for the conditional termination benchmarks (Table 2).
-      * *clock_synchronization_succ_trees.py*: Contains one-step transitions functions and BDT templates for the conditional termination benchmarks (Table 1).
-      * *conditional_termination_experiments.py*: Defines the experiments to run for producing the results in Table 2 (Bisimulation Learning column).
-      *  *clock_synchronization_experiments.py*: Defines the experiments to run for producing the results in Table 1 (Bisimulation Learning column).
+      * *benchmark_det.py*: Main file for running Bisimulation Learning on deterministic experiments.
+      * *benchmark_nd.py*: Main file for running Bisimulation Learning on non-deterministic (branching) experiments.
+      * **bisimulation_learning**
+        * **deterministic**
+          * **experiments**: Definitions for the deterministic experiments (Table 1 and Table 2).
+          <!--
+                * *conditional_termination_succ_trees.py*: Contains one-step transitions functions and BDT templates for the conditional termination benchmarks (Table 2).
+                * *clock_synchronization_succ_trees.py*: Contains one-step transitions functions and BDT templates for the conditional termination benchmarks (Table 1).
+                * *conditional_termination_experiments.py*: Defines the experiments to run for producing the results in Table 2 (Bisimulation Learning column).
+                *  *clock_synchronization_experiments.py*: Defines the experiments to run for producing the results in Table 1 (Bisimulation Learning column).
+          -->
+          * *cegis_solver.py*: Contains main algorithms and procedures for deterministic Bisimulation Learning. 
+          * *experiment_runner.py*: Toolchain for running deterministic experiments, benchmarking time and subsequently saving/visualizing the results.
+        * **finitely_branching**
+          * **experiments** Definitions for the non-deterministic experiments (Table 3, Table 4 and Table 5).
+          * *cegis_solver.py*: Contains main algorithms and procedures for non-deterministic Bisimulation Learning. 
+          * *conditions.py*: Contains the conditions formulas for stuttering bisimulations.
+        * **shared**
+          * *experiment.py*: Experiment class for defining experiments and parameters.
+          * *visualization.py*: Toolchain for visualizing the resulting partitions of 2D experiments.
+          * *utils.py*: Utility functions for type conversion, result extraction and visualization.
+          * *binary_decision_trees.py*: BDT class representing binary decision trees with aribtrary real-valued predicates and a special class for linear predicates.
+          * *utils.py*: Some helper functions.
       *  **nuxmv**
-         *  *nuxmv_experiments.py*: Experiment class for defining experiments and parameters that are passed to the nuXmv baseline tool.
-         *  *nuXmv_runner.py*: Toolchain for running experiments and benchmarking time for nuXmv.
+         *  *nuxmv_experiments.py*: Experiment class for defining deterministic experiments and parameters that are passed to the nuXmv baseline tool.
+         *  *nuXmv_runner.py*: Toolchain for running deterministic experiments and benchmarking time for nuXmv.
+         * *benchmarks_nd_inf.py*: Contains definitions for the non-deterministic infinite-state space benchmarks base, and the toolchain to run them.
+         * *benchmarks_nd_inf.py*: Contains definitions for the non-deterministic finite-state space benchmarks base, and the toolchain to run them.
       *  **ultimate**
-         *  *ultimate_experiments.py*: Experiment class for defining experiments and parameters that are passed to the Ultimate Automizer baseline tool.
-         *  *ultimate_runner.py*: Toolchain for running experiments and benchmarking time for the Ultimate Automizer.
+         *  *ultimate_experiments.py*: Experiment class for defining deterministic experiments and parameters that are passed to the Ultimate Automizer baseline tool.
+         *  *ultimate_runner.py*: Toolchain for running deterministic experiments and benchmarking time for the Ultimate Automizer.
+      *  **ultimate-ltl**
+         * *benchmarks.py*: Contains definitions for the non-deterministic benchmarks base, the LTL formulas and the toolchain to run them with.
       *  **cpa**
          *  *CPA_experiments.py*: Experiment class for defining experiments and parameters that are passed to the CPAChecker baseline tool.
          *  *CPA_runner.py*: Toolchain for running experiments and benchmarking time for the CPAChecker.
+      *  **t2-prover**: A separate folder for T2 benchmarks. It has its own readme.
      *  **nuXmv-Files**: Contains the used benchmarks as SMV files to be used with the nuXmv model checker. 
      *  **C-Programs**: Contains the sued benchmarks as C programs to be used with Ultimate Automizer and CPA Checker.
   * ***nuXMv-2.0.0***: Baseline tool **nuXmv** used for symbolic model checking via BDDs and IC3 for infinite state systems. Also used for termination analysis.
@@ -66,7 +84,7 @@ The artifact contains a `Dockerfile` which automatically sets up the environment
 After unpacking the artifact, the `Dockerfile` can be turned into an image by running:
 
 ```bash
-docker build -t artifact .
+docker build -t bisimulation-learning .
 ```
 
 in the directoy of the file. As described above, the setup may take a while to install all dependencies and baseline tools. 
@@ -74,17 +92,24 @@ in the directoy of the file. As described above, the setup may take a while to i
 The image can be run in a container by executing:
 
 ```bash
-docker run -it artifact 
+docker run --name=bisimulation-learning -it bisimulation-learning 
 ```
 
-After the setup, the container should start in the `CAV24`-folder, whose structure is described in the **Structure and Content** section.
+After the setup, the container should start in the `CAV25/Branching-Bisimulation-Learning/src` folder, whose structure is described in the **Structure and Content** section.
 
-The main file for running all experiments is `CAV24/BisimulationLearning/src/run.py`, which can be run from the `src` directory with:
+The main file for running all experiments is `CAV25/Branching-Bisimulation-Learning/src/run.py`, which can be run from the `src` directory with:
 ```bash
-python3.10 run.py 
+python3 run.py 
+```
+
+or, since it is itself an executable:
+
+```bash
+./run.py
 ```
 
 The `run.py` file can take multiple arguments defining which experiments to run:
+<!--
 ### Smoke-Test 
 
 The smoke test will run one benchmark in every toolchain, i.e., CEGIS, Ultimate Automizer, CPAChecker, and nuXmv. To run the smoke test, execute the `run.py` with the argument `-smoke`.
@@ -93,39 +118,90 @@ If finished successfully, the evaluation script should print:
 ```
 All smoke tests ran successfully :)
 ```
+-->
 ### Running Experiments
 
-We have split the experiments into tools and benchmark times, which can be executed individually to build Tables 1 and 2. To run the experiment, run the `run.py` with the respective arguments:
+We have split the experiments into tools and benchmark times, which can be executed individually to build the tables. To run the experiment, run the `run.py` with the respective arguments:
 
 ```bash
-python3.10 run.py -arg1 [-arg2 ...]
+./run.py -arg1 [-arg2 ...]
 ```
 
-The evaluation script has the following options:
+You can run different datasets specifying the tool and the property to check. For example, `./run -d clock -t bisimulation-learning` will run the deterministic clock experiments with Branching Bisimulation Learning (i.e. the last column for Table 1).
 
-**Conditional Termination (Table 2)** (relatively quick):
-* `-cond`,`--cond_term`: Run the conditional termination benchmarks (Table 2) with our tool (Bisimulation Learning).
-* `-cpa`, `--cpa_checker`: Run the conditional termination benchmarks (Table 2) with the CPAChecker baseline tool.
-* `-ult`, `--ultimate`: Run the conditional termination benchmarks (Table 2) with the Ultimate Automizer baseline tool.
-* `-nxcond`, `--nuxmv_cond_term`: Run the conditional termination benchmarks (Table 2) with the nuXmv baseline tool.
+Please, consider the following availability schema:
+- `clock`: the finite state clock synchronisation protocols (Table 1). Possible tools allowed:
+    - `nuxmv` with modes `ic3` and `bdd` and formulas `safe` and `synch`
+    - `bisimulation-learning` with modes `det` and `brn`
+- `term`: the infinite state termination dataset (Table 2). Possible tools allowed:
+    - `nuxmv` (`ic3` only) with formulas `term` and `nonterm`
+    - `cpa` with formulas `term` and `nonterm`
+    - `ultimate` with formulas `term` and `nonterm`
+    - `bisimulation-learning` with modes `det` and `brn`
+- `nd-inf`: the infinite state, (bounded) branching dataset with the formulas to be checked (Table 3). Possible tools allowed:
+    - `nuxmv` (`ic3` only)
+    - `ultimate`
+    - `bisimulation-learning` (`brn` mode only)
+- `nd-inf-t2`: the infinite state, (bounded) branching dataset for T2 comparison (Table 4). Please note that due to specific requirements T2 needs a separate container to run. Possible tools allowed:
+    - `bisimulation-learning` (`brn` mode only)
+- `nd-fin`: the finite state, (bounded) branching dataset (Table 5). Please note that this allows to set the systems' size with the --size flag. Possible tools allowed:
+    - `nuxmv` (`bdd` mode only)
+    - `bisimulation-learning` (`brn` mode only)
 
-**Clock Synchronization (Table 1)** (may take long, depending on specified timeout for nuXmv):
-  * `-sync`,`--clock_sync`: Run the clock synchronization benchmarks (Table 1) with our tool (Bisimulation Learning).
-  * `-nxsync`, `--nuxmv_sync`: Run the clock synchronization benchmarks (Table 1) with the nuXmv baseline tool.
-  * `-to [time in sec]`, `--timeout [time in sec]`: Set timeout for the nuXmv toolchain (default 500s).
+You find a complete list of arguments and possible values with:
+```bash
+./run.py --help
+```
+
+We provide some examples:
+
+**Deterministic Clock Synchronization (Table 1)**:
+```bash
+./run.py -d clock -t nuxmv -m bdd -f safe
+```
+This command will produce numbers for the third column of Table 1.
+
+**Deterministic Conditional Termination (Table 2)**:
+```bash
+./run.py -d term -t cpa
+```
+This command will produce numbers for the third column in Table 2.
+
+**Non-Deterministic Infinite State base (Table 3)**:
+```bash
+./run.py -d nd-inf -t nuxmv
+```
+This command will produce numbers for the nuXmv (IC3) column in Table 3.
+
+**T2 benchmarks (Table 4)**:
+```bash
+./run.py -d nd-inf-t2 -t bl
+```
+This command will produce numbers for the Bisimulation Learning column in Table 4.
+
+T2 has specific dependency needs in contrast with other tool's. For this reason, it is provided within a different container. You find the related manual on how to get the numbers for the T2 column in the `src/t2-prover` folder.
+
+**Non-Deterministic Finite State base (Table 5)**:
+```bash
+./run.py -d nd-fin -t nuxmv -size 11 
+```
+This command will produce numbers for the nuXmv (BDD) column in Table 5, **for systems with 2^11 states**.
 
 
 If finished successfully, the evaluation script should print:
 ```
-Experiments ran successfully.
+Experiments ran successfully. Results stored in some-file.csv
 ```
+and you can find the benchmarks data in the specified `.csv` file.
 
 ## Evaluation 
 ### Runtime
 
-The time required to run all experiments depends on the timeout chosen for the nuXmv toolchain. The default timeout is 500 seconds, which may cause the experiments to run for about 6 hours. You may specify a shorter timeout with the `-to [time in sec]` command.
+The time required to run all experiments depends on the timeout chosen for the nuXmv toolchain. The default timeout is 300 seconds, which may cause the experiments to run for about 6 hours. You may specify a shorter timeout with the `--timeout [time in sec]` argument.
 
 The conditional termination benchmarks (Table 2) should be quick to obtain for Bisimulation Learning, CPAChecker, and Ultimate Automizer, i.e., in less than 5 minutes.
+
+Table 3 and Table 5 check several properties on the systems. 
 
 ### Results
 The results for Bisimulation Learning are the parameters for the BDT templates, ranking functions, and the abstract transition function. The parameters are saved into files in the `src/results` directory, where the parameters are named as in the code. A visualization for BDTs with the obtained parameters is being developed. 

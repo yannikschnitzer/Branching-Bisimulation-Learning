@@ -16,7 +16,7 @@ usage = """
 You can run different datasets specifying the tool and the property to check. Note that Bisumulation Learning doesn't run a property check: in some cases, you can run it in "branching" mode and "deterministic" mode. Please, consider the following availability schema:
 - 'clock': the finite state clock synchronisation protocols (table 1). Possible tools allowed:
     - 'nuxmv' with modes 'ic3' and 'bdd' and formulas 'safe' and 'synch'
-    - 'bisimulation-learning' with modes 'det' and 'brn'
+    - 'bisimulation-learning' (accepted alias: 'bl') with modes 'det' and 'brn'
 - 'term': the infinite state termination dataset (table 2). Possible tools allowed:
     - 'nuxmv' ('ic3' only) with formulas 'term' and 'nonterm'
     - 'cpa' with formulas 'term' and 'nonterm'
@@ -331,7 +331,7 @@ if __name__ == "__main__":
     parser.add_argument("-o", "--output", help="Output csv file. Default is CURRENT_DATE-DATASET-TOOL[-MODE][-FORMULA][-SIZE].csv")
     parser.add_argument("--global-rank", action="store_true", help="In Branching Bisimulation Learning, it enables to use a single ranking function rather than a different ranking function for each class.")
     parser.add_argument("-v", "--verbose", action="store_true", help="Prints additional messages. Useful for debugging.")
-
+    
     args = parser.parse_args()
 
 
@@ -347,5 +347,6 @@ if __name__ == "__main__":
         print(pretty_print(args))
         df = run_benchmarks(args)
         df.to_csv(args.output)
+        print(f"Experiments ran successfully. Results stored in {args.output}")
     except Exception as e:
         print("Error:", e)
