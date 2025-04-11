@@ -424,17 +424,17 @@ experiments = [
 
 ]
 
-def run_subprocess(name, flag, formula, timeout):
-    command = ' '.join(["/usr/bin/mono", "src/bin/Debug/T2.exe", name, flag, formula, timeout])
+def run_subprocess(name, flag, formula, timeoutFlag, timeout=300):
+    command = ' '.join(["/usr/bin/mono", "src/bin/Debug/T2.exe", name, flag, formula, timeoutFlag])
     p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     try:
-        out, err = p.communicate(timeout=300)
+        out, err = p.communicate(timeout=timeout)
         return out
     except subprocess.TimeoutExpired as e:
         p.kill()
         raise e
 
-def run_t2_experiment(exp):
+def run_t2_experiment(exp, timeout):
     formula = exp['formula']
     ctlstar = not re.search(r"\[", formula) # syntax for ctlstar does not contain square brackets
     star = 'Star' if ctlstar else ''
@@ -442,22 +442,22 @@ def run_t2_experiment(exp):
         exp['name'],
         f"--CTL{star}",
         f"'{formula}'",
-        "--timeout=350"
+        f"--timeout={timeout+50}" # we give a little more timeout than specified here so that we can manage the exception internally
     ]
-    outb = run_subprocess(*options)
+    outb = run_subprocess(*options, timeout=timeout)
     # outb = subprocess.check_output(cmd, shell=True, stderr=subprocess.DEVNULL)
     out = outb.decode("utf-8")
     match = re.search("Temporal proof", out)
     if match is None:
         raise Exception(f"Check was unsuccessful: T2-output was '{out}'")
 
-def measure_t2_experiment(exp, tolerance = 5):
+def measure_t2_experiment(exp, iters=10, tolerance = 5, timeout=300):
     times = []
     skipped = 0
     for i in range(iters):
         try:
             start_time = time.time()
-            run_t2_experiment(exp)
+            run_t2_experiment(exp, timeout=timeout)
             stop_time = time.time()
             times.append(stop_time - start_time)
             if verbose:
@@ -476,11 +476,11 @@ def measure_t2_experiment(exp, tolerance = 5):
     print(f"--- Experiment {exp} \n\taverage = {avg} \n\tstd = {std}")
     return avg, std
 
-def run_t2_experiments(iters, verbose=False, tolerance=5):
+def run_t2_experiments(iters, verbose=False, tolerance=5, timeout=300):
     df = pd.DataFrame(columns=["Experiment", "Average", "StD"])
     for exp in experiments:
         try:
-            avg, std = measure_t2_experiment(exp, tolerance=tolerance)
+            avg, std = measure_t2_experiment(exp, iters=iters, timeout=timeout, tolerance=tolerance)
             df.loc[len(df)] = [exp, avg, std]
         except subprocess.TimeoutExpired:
             df.loc[len(df)] = [exp, "OOT", ""]
@@ -493,10 +493,11 @@ def run_t2_experiments(iters, verbose=False, tolerance=5):
 if __name__ == "__main__":
     arg_parser = ArgumentParser(
         prog = "Branching Bisimulation Learning - Nondeterministic Benchmarks",
-        description = "Runs iteratively all the nondeterministic.",
+        description = "Runs iteratively all the T2 benchmarks.",
         epilog = "Copyright?"
     )
     arg_parser.add_argument("-i", "--iters", help="The number of times to repeat the benchmarks. Default is 10")
+    arg_parser.add_argument("--timeout", help="The allowed maximun running time. Default is 300")
     arg_parser.add_argument("-t", "--tolerance", help="The maximum number of times that a benchmark can break before being excluded from the report. Default is 5")
     arg_parser.add_argument("-v", "--verbose", action="store_true", help="Prints additional information during execution")
     args = arg_parser.parse_args()
@@ -504,7 +505,8 @@ if __name__ == "__main__":
     iters = args.iters or 10 # default iterations is 10
     iters = int(iters)
     tolerance = int(args.tolerance or 5)
+    timeout = int(args.timeout or 300)
     verbose = args.verbose
     os.system("")
-    df = run_t2_experiments(iters, verbose=verbose, tolerance=tolerance)
+    df = run_t2_experiments(iters, verbose=verbose, tolerance=tolerance, timeout=timeout)
     df.to_csv(f"t2-benchmarks-{time}.csv")
