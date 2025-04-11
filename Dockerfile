@@ -84,5 +84,5 @@ RUN mv ${BL_HOME}/src/cpa/cpa /usr/local/bin/
 RUN chmod 757 /usr/local/bin/cpa
 
 WORKDIR ${BL_HOME}/src/
-RUN chmod +x main.py
+RUN chmod +x run.py
 
