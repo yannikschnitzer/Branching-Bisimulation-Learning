@@ -169,7 +169,12 @@ def timeout_handler(signum, frame):
 def compute_branching_abstract_system(trs, tem, explicit_classes, verbose=False):
     theta, eta = bisimulation_learning(trs, tem, 1000, explicit_classes)
     gamma = compute_adjacency_matrix(trs, tem, theta)
-    if verbose : print("Theta:", theta, "Eta:", eta, "Adjacency Matrix:", gamma)
+    if verbose : 
+        np.set_printoptions(precision=2, suppress=True, linewidth=100)
+        print("Theta:", theta)
+        print("Eta:", eta)
+        print("Adjacency Matrix:")
+        print(np.array2string(gamma, separator=', ', prefix='  '))
     #visualize_branching(theta, tem)
 
 def compare_times(exp, iters = 10, verbose=False):
