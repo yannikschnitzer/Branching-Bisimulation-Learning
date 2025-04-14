@@ -13,7 +13,7 @@ import benchmark_nd as bl_brn
 from time import time
 
 usage = """
-You can run different datasets specifying the tool and the property to check. Note that Bisumulation Learning doesn't run a property check: in some cases, you can run it in "branching" mode and "deterministic" mode. Please, consider the following availability schema:
+You can run different datasets specifying the tool and the property to check. Please, consider the following availability schema:
 - 'clock': the finite state clock synchronisation protocols (table 1). Possible tools allowed:
     - 'nuxmv' with modes 'ic3' and 'bdd' and formulas 'safe' and 'synch'
     - 'bisimulation-learning' (accepted alias: 'bl') with modes 'det' and 'brn'

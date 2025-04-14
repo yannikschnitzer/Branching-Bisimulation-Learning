@@ -14,22 +14,22 @@ We claim the artifact to be available, functional and reusable. We describe the 
 ![alt text](https://i.postimg.cc/BQ064qJG/Screenshot-2025-04-04-at-10-45-36.png)
 ## Artifact Requirements
 
-The artifact comes as a `Dockerfile`, which automatically sets up a container containing all relevant files, software, and dependencies. 
+The artifact comes as `Dockerfiles`, which automatically set up a container containing all relevant files, software, and dependencies. Due to incompatible requirements for some of the baseline tools, we split the artfact into two seperate Dockerfiles, we elaborate their structure and usage below. 
 
 The artifact contains our software and third-party software used internally or as baselines for comparison. Neither of them requires an excessive amount of resources. We recommend the following specifications used in our evaluation:
 * **CPU**: Intel Xeon 3.3GHz 8-core 
 * **RAM**: 16GB
 * **Disk Space**: 32GB
 
-**Remark**: To run the baseline comparison with the *Ultimate Automizer* tool, an x86 architecture is required. The Dockerfile requests this.
+**Remark**: To run the baseline comparison with the *Ultimate Automizer* tool, an x86 architecture is required.
 
 The setup via Docker installs all required software and dependencies. As the baseline tools and some used libraries are extensive, this may take a while. On our machines, the setup took up to an hour to complete.
 
-The artifact can run the experiments separately, i.e., produce the individual columns of the tables. For our tool, this is relatively quick and should take at most 10 minutes to produce all results via Bisimulation Learning. This may take significantly longer for the baseline tools, especially when experiments will time out. In our evaluation, we used a timeout of 500 seconds, implying that the complete experiments may take up to ~4 hours. For a quicker evaluation, we allow a custom timeout (e.g., 60 seconds) to be set, sufficient to show the orders of magnitude.
+The artifact can run the experiments separately, i.e., produce the individual columns of the tables. This may require a significant amount of runtime, especially when experiments will time out. In our evaluation, we used a timeout of 500 seconds, implying that the complete experiments may take up to ~10 hours. For a quicker evaluation, we allow a custom timeout (e.g., 60 seconds) to be set, sufficient to show the orders of magnitude.
 
 ## Structure and Content
 
-The artifact contains a `Dockerfile` which automatically sets up the environment for evaluation. The environment is structured as follows
+The artifact contains two `Dockerfiles`, one for the **T2** baseline tool and one for all other tools and baselines (due to requirement incompatability). The Dockerfiles automatically set up the environment for evaluation. The environment is structured as follows
 
 * **CAV25** - Main Folder containing the artifact.
   * ***Branching-Bisimulation-Learning***: Repository containing our implementation and experiments.
@@ -71,7 +71,7 @@ The artifact contains a `Dockerfile` which automatically sets up the environment
       *  **cpa**
          *  *CPA_experiments.py*: Experiment class for defining experiments and parameters that are passed to the CPAChecker baseline tool.
          *  *CPA_runner.py*: Toolchain for running experiments and benchmarking time for the CPAChecker.
-      *  **t2-prover**: A separate folder for T2 benchmarks. It has its own readme.
+      *  **<span style="color:red">t2-prover</span>**: A separate folder for T2 benchmarks. It has its own readme and the **<span style="color:red">second Dockerfile</span>**.
      *  **nuXmv-Files**: Contains the used benchmarks as SMV files to be used with the nuXmv model checker. 
      *  **C-Programs**: Contains the sued benchmarks as C programs to be used with Ultimate Automizer and CPA Checker.
   * ***nuXMv-2.0.0***: Baseline tool **nuXmv** used for symbolic model checking via BDDs and IC3 for infinite state systems. Also used for termination analysis.
@@ -81,13 +81,13 @@ The artifact contains a `Dockerfile` which automatically sets up the environment
 
 ## Getting Started
 
-After unpacking the artifact, the `Dockerfile` can be turned into an image by running:
+After unpacking the artifact, the main `Dockerfile` in the **/CAV25** base directory can be turned into an image by running:
 
 ```bash
 docker build -t bisimulation-learning .
 ```
 
-in the directoy of the file. As described above, the setup may take a while to install all dependencies and baseline tools. 
+in the directoy of the file. As described above, the setup may take a while to install all dependencies and baseline tools (in the range of 2h, depending on your system). 
 
 The image can be run in a container by executing:
 
@@ -96,6 +96,8 @@ docker run --name=bisimulation-learning -it bisimulation-learning
 ```
 
 After the setup, the container should start in the `CAV25/Branching-Bisimulation-Learning/src` folder, whose structure is described in the **Structure and Content** section.
+
+---
 
 The main file for running all experiments is `CAV25/Branching-Bisimulation-Learning/src/run.py`, which can be run from the `src` directory with:
 ```bash
@@ -109,16 +111,20 @@ or, since it is itself an executable:
 ```
 
 The `run.py` file can take multiple arguments defining which experiments to run:
-<!--
+
 ### Smoke-Test 
 
-The smoke test will run one benchmark in every toolchain, i.e., CEGIS, Ultimate Automizer, CPAChecker, and nuXmv. To run the smoke test, execute the `run.py` with the argument `-smoke`.
+The smoke test will run one benchmark in every toolchain, i.e., CEGIS, Ultimate Automizer, CPAChecker, and nuXmv. To run the smoke test, execute the `run.py` with the argument `-smoke`:
+
+```bash
+./run.py -smoke
+```
 
 If finished successfully, the evaluation script should print:
 ```
 All smoke tests ran successfully :)
 ```
--->
+
 ### Running Experiments
 
 We have split the experiments into tools and benchmark times, which can be executed individually to build the tables. To run the experiment, run the `run.py` with the respective arguments:
@@ -228,15 +234,18 @@ We remark that while preparing this artifact for submission, we realized that Ta
 
 We further want to clarify the meaning of n/c in the CPAChecker and Ultimate Automizer columns in Table 2. While the tools may produce results (we specifically output them in these cases), the results are wrong (e.g., False is outputted for a terminating benchmark) since these tools can not handle non-linearities in general.
 
-## Use beyond this paper
+## Reusability beyond this paper
 The artifact is easy to use and extends beyond the purposes of this paper. To include a new experiment, all that is to do is define the one-step transition function of the form: 
 
 ```python
 def successor(x):
-    y = f(x)
-    return y
+    y_1 = f_1(x)
+    ...
+    y_k = f_k(x)
+
+    return [y_1, ..., y_k]
 ```
-which maps a current state $x\in \mathbb{R}^n$ to its successor $f(x) \in \mathbb{R}^n$, and a BDT template of the form 
+which maps a current state $x\in \mathbb{R}^n$ to a list of its $k$ successors (remember that we assume transition systems with $k$-bounded branching) $y_i \in \mathbb{R}^n$ for $1 \leq i \leq k$, and an initial BDT template of the form 
 
 ```python
 def bdt_term(params, x, num_params, partitions):
@@ -249,22 +258,24 @@ def bdt_term(params, x, num_params, partitions):
 ```
 defining the used label-preserving binary decision tree. An automated parser for labelling functions into a BDT of a specified size is in progress. 
 
-With these two ingredients, one can follow the style of the `experiment_runner.py` and easily define a new experiment to run with Bisimulation Learning. Since the core artifact is a simple Python script, it can be used on any system with Python installed and even in a Jupyter Notebook.
+With these two ingredients, one can follow the style of the `src/benchmark_nd.py` and easily define a new experiment to run with Bisimulation Learning. 
+
+#### Resuability outside the artifact
+
+Since the core artifact is a simple Python script, it can be used on any system with Python installed and even in a Jupyter Notebook. 
 
 
 ## Dependencies and Libraries
 Bisimulation Learning builds up on the following dependencies and libraries (most recent versions):
 
-  * [Z3 Solver](https://github.com/Z3Prover/z3) - SMT Solver used for Bisimulation Learning. Used in Learner and Verifier.
-  * [NumPy](https://github.com/numpy/numpy) - Used internally for tensor and list operations.
-  * [matplotlib](https://matplotlib.org/) - Used for visualizing the resulting partition of 2D benchmarks.
-  * [NetworkX](https://networkx.org/documentation/stable/index.html) - Used for visualizing the resulting quotients.
+  * [Z3 Solver](https://github.com/Z3Prover/z3) (Version 4.14.2) - SMT Solver used for Bisimulation Learning. Used in Learner and Verifier.
+  * [NumPy](https://github.com/numpy/numpy) (Version 2.2.0) - Used internally for tensor and list operations.
 
-Links to baseline tools:
+The links to the used baseline tools are:
 
-  * [Ultimate Automizer](https://github.com/ultimate-pa/ultimate)
-  * [CPAChecker](https://cpachecker.sosy-lab.org/index.php)
-  * [nuXmv](https://nuxmv.fbk.eu/)
+  * [Ultimate Automizer](https://github.com/ultimate-pa/ultimate) ()
+  * [CPAChecker](https://cpachecker.sosy-lab.org/index.php) (Version 2.3)
+  * [nuXmv](https://nuxmv.fbk.eu/) (Version 2.1.0)
 
 ## License
 
