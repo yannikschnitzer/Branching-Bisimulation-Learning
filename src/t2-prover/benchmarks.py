@@ -464,7 +464,7 @@ def measure_t2_experiment(exp, iters=10, tolerance = 5, timeout=300):
                 print(f"--- Experiment {exp} - {i}th run expired in {stop_time - start_time}s")
         except subprocess.TimeoutExpired as e:
             # propagate exception, don't try again
-            print("Timeout expired")
+            print(f"--- Experiment {exp} - Timeout expired")
             raise e
         except Exception as e:
             print(f"Discarding one run of {exp}: exception was '{e}' \n \t skipped until now = {skipped + 1}")
