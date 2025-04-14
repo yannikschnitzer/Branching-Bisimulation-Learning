@@ -180,7 +180,7 @@ def compute_branching_abstract_system(trs, tem, explicit_classes, verbose=False)
         
         # Print rows with labels
         for i, row in enumerate(gamma):
-            row_str = "  ".join(['1' if val else '0' for val in row])
+            row_str = "  ".join([' 1 ' if val else ' 0 ' for val in row])
             print(f"{labels[i]:<5} {row_str}")
     #visualize_branching(theta, tem)
 
