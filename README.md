@@ -213,8 +213,8 @@ The time required to run all experiments depends on the timeouts. The default ti
 
 
 ### Results / Quotients
-The results for Bisimulation Learning are the parameters for the BDT templates, ranking functions, and the abstract transition function. **These can be viewed for branching bisimulation learning by adding the `--verbose` or `-v` option to the experiment call.** This will print the resulting parameters for partition tempate (theta), ranking function (eta) and also the adjacency matrix which uniquely describes the resulting quotient. A visualization for BDTs with the obtained parameters is being developed. 
-
+The results for Bisimulation Learning are the parameters for the BDT templates, ranking functions, and the abstract transition function. **These can be viewed for branching bisimulation learning by adding the `--verbose` or `-v` option to the experiment call.** This will print the resulting parameters for partition tempate (theta), ranking function (eta) and also the adjacency matrix which uniquely describes the resulting quotient. A visualization for BDTs with the obtained parameters is being developed. If the prints contain symbolic values such as `u_0_1_0` or `p_1`, this corresponds to parameters that are not being used and whose values are therefore irrelevant.
+ 
 
 ### Randomness and Nondeterminism
 

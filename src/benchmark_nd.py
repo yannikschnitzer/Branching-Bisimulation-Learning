@@ -173,7 +173,7 @@ def compute_branching_abstract_system(trs, tem, explicit_classes, verbose=False)
         labels = [f"s_{i}" for i in range(len(gamma))]
         print("Theta:", theta)
         print("Eta:", eta)
-        print("Adjacency Matrix (gamma):")
+        print("Adjacency Matrix of Quotient:")
 
         # Print header
         print("      " + "  ".join(labels))
