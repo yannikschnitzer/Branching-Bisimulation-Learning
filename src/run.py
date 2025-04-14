@@ -345,11 +345,21 @@ if __name__ == "__main__":
         if args.smoke:
             print("Running smoke test...\n")
 
-            print("Running Branching Bisimulation Learning smoke test....")
+            print("\nRunning Branching Bisimulation Learning smoke test....")
             bl_brn.run_smoke_test()
 
-            print("Running Deterministic Bisimulation Learning smoke test....")
+            print("\nRunning Deterministic Bisimulation Learning smoke test....")
             bl_det.run_smoke_test()
+
+            print("\nRunning nuXmv smoke test....")
+            nuxmv_det.run_nuXmv_smoketest()
+
+            print("\nRunning Ultimate smoke test....")
+            ultimate_det.run_ultimate_smoketest()
+
+            print("\nRunning CPAChecker smoke test....")
+            cpa.run_cpa_smoketest()
+
             print("All smoke tests ran successfully :)")
         else:
             args = validate(args)
