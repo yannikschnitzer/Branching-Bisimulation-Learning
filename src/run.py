@@ -360,7 +360,7 @@ if __name__ == "__main__":
             print("\nRunning CPAChecker smoke test....")
             cpa.run_cpa_smoketest()
 
-            print("All smoke tests ran successfully :)")
+            print("\nAll smoke tests ran successfully :)")
         else:
             args = validate(args)
             set_output_filename(args)

@@ -14,7 +14,7 @@ __status__ = "Experimental - Artifact Evaluation"
 
 
 def run_nuXmv_smoketest(timeout = 100):
-    run_nuXmv_experiment(exp_tte_sf_10_g_bdd(), timeout)
+    run_nuXmv_experiment(exp_tte_sf_10_g_bdd(), timeout, verbose=True)
 
 def run_nuXmv_experiments_cond(timeout = 500):
     run_nuXmv_experiment(exp_term_loop_1_term(), timeout)
