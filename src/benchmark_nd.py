@@ -170,7 +170,6 @@ def compute_branching_abstract_system(trs, tem, explicit_classes, verbose=False)
     theta, eta = bisimulation_learning(trs, tem, 1000, explicit_classes)
     gamma = compute_adjacency_matrix(trs, tem, theta)
     if verbose : 
-        np.set_printoptions(precision=2, suppress=True, linewidth=100)
         print("Theta:", theta)
         print("Eta:", eta)
         print("Adjacency Matrix:")
