@@ -169,7 +169,13 @@ def timeout_handler(signum, frame):
 def compute_branching_abstract_system(trs, tem, explicit_classes, verbose=False):
     theta, eta = bisimulation_learning(trs, tem, 1000, explicit_classes)
     gamma = compute_adjacency_matrix(trs, tem, theta)
-    if verbose : print("Theta:", theta, "Eta:", eta, "Adjacency Matrix:", gamma)
+    if verbose:
+        labels = [f"s_{i}" for i in range(len(gamma))]
+        gamma_array = np.array(gamma, dtype=int)  # convert booleans to 0/1
+        print("Theta:", theta)
+        print("Eta:", eta)
+        print("Adjacency Matrix (gamma):")
+        print(tabulate(gamma_array, headers=labels, showindex=labels, tablefmt="grid"))
     #visualize_branching(theta, tem)
 
 def compare_times(exp, iters = 10, verbose=False):
