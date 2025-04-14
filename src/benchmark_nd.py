@@ -171,11 +171,17 @@ def compute_branching_abstract_system(trs, tem, explicit_classes, verbose=False)
     gamma = compute_adjacency_matrix(trs, tem, theta)
     if verbose:
         labels = [f"s_{i}" for i in range(len(gamma))]
-        gamma_array = np.array(gamma, dtype=int)  # convert booleans to 0/1
         print("Theta:", theta)
         print("Eta:", eta)
         print("Adjacency Matrix (gamma):")
-        print(tabulate(gamma_array, headers=labels, showindex=labels, tablefmt="grid"))
+
+        # Print header
+        print("      " + "  ".join(labels))
+        
+        # Print rows with labels
+        for i, row in enumerate(gamma):
+            row_str = "  ".join(['1' if val else '0' for val in row])
+            print(f"{labels[i]:<5} {row_str}")
     #visualize_branching(theta, tem)
 
 def compare_times(exp, iters = 10, verbose=False):
