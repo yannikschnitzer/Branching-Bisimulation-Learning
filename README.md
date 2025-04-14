@@ -125,6 +125,8 @@ If finished successfully, the evaluation script should print:
 All smoke tests ran successfully :)
 ```
 
+Note that the T2 baseline tool has its own smoke test as described in its README in the `src/t2-prover` directory.
+
 ### Running Experiments
 
 We have split the experiments into tools and benchmark times, which can be executed individually to build the tables in the Appendix, which make up the datapoints for the plots in Figures 6-8. To run the experiment, run the `run.py` with the respective arguments:
@@ -189,7 +191,7 @@ This command will produce numbers for the nuXmv (IC3) column in Table 3.
 ```
 This command will produce numbers for the Bisimulation Learning column in Table 4.
 
-T2 has specific dependency needs in contrast with other tool's. For this reason, it is provided within a different container. You find the related manual on how to get the numbers for the T2 column in the `src/t2-prover` folder.
+**T2 has specific dependency needs in contrast with other tool's. For this reason, it is provided within a different container. You find the related manual on how to get the numbers for the T2 column in the `src/t2-prover` folder.**
 
 **Non-Deterministic Finite State base (Table 5)**:
 ```bash
@@ -230,8 +232,6 @@ The main claims that the artifact should validate despite nondeterminism are:
 ### Correctness
 
 The abstractions obtained for the used benchmarks are very simple (mostly < 10 states). They can be assessed visually (i.e., by viewing the adjacency matrix of the quotient) or by evaluating the resulting parameters (a BDT visualization is in progress).
-
-### Remarks
 
 
 ## Reusability beyond this paper

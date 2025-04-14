@@ -464,6 +464,7 @@ def measure_t2_experiment(exp, iters=10, tolerance = 5, timeout=300):
                 print(f"--- Experiment {exp} - {i}th run expired in {stop_time - start_time}s")
         except subprocess.TimeoutExpired as e:
             # propagate exception, don't try again
+            print("Timeout expired")
             raise e
         except Exception as e:
             print(f"Discarding one run of {exp}: exception was '{e}' \n \t skipped until now = {skipped + 1}")
@@ -493,8 +494,7 @@ def run_t2_experiments(iters, verbose=False, tolerance=5, timeout=300):
 if __name__ == "__main__":
     arg_parser = ArgumentParser(
         prog = "Branching Bisimulation Learning - Nondeterministic Benchmarks",
-        description = "Runs iteratively all the T2 benchmarks.",
-        epilog = "Copyright?"
+        description = "Runs iteratively all the T2 benchmarks."
     )
     arg_parser.add_argument("-i", "--iters", help="The number of times to repeat the benchmarks. Default is 10")
     arg_parser.add_argument("--timeout", help="The allowed maximun running time. Default is 300")
