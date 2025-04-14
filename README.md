@@ -16,7 +16,7 @@ We claim the artifact to be available, functional and reusable. We describe the 
 
 The artifact comes as `Dockerfiles`, which automatically set up a container containing all relevant files, software, and dependencies. Due to incompatible requirements for some of the baseline tools, we split the artfact into two seperate Dockerfiles, we elaborate their structure and usage below. 
 
-The artifact contains our software and third-party software used internally or as baselines for comparison. Neither of them requires an excessive amount of resources. We recommend the following specifications used in our evaluation:
+The artifact contains our software and third-party software used internally or as baselines for comparison. Neither of them requires an excessive amount of resources. We recommend the following minimal specifications:
 * **CPU**: Intel Xeon 3.3GHz 8-core 
 * **RAM**: 16GB
 * **Disk Space**: 32GB
@@ -114,10 +114,10 @@ The `run.py` file can take multiple arguments defining which experiments to run:
 
 ### Smoke-Test 
 
-The smoke test will run one benchmark in every toolchain, i.e., CEGIS, Ultimate Automizer, CPAChecker, and nuXmv. To run the smoke test, execute the `run.py` with the argument `-smoke`:
+The smoke test will run one benchmark in every toolchain, i.e., CEGIS, Ultimate Automizer, CPAChecker, and nuXmv. To run the smoke test, execute the `run.py` with the argument `--smoke`:
 
 ```bash
-./run.py -smoke
+./run.py --smoke
 ```
 
 If finished successfully, the evaluation script should print:
@@ -127,13 +127,15 @@ All smoke tests ran successfully :)
 
 ### Running Experiments
 
-We have split the experiments into tools and benchmark times, which can be executed individually to build the tables. To run the experiment, run the `run.py` with the respective arguments:
+We have split the experiments into tools and benchmark times, which can be executed individually to build the tables in the Appendix, which make up the datapoints for the plots in Figures 6-8. To run the experiment, run the `run.py` with the respective arguments:
 
 ```bash
 ./run.py -arg1 [-arg2 ...]
 ```
 
-You can run different datasets specifying the tool and the property to check. For example, `./run -d clock -t bisimulation-learning` will run the deterministic clock experiments with Branching Bisimulation Learning (i.e. the last column for Table 1).
+You can run different datasets specifying the tool and the property to check. For example, `./run.py -d clock -t bisimulation-learning` will run the deterministic clock experiments with Branching Bisimulation Learning (i.e. the last column for Table 1). 
+
+**You can view a list of all available arguments by running `./run.py -h`.**
 
 Please, consider the following availability schema:
 - `clock`: the finite state clock synchronisation protocols (Table 1). Possible tools allowed:
@@ -158,6 +160,8 @@ You find a complete list of arguments and possible values with:
 ```bash
 ./run.py --help
 ```
+
+By default, all examples are run 10 times and their average runtime + standard deviation are reported, this can be adapted with the `--iters i` argument.
 
 We provide some examples:
 
@@ -203,36 +207,32 @@ and you can find the benchmarks data in the specified `.csv` file.
 ## Evaluation 
 ### Runtime
 
-The time required to run all experiments depends on the timeout chosen for the nuXmv toolchain. The default timeout is 300 seconds, which may cause the experiments to run for about 6 hours. You may specify a shorter timeout with the `--timeout [time in sec]` argument.
+The time required to run all experiments depends on the timeouts. The default timeout is 500 seconds, which may cause the experiments to run for more than 10 hours. You may specify a shorter timeout with the `--timeout [time in sec]` argument.
 
-The conditional termination benchmarks (Table 2) should be quick to obtain for Bisimulation Learning, CPAChecker, and Ultimate Automizer, i.e., in less than 5 minutes.
+**The expected runtimes or rather their magnitudes can be found in Tables 1-5 in the Appendix A of the paper.** 
 
-Table 3 and Table 5 check several properties on the systems. 
 
-### Results
-The results for Bisimulation Learning are the parameters for the BDT templates, ranking functions, and the abstract transition function. The parameters are saved into files in the `src/results` directory, where the parameters are named as in the code. A visualization for BDTs with the obtained parameters is being developed. 
+### Results / Quotients
+The results for Bisimulation Learning are the parameters for the BDT templates, ranking functions, and the abstract transition function. **These can be viewed for branching bisimulation learning by adding the `--verbose` or `-v` option to the experiment call.** This will print the resulting parameters for partition tempate (theta), ranking function (eta) and also the adjacency matrix which uniquely describes the resulting quotient. A visualization for BDTs with the obtained parameters is being developed. 
 
-For the 2D conditional termination benchmarks, we visualize the resulting partitions and quotients obtained in the last run, which can be found in the `src/figures`directory.
 
 ### Randomness and Nondeterminism
 
-We note that our approach (Bisimulation Learning) is subject to two kinds of uncertainties. First, the obtained results depend on the uniformly chosen initial samples, which we control by fixing a seed for the random generator. However, our learning approach depends on the sequence of counterexamples generated by the Verifier, i.e., an SMT solver. Since these are not controllable, our results may change in every run. We tried to be conservative in our evaluation, and results should all lie within the same order of magnitude, i.e., only (fractions of) seconds apart. 
+We note that our approach (Branching Bisimulation Learning) is subject to two kinds of uncertainties. First, the obtained results depend on the initial samples, which we control by fixing a seed for the random generator (or do not use initial samples at all). **However, our learning approach depends on the sequence of counterexamples generated by the Verifier, i.e., an SMT solver. Since these are not controllable, our results may change in every run.** We tried to be conservative in our evaluation, and results should all lie within the same order of magnitude. 
 
 The main claims that the artifact should validate despite nondeterminism are: 
-* No significant runtime increase for learning bisimulations in clock synchronization benchmarks when scaling the state spaces compared to the direct verification. Note that our approach is not stand-alone, i.e., it produces an abstraction that needs to be subsequently 
-verified by a model-checker, e.g., nuXmv. For the used benchmarks, these abstractions are very small (2-3 states). Therefore, model checking is an easy problem that can be done manually.
+* No significant runtime increase for learning bisimulations in the finite state clock synchronization benchmarks **(Figure 6 and Table 1)** when scaling the state spaces compared to the direct verification using nuXmv, which will become infeasbile for large benchmarks. 
 
-* Comparable runtime, i.e., the same order of magnitude for the conditional termination benchmarks, while producing a more informative result. Bisimulation learning provides a bisimulation and a separation into terminating and non-terminating states. At the same time, the baseline tools can only prove termination or nontermination for the entire state space and, therefore, need to be handed separate benchmarks.
+* Comparable runtime, i.e., the same order of magnitude for the conditional termination benchmarks **(Figure 7 and Table 2)**, while producing a more informative result. Bisimulation learning provides a bisimulation and a separation into terminating and non-terminating states. At the same time, the baseline tools can only prove termination or nontermination for the entire state space and, therefore, need to be handed separate benchmarks.
+
+* Runtime Comparable to Ultimate and T2 for LTL and CTL verification of infinite state non-deterministic benchmarks and better runtime than T2 for CTL* verification **(Figure 8 and Table 3 + 4)**.
   
 ### Correctness
 
-The abstractions obtained for the used benchmarks are very simple (mostly 2 or 3 states). They can be assessed visually (i.e., visualized conditional termination benchmarks) or by evaluating the resulting parameters (a BDT visualization is in progress).
+The abstractions obtained for the used benchmarks are very simple (mostly < 10 states). They can be assessed visually (i.e., by viewing the adjacency matrix of the quotient) or by evaluating the resulting parameters (a BDT visualization is in progress).
 
 ### Remarks
 
-We remark that while preparing this artifact for submission, we realized that Table 2 should have two changes in the *nuXmv(IC3) term* column: **audio-compr**: "3.1" -> "< 0.1" and **parallel**: n/c -> oot. 
-
-We further want to clarify the meaning of n/c in the CPAChecker and Ultimate Automizer columns in Table 2. While the tools may produce results (we specifically output them in these cases), the results are wrong (e.g., False is outputted for a terminating benchmark) since these tools can not handle non-linearities in general.
 
 ## Reusability beyond this paper
 The artifact is easy to use and extends beyond the purposes of this paper. To include a new experiment, all that is to do is define the one-step transition function of the form: 
@@ -273,7 +273,7 @@ Bisimulation Learning builds up on the following dependencies and libraries (mos
 
 The links to the used baseline tools are:
 
-  * [Ultimate Automizer](https://github.com/ultimate-pa/ultimate) ()
+  * [Ultimate Automizer](https://github.com/ultimate-pa/ultimate) (Version 097f781)
   * [CPAChecker](https://cpachecker.sosy-lab.org/index.php) (Version 2.3)
   * [nuXmv](https://nuxmv.fbk.eu/) (Version 2.1.0)
 

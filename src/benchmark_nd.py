@@ -75,8 +75,10 @@ nd_inf_experiments = [
 
 t2_experiments = [
     *term_loop_nd_exps,
+    *cond_term_nd_exps
     *industrial_exps,
     (P28(), "P28"),
+    *robot_exps,
 ]
 
 
