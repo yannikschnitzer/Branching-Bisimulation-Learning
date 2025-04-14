@@ -1146,6 +1146,7 @@ def run_nuxmv_experiments_iters(experiments, iters = 10, timeout=300, verbose=Fa
             avg = str(e)
             std = ""
         df.loc[len(df)] = [experiment.name, avg, std]
+        print("")
     return df
 
 if __name__ == "__main__":

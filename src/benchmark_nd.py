@@ -164,19 +164,19 @@ experiments_robot = [
 def timeout_handler(signum, frame):
     raise Exception("Timeout occurred.")
 
-def compute_branching_abstract_system(trs, tem, explicit_classes):
+def compute_branching_abstract_system(trs, tem, explicit_classes, verbose=False):
     theta, eta = bisimulation_learning(trs, tem, 1000, explicit_classes)
     gamma = compute_adjacency_matrix(trs, tem, theta)
-    #print("Theta:", theta, "Eta:", eta, "Gamma:", gamma)
+    if verbose : print("Theta:", theta, "Eta:", eta, "Adjacency Matrix:", gamma)
     #visualize_branching(theta, tem)
 
-def compare_times(exp, iters = 10):
+def compare_times(exp, iters = 10, verbose=False):
     trs, tem = exp
     branching_times_impl = []
     for i in range(iters):
         try:
             branching_start_time = time.time()
-            compute_branching_abstract_system(trs, tem, False)
+            compute_branching_abstract_system(trs, tem, False, verbose and i == iters-1)
             branching_end_time = time.time()
             branching_times_impl.append(branching_end_time - branching_start_time)
             if verbose:
@@ -191,7 +191,7 @@ def compare_times(exp, iters = 10):
     for i in range(iters):
         try:
             branching_start_time = time.time()
-            compute_branching_abstract_system(trs, tem, True)
+            compute_branching_abstract_system(trs, tem, True, verbose and i == iters-1)
             branching_end_time = time.time()
             branching_times_expl.append(branching_end_time - branching_start_time)
             if verbose:
@@ -212,7 +212,7 @@ def run_bisimulation_learning_experiment(exp, explicit_classes = True, iters = 1
             signal.signal(signal.SIGALRM, timeout_handler)
             signal.alarm(timeout)
             branching_start_time = time.time()
-            compute_branching_abstract_system(trs, tem, explicit_classes)
+            compute_branching_abstract_system(trs, tem, explicit_classes, verbose and i == iters-1)
             signal.alarm(0)
             branching_end_time = time.time()
             branching_times_impl.append(branching_end_time - branching_start_time)
@@ -250,7 +250,7 @@ if __name__ == "__main__":
     
     iters = args.iters or 10 # default iterations is 10
     iters = int(iters)
-    verbose = True# args.verbose
+    verbose = args.verbose
     explicit_classes = not args.global_rank
     if explicit_classes:
         print(f"Running with {iters} iters with a ranking function for each partition")
@@ -262,7 +262,7 @@ if __name__ == "__main__":
     for exp, name in all_experiments:
         try:
             print(f"Running experiment {name}")
-            impl_avg, impl_std, expl_avg, expl_std = compare_times(exp, iters)
+            impl_avg, impl_std, expl_avg, expl_std = compare_times(exp, iters, verbose = verbose)
             print(f"End experiment {name}\n")
             df.loc[len(df)] = [name, impl_avg, impl_std, expl_avg, expl_std]
         except Exception as e:
