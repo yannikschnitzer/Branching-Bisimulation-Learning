@@ -237,6 +237,9 @@ def run_experiments(experiments, explicit_classes, iters = 10, timeout = 300, ve
             print(f"Experiment {name} unexpected error: {e}")
     return df
 
+def run_smoke_test():
+    run_bisimulation_learning_experiment(term_loop_1(), explicit_classes=True, iters=1, timeout=300, verbose=True)
+
 if __name__ == "__main__":
     arg_parser = ArgumentParser(
         prog = "Branching Bisimulation Learning - Deterministic Benchmarks",

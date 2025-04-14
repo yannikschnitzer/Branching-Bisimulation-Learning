@@ -331,7 +331,7 @@ if __name__ == "__main__":
     parser.add_argument("-o", "--output", help="Output csv file. Default is CURRENT_DATE-DATASET-TOOL[-MODE][-FORMULA][-SIZE].csv")
     parser.add_argument("--global-rank", action="store_true", help="In Branching Bisimulation Learning, it enables to use a single ranking function rather than a different ranking function for each class.")
     parser.add_argument("-v", "--verbose", action="store_true", help="Prints additional messages. Useful for debugging.")
-    
+    parser.add_argument("--smoke", action="store_true", help="Runs a smoke test with a single iteration.")
     args = parser.parse_args()
 
 
@@ -342,11 +342,16 @@ if __name__ == "__main__":
     # df.to_csv(args.output)
 
     try:
-        args = validate(args)
-        set_output_filename(args)
-        print(pretty_print(args))
-        df = run_benchmarks(args)
-        df.to_csv(args.output)
-        print(f"Experiments ran successfully. Results stored in {args.output}")
+        if args.smoke:
+            print("Running smoke test...")
+            bl_brn.run_smoke_test()
+            print("All smoke tests ran successfully :)")
+        else:
+            args = validate(args)
+            set_output_filename(args)
+            print(pretty_print(args))
+            df = run_benchmarks(args)
+            df.to_csv(args.output)
+            print(f"Experiments ran successfully. Results stored in {args.output}")
     except Exception as e:
         print("Error:", e)
