@@ -96,6 +96,9 @@ def run_experiments(experiments, iters = 10, timeout = 500, global_rank = False,
             df.loc[len(df)] = [experiment.name, "error", ""]
     return df
 
+def run_smoke_test():
+    run_experiments([exp_term_loop_1()], iters=1, timeout = 10, global_rank=False, verbose = True)
+
 if __name__ == "__main__":
     arg_parser = ArgumentParser(
         prog = "Branching Bisimulation Learning - Deterministic Benchmarks",

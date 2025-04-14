@@ -343,8 +343,13 @@ if __name__ == "__main__":
 
     try:
         if args.smoke:
-            print("Running smoke test...")
+            print("Running smoke test...\n")
+
+            print("Running Branching Bisimulation Learning smoke test....")
             bl_brn.run_smoke_test()
+
+            print("Running Deterministic Bisimulation Learning smoke test....")
+            bl_det.run_smoke_test()
             print("All smoke tests ran successfully :)")
         else:
             args = validate(args)
