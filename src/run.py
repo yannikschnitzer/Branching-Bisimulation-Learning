@@ -319,10 +319,10 @@ def run_benchmarks(args):
 if __name__ == "__main__":
     parser = ArgumentParser("CAV 25 Artifact Evaluation",
         usage=usage)
-    parser.add_argument("-d", "--dataset", required=True, help="""
+    parser.add_argument("-d", "--dataset", required=False, help="""
     The dataset to evaluate. Possible values: 'clock', 'term', 'nd-inf', 'nd-fin', 'nd-inf-t2'.
     """)
-    parser.add_argument("-t", "--tool", required=True, help="The tool to run on the experiments. Possible values are: 'nuxmv-ic3', 'nuxmv-bdd', 'cpa', 'ultimate', 'bisimulation-learning'")
+    parser.add_argument("-t", "--tool", required=False, help="The tool to run on the experiments. Possible values are: 'nuxmv-ic3', 'nuxmv-bdd', 'cpa', 'ultimate', 'bisimulation-learning'")
     parser.add_argument("-f", "--formula", help="The formula to evaluate on the experiments. On 'clock' and 'term' datasets only. Not available on 'bisimulation-learning'. Please refer on the help message for compatibility with the dataset.")
     parser.add_argument("-m", "--mode", help="The tool's mode. Available values: 'ic3', 'bdd' for 'nuxmv' and 'det', 'brn' for 'bisimulation-learning'")
     parser.add_argument("-s", "--size", help="Sizes for the nondeterministic finite state systems. Available state sizes are 9, 11, 13, 15 and 17")
