@@ -190,7 +190,7 @@ def compare_times(exp, iters = 10, verbose=False):
     for i in range(iters):
         try:
             branching_start_time = time.time()
-            compute_branching_abstract_system(trs, tem, False, verbose and i == iters-1)
+            compute_branching_abstract_system(trs, tem, True, verbose and i == iters-1)
             branching_end_time = time.time()
             branching_times_impl.append(branching_end_time - branching_start_time)
             if verbose:
@@ -231,12 +231,12 @@ def run_bisimulation_learning_experiment(exp, explicit_classes = True, iters = 1
             branching_end_time = time.time()
             branching_times_impl.append(branching_end_time - branching_start_time)
             if verbose:
-                print(f"--- Branching Implicit Formula {i}: {branching_times_impl[-1]}s expired ")
+                print(f"--- Branching Bismulation Learning {i}: {branching_times_impl[-1]}s expired ")
         except Exception as e:
-            print(f"--- Branching Implicit Formula {i} error: {e}")
+            print(f"--- Branching Bismulation Learning {i} error: {e}")
     avg = np.average(branching_times_impl)
     std = np.std(branching_times_impl)
-    print(f"--- Branching Implicit Formulas - Average expired time is {avg}s - STD: {std}")
+    print(f"--- Branching Bismulation Learning  - Average expired time is {avg}s - STD: {std}")
     return avg, std
 
 def run_experiments(experiments, explicit_classes, iters = 10, timeout = 300, verbose=False):
