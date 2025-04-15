@@ -14,7 +14,7 @@ We claim the artifact to be available, functional and reusable. We describe the 
 ![alt text](https://i.postimg.cc/BQ064qJG/Screenshot-2025-04-04-at-10-45-36.png)
 ## Artifact Requirements
 
-The artifact comes as `Dockerfiles`, which automatically set up a container containing all relevant files, software, and dependencies. Due to incompatible requirements for some of the baseline tools, we split the artfact into two seperate Dockerfiles, we elaborate their structure and usage below. 
+The artifact comes as `Dockerfiles`, which automatically set up containers containing all relevant files, software, and dependencies. Due to incompatible requirements for some of the baseline tools, we split the artfact into two seperate Dockerfiles, we elaborate their structure and usage below. 
 
 The artifact contains our software and third-party software used internally or as baselines for comparison. Neither of them requires an excessive amount of resources. We recommend the following minimal specifications:
 * **CPU**: Intel Xeon 3.3GHz 8-core 
@@ -87,7 +87,7 @@ After unpacking the artifact, the main `Dockerfile` in the **/CAV25** base direc
 docker build -t bisimulation-learning .
 ```
 
-in the directoy of the file. As described above, the setup may take a while to install all dependencies and baseline tools (in the range of 2h, depending on your system). 
+in the directoy of the file. As described above, the setup may take a while to install all dependencies and baseline tools (in the range of 1h, depending on your system). 
 
 The image can be run in a container by executing:
 
