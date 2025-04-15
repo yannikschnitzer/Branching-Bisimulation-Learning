@@ -199,17 +199,35 @@ We provide some examples:
 ```
 This command will produce numbers for the third column of Table 1.
 
+```bash
+./run.py -d clock -t bl -m brn
+```
+This command will produce numbers for the last column of Table 1 (Branching Bisimulation Learning).
+
+
+
 **Deterministic Conditional Termination (Table 2)**:
 ```bash
 ./run.py -d term -t cpa
 ```
 This command will produce numbers for the third column in Table 2.
 
+```bash
+./run.py -d term -t bl -m brn
+```
+This command will produce numbers for the last column in Table 2 (Branching Bisimulation Learning).
+
 **Non-Deterministic Infinite State base (Table 3)**:
 ```bash
 ./run.py -d nd-inf -t nuxmv
 ```
 This command will produce numbers for the nuXmv (IC3) column in Table 3.
+
+```bash
+./run.py -d nd-inf -t bl  
+```
+This command will produce numbers for the Branching Bisimulation Learning column in Table 3.
+
 
 **T2 benchmarks (Table 4)**:
 ```bash
