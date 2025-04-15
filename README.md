@@ -143,7 +143,7 @@ The available arguments are:
   - `-d DATASET`, `--dataset DATASET`:
                         The dataset of benchmarks to evaluate. Possible values: 'clock', 'term', 'nd-inf', 'nd-fin', 'nd-inf-t2'.
 
-  - `-t TOOL`, `--tool TOOL`:  The tool to run on the experiments. Possible values are: 'nuxmv-ic3', 'nuxmv-bdd', 'cpa', 'ultimate', 'bisimulation-learning'
+  - `-t TOOL`, `--tool TOOL`:  The tool to run on the experiments. Possible values are: 'nuxmv-ic3', 'nuxmv-bdd', 'cpa', 'ultimate', 'bisimulation-learning' ('bisimulation-learning' can also be 'bl' for short).
 
   - `-f FORMULA`, `--formula FORMULA`:
                         The formula to evaluate on the experiments. On 'clock' and 'term' datasets only. Not available on 'bisimulation-learning'. Please refer on the help
