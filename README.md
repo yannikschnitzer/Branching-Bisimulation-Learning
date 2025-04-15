@@ -320,6 +320,7 @@ The links to the used baseline tools are:
   * [Ultimate Automizer](https://github.com/ultimate-pa/ultimate) (Version 097f781)
   * [CPAChecker](https://cpachecker.sosy-lab.org/index.php) (Version 2.3)
   * [nuXmv](https://nuxmv.fbk.eu/) (Version 2.1.0)
+  * [T2](https://github.com/mmjb/T2) (Version 10f1373)
 
 ## License
 
