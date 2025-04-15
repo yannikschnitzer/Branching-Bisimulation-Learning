@@ -138,8 +138,34 @@ We have split the experiments into tools and benchmark times, which can be execu
 You can run different datasets specifying the tool and the property to check. For example, `./run.py -d clock -t bisimulation-learning` will run the deterministic clock experiments with Branching Bisimulation Learning (i.e. the last column for Table 1). 
 
 **You can view a list of all available arguments by running `./run.py -h`.**
+The available arguments are:
 
-Please, consider the following availability schema:
+  - `-d DATASET`, `--dataset DATASET`:
+                        The dataset of benchmarks to evaluate. Possible values: 'clock', 'term', 'nd-inf', 'nd-fin', 'nd-inf-t2'.
+
+  - `-t TOOL`, `--tool TOOL`:  The tool to run on the experiments. Possible values are: 'nuxmv-ic3', 'nuxmv-bdd', 'cpa', 'ultimate', 'bisimulation-learning'
+
+  - `-f FORMULA`, `--formula FORMULA`:
+                        The formula to evaluate on the experiments. On 'clock' and 'term' datasets only. Not available on 'bisimulation-learning'. Please refer on the help
+                        message for compatibility with the dataset.
+
+  - `-m MODE`, `--mode MODE`:  The tool's mode. Available values: 'ic3', 'bdd' for 'nuxmv' and 'det', 'brn' for 'bisimulation-learning'
+
+  - `-s SIZE`, `--size SIZE`:  Sizes for the nondeterministic finite state systems. Available state sizes are 9, 11, 13, 15 and 17
+
+  - `-i ITERS`, `--iters ITERS`:
+                        Number of iterations to run a single test to get the average. Default value is 10
+
+  - `--timeout TIMEOUT`:     Timeout of a single test, in seconds. Default is 300 seconds
+
+  - `-o OUTPUT`, `--output OUTPUT`:
+                        Output csv file. Default is CURRENT_DATE-DATASET-TOOL[-MODE][-FORMULA]
+
+  - `-v`, `--verbose`:         Prints additional information and also resulting parameters / adjacency matrices of the resulting quotients for bisimlation learning.
+
+  - `--smoke `:              Runs a smoke test with a single iteration.
+
+Please, consider the following availability schema for datasets, tools, modes and formulas:
 - `clock`: the finite state clock synchronisation protocols (Table 1). Possible tools allowed:
     - `nuxmv` with modes `ic3` and `bdd` and formulas `safe` and `synch`
     - `bisimulation-learning` with modes `det` and `brn`
