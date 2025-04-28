@@ -181,16 +181,14 @@ def run_cpa_benchmarks(args, experiments):
     return cpa.run_cpa_experiment_iters(
         experiments=experiments,
         iters=args.iters,
-        timeout=args.timeout,
-        verbose=args.verbose
+        timeout=args.timeout
     )
 
 def run_ultimate_det_benchmarks(args, experiments):
     return ultimate_det.run_ultimate_experiment_iters(
         experiments=experiments,
         iters=args.iters,
-        timeout=args.timeout,
-        verbose=args.verbose
+        timeout=args.timeout
     )
 
 def run_ultimate_nd_inf_benchmarks(args):
