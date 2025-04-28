@@ -434,6 +434,10 @@ def run_subprocess(name, flag, formula, timeoutFlag, timeout=300):
         p.kill()
         raise e
 
+class T2Exception(Exception):
+    def __init__(self, message):
+        super().__init__(message)
+
 def run_t2_experiment(exp, timeout):
     formula = exp['formula']
     ctlstar = not re.search(r"\[", formula) # syntax for ctlstar does not contain square brackets
@@ -449,7 +453,7 @@ def run_t2_experiment(exp, timeout):
     out = outb.decode("utf-8")
     match = re.search("Temporal proof", out)
     if match is None:
-        raise Exception(f"Check was unsuccessful: T2-output was '{out}'")
+        raise T2Exception(f"Experiment run was unsuccessful due to T2 printing an unexpected output. T2 original output was '{out}'")
 
 def measure_t2_experiment(exp, iters=10, tolerance = 5, timeout=300):
     times = []
@@ -466,11 +470,11 @@ def measure_t2_experiment(exp, iters=10, tolerance = 5, timeout=300):
             # propagate exception, don't try again
             print(f"--- Experiment {exp} - Timeout expired")
             raise e
-        except Exception as e:
-            print(f"Discarding one run of {exp}: exception was '{e}' \n \t skipped until now = {skipped + 1}")
+        except T2Exception as e:
+            print(f"Discarding one run of {exp} due to a T2 error. This is the {skipped + 1}th run that I skip. Original exception was '{e}' ")
             skipped += 1
             if skipped > tolerance:
-                print(f"Raising exception now")
+                print(f"This run has tolerated too many T2 errors. I will skip this test.")
                 raise e
     avg = np.average(times)
     std = np.std(times)
