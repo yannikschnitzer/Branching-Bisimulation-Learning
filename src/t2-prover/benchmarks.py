@@ -490,6 +490,14 @@ def measure_t2_experiment(exp, iters=1, tolerance = 5, timeout=300):
 
 def run_t2_experiments(iters, verbose=False, tolerance=5, timeout=300):
     df = pd.DataFrame(columns=["Experiment", "Average", "StD"])
+    print("Running T2 experiments")
+    print(f"Running {len(experiments)} experiments with {iters} iterations each.")
+    print(f"Timeout is set to {timeout} seconds.")
+    print(f"Tolerance for number of T2 errors is set to {tolerance} errors (see ReadMe).")
+    print(f"Verbose is set to {verbose}.")
+    print("Starting experiments...")
+
+
     for exp in experiments:
         try:
             avg, std = measure_t2_experiment(exp, iters=iters, timeout=timeout, tolerance=tolerance)
