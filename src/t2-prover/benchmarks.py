@@ -486,6 +486,7 @@ def measure_t2_experiment(exp, iters=1, tolerance = 5, timeout=300):
         raise T2Exception(f"Experiment {exp} was not successful. No runs were successful.")
     else:
         print(f"--- Experiment {exp} \n\taverage = {avg} \n\tstd = {std}")
+    print("")
     return avg, std
 
 def run_t2_experiments(iters, verbose=False, tolerance=5, timeout=300):
