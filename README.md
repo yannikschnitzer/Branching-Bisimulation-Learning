@@ -196,13 +196,13 @@ By default, all examples are run 10 times and their average runtime + standard d
 
 The CPAChecker and Ultimate baseline tools require distinct Java versions. Our scripts for running the baseline tools try to change this version on-the-fly when executing the respective commands. However, this may be unsuccesfull, leading to strange errors, such as related to the Eclipse plugin or unresolved modules.
 
-Ultimate requires Java 1.21. So in case you experience strange errors when running a benchmark set with the Ultiamte tool, please run:
+Ultimate requires Java 1.21. So in case you experience strange errors when running a benchmark set with the Ultiamte tool (which is most likely the case if you have previously run a benchmark with the CPA tool and the Java version did not automatically switch back), please run:
 
 ```
 sudo update-java-alternatives --set java-1.21.0-openjdk-amd64
 ```
 
-to swtich to the correct version, which you can check with `java --version`.
+to swtich to the correct version, which you can check with `java --version`. 
 
 The CPAChecker requires Java 1.17, to switch please run:
 
