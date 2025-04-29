@@ -191,7 +191,29 @@ You find a complete list of arguments and possible values with:
 
 By default, all examples are run 10 times and their average runtime + standard deviation are reported, this can be adapted with the `--iters i` argument.
 
-We provide some examples:
+---
+### !!! Important note on CPA and Ultimate !!!
+
+The CPAChecker and Ultimate baseline tools require distinct Java versions. Our scripts for running the baseline tools try to change this version on-the-fly when executing the respective commands. However, this may be unsuccesfull, leading to strange errors, such as related to the Eclipse plugging or unresolved modules.
+
+Ultimate requires Java 1.21. So in case you experience strange errors when running a benchmark set with the Ultiamte tool, please run:
+
+```
+sudo update-java-alternatives --set java-1.21.0-openjdk-amd64
+```
+
+to swtich to the correct version, which you can check with `java --version`.
+
+The CPAChecker requires Java 1.17, to switch please run:
+
+```
+sudo update-java-alternatives --set java-1.17.0-openjdk-amd64
+```
+---
+
+ ###
+
+We provide some example commands:
 
 **Deterministic Clock Synchronization (Table 1)**:
 ```bash
