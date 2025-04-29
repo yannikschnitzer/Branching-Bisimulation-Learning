@@ -1,5 +1,18 @@
 # Instructions for T2
 
+T2 is included as a baseline tool for CTL/CTL* verification of infinite-state systems. However, please note that T2 has not been actively maintained for approximately seven years ([see this repository](https://github.com/mmjb/T2)) and depends on legacy libraries and software versions. Despite this, we include it as it remains the only available tool supporting CTL/CTL* verification for infinite-state systems.
+
+To accommodate the legacy dependencies, we provide a separate Dockerfile and Docker image. The Dockerfile was sourced from https://github.com/Marti2203/T2-temporal. As this Dockerfile is external to our work, we cannot guarantee the full functionality or stability of the T2 setup. However, we have made every effort to streamline its usage by supplying convenient wrapper scripts.
+
+---
+
+**Disclaimer on usablity of T2**: 
+Given the lack of recent maintenance, T2 is currently not fully reliable, especially for CTL* formula verification. In our experience, the tool may occasionally crash internally or fail to produce a result, sometimes in a non-deterministic manner. To mitigate this, we automatically retry the command execution several times until either a valid result is obtained or a maximum number of retries or a timeout is reached.
+
+If you observe errors being printed, these originate from T2 itself and are part of the expected behavior within our retry mechanism; they are not indicative of issues with the artifact itself.
+
+
+
 ## Setup
 
 

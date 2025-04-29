@@ -455,7 +455,7 @@ def run_t2_experiment(exp, timeout):
     if match is None:
         raise T2Exception(f"Experiment run was unsuccessful due to T2 exiting with an unexpected error. ")
 
-def measure_t2_experiment(exp, iters=10, tolerance = 5, timeout=300):
+def measure_t2_experiment(exp, iters=1, tolerance = 5, timeout=300):
     times = []
     skipped = 0
     for i in range(iters):
@@ -469,16 +469,19 @@ def measure_t2_experiment(exp, iters=10, tolerance = 5, timeout=300):
         except subprocess.TimeoutExpired as e:
             # propagate exception, don't try again
             print(f"--- Experiment {exp} - Timeout occured")
-            raise e
+        #    raise e
         except T2Exception as e:
             print(f"Discarding one run of {exp} due to a T2 error. This is the {skipped + 1}th run that I skip. Original exception was '{e}' ")
             skipped += 1
             if skipped > tolerance:
                 print(f"This run has tolerated too many T2 errors. I will skip this test.")
                 raise e
-    avg = np.average(times)
-    std = np.std(times)
-    print(f"--- Experiment {exp} \n\taverage = {avg} \n\tstd = {std}")
+    avg = np.average(times) if len(times) != 0 else 0
+    std = np.std(times) if len(times) != 0 else 0
+    if len(times) == 0:
+        raise T2Exception(f"Experiment {exp} was not successful. No runs were successful.")
+    else:
+        print(f"--- Experiment {exp} \n\taverage = {avg} \n\tstd = {std}")
     return avg, std
 
 def run_t2_experiments(iters, verbose=False, tolerance=5, timeout=300):

@@ -53,7 +53,6 @@ def run_ultimate_experiment(exp: Ultimate_Experiment) -> float:
 
     # 1) Switch Java and fail loudly if it doesn’t work
     try:
-        print(f"Switching Java to {java_name!r}…")
         subprocess.check_call(java_cmd, stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as e:
         # e.returncode is non-zero; e.output may be None here because check_call doesn’t capture it
