@@ -483,6 +483,7 @@ def measure_t2_experiment(exp, iters=1, tolerance = 5, timeout=300):
     std = np.std(times) if len(times) != 0 else 0
     if len(times) == 0:
         print(f"--- Experiment {exp} - No runs were successful.")
+        print("")
         raise T2Exception(f"Experiment {exp} was not successful. No runs were successful.")
     else:
         print(f"--- Experiment {exp} \n\taverage = {avg} \n\tstd = {std}")
@@ -525,7 +526,7 @@ if __name__ == "__main__":
     arg_parser.add_argument("-v", "--verbose", action="store_true", help="Prints additional information during execution")
     args = arg_parser.parse_args()
     
-    iters = args.iters or 1 # default iterations is 1
+    iters = args.iters or 3 # default iterations is 1
     iters = int(iters)
     tolerance = int(args.tolerance or 10)
     timeout = int(args.timeout or 300)
