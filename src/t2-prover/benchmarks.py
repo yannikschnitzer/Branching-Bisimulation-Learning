@@ -455,7 +455,7 @@ def run_t2_experiment(exp, timeout):
     if match is None:
         raise T2Exception(f"Experiment run was unsuccessful due to T2 exiting with an unexpected error. ")
 
-def measure_t2_experiment(exp, iters=1, tolerance = 5, timeout=300):
+def measure_t2_experiment(exp, iters=1, tolerance = 3, timeout=300):
     times = []
     skipped = 0
     i = 0
@@ -529,7 +529,7 @@ if __name__ == "__main__":
     
     iters = args.iters or 3 # default iterations is 1
     iters = int(iters)
-    tolerance = int(args.tolerance or 10)
+    tolerance = int(args.tolerance or 3)
     timeout = int(args.timeout or 300)
     verbose = args.verbose
     os.system("")

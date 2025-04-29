@@ -194,7 +194,7 @@ By default, all examples are run 10 times and their average runtime + standard d
 ---
 ### !!! Important note on CPA and Ultimate !!!
 
-The CPAChecker and Ultimate baseline tools require distinct Java versions. Our scripts for running the baseline tools try to change this version on-the-fly when executing the respective commands. However, this may be unsuccesfull, leading to strange errors, such as related to the Eclipse plugging or unresolved modules.
+The CPAChecker and Ultimate baseline tools require distinct Java versions. Our scripts for running the baseline tools try to change this version on-the-fly when executing the respective commands. However, this may be unsuccesfull, leading to strange errors, such as related to the Eclipse plugin or unresolved modules.
 
 Ultimate requires Java 1.21. So in case you experience strange errors when running a benchmark set with the Ultiamte tool, please run:
 

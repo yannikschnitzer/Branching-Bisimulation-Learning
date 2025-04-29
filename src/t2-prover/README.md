@@ -49,6 +49,11 @@ Bisimulation Learning benchmarks are defined in the `benchmarks.py` file. You ca
 python3 benchmarks.py
 ```
 
+The available arguments are:
+
+```
+```
+
 The test bench should take around half an hour to complete. If that's too long, you can adjust iteration and timeout settings:
 
 ```bash
