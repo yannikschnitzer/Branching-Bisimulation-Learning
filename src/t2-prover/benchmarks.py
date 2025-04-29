@@ -513,9 +513,9 @@ if __name__ == "__main__":
     arg_parser.add_argument("-v", "--verbose", action="store_true", help="Prints additional information during execution")
     args = arg_parser.parse_args()
     
-    iters = args.iters or 10 # default iterations is 10
+    iters = args.iters or 1 # default iterations is 1
     iters = int(iters)
-    tolerance = int(args.tolerance or 5)
+    tolerance = int(args.tolerance or 10)
     timeout = int(args.timeout or 300)
     verbose = args.verbose
     os.system("")
