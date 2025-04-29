@@ -458,7 +458,8 @@ def run_t2_experiment(exp, timeout):
 def measure_t2_experiment(exp, iters=1, tolerance = 5, timeout=300):
     times = []
     skipped = 0
-    for i in range(iters):
+    i = 0
+    while i <= iters:
         try:
             start_time = time.time()
             run_t2_experiment(exp, timeout=timeout)
@@ -466,9 +467,11 @@ def measure_t2_experiment(exp, iters=1, tolerance = 5, timeout=300):
             times.append(stop_time - start_time)
             if verbose:
                 print(f"--- Experiment {exp} - {i}th run completed in {stop_time - start_time}s")
+            i += 1
         except subprocess.TimeoutExpired as e:
             # propagate exception, don't try again
             print(f"--- Experiment {exp} - Timeout occured")
+            i += 1
         #    raise e
         except T2Exception as e:
             print(f"Discarding one run of {exp} due to a T2 error. This is the {skipped + 1}th run that I skip. Original exception was '{e}' ")
