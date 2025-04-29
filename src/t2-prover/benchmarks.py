@@ -459,7 +459,7 @@ def measure_t2_experiment(exp, iters=1, tolerance = 5, timeout=300):
     times = []
     skipped = 0
     i = 0
-    while i <= iters:
+    while i < iters:
         try:
             start_time = time.time()
             run_t2_experiment(exp, timeout=timeout)
@@ -482,6 +482,7 @@ def measure_t2_experiment(exp, iters=1, tolerance = 5, timeout=300):
     avg = np.average(times) if len(times) != 0 else 0
     std = np.std(times) if len(times) != 0 else 0
     if len(times) == 0:
+        print(f"--- Experiment {exp} - No runs were successful.")
         raise T2Exception(f"Experiment {exp} was not successful. No runs were successful.")
     else:
         print(f"--- Experiment {exp} \n\taverage = {avg} \n\tstd = {std}")
