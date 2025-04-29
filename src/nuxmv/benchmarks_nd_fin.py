@@ -161,7 +161,7 @@ def measure_nuxmv_ctl_experiment(exp, formula_idx, formula, progr_state_size, ou
             time = measure_nuxmv_experiment(exp, formula_idx, formula, progr_state_size, timeout=timeout, verbose=verbose)
             times.append(time)
             if verbose:
-                print(f"--- Experiment {exp} Formula {formula} - {i}th run expired in {times[-1]}s")
+                print(f"--- Experiment {exp} Formula {formula} - {i}th run completed in {times[-1]}s")
         avg = np.average(times)
         std = np.std(times)
         print(f"--- Experiment {exp} Formula {formula} \n\taverage = {avg} \n\tstd = {std}")

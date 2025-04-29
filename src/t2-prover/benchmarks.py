@@ -453,7 +453,7 @@ def run_t2_experiment(exp, timeout):
     out = outb.decode("utf-8")
     match = re.search("Temporal proof", out)
     if match is None:
-        raise T2Exception(f"Experiment run was unsuccessful due to T2 printing an unexpected output. T2 original output was '{out}'")
+        raise T2Exception(f"Experiment run was unsuccessful due to T2 exiting with an unexpected error. ")
 
 def measure_t2_experiment(exp, iters=10, tolerance = 5, timeout=300):
     times = []
@@ -465,10 +465,10 @@ def measure_t2_experiment(exp, iters=10, tolerance = 5, timeout=300):
             stop_time = time.time()
             times.append(stop_time - start_time)
             if verbose:
-                print(f"--- Experiment {exp} - {i}th run expired in {stop_time - start_time}s")
+                print(f"--- Experiment {exp} - {i}th run completed in {stop_time - start_time}s")
         except subprocess.TimeoutExpired as e:
             # propagate exception, don't try again
-            print(f"--- Experiment {exp} - Timeout expired")
+            print(f"--- Experiment {exp} - Timeout occured")
             raise e
         except T2Exception as e:
             print(f"Discarding one run of {exp} due to a T2 error. This is the {skipped + 1}th run that I skip. Original exception was '{e}' ")

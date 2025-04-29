@@ -129,7 +129,7 @@ def measure_ultimate_ltl_experiment(exp: str, formula: str, formula_idx: str, ou
             time = run_ultimate_ltl_experiment(exp, formula, formula_idx, timeout=timeout)
             times.append(time)
             if verbose:
-                print(f"--- Experiment {exp} Formula {formula} - {i}th run expired in {times[-1]}s")
+                print(f"--- Experiment {exp} Formula {formula} - {i}th run completed in {times[-1]}s")
         avg = np.average(times)
         std = np.std(times)
         output.loc[len(output)] = [exp, formula, avg, std]
