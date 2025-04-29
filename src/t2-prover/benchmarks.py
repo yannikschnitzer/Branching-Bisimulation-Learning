@@ -471,6 +471,7 @@ def measure_t2_experiment(exp, iters=1, tolerance = 5, timeout=300):
         except subprocess.TimeoutExpired as e:
             # propagate exception, don't try again
             print(f"--- Experiment {exp} - Timeout occured")
+            times.append(timeout)
             i += 1
         #    raise e
         except T2Exception as e:
@@ -481,7 +482,7 @@ def measure_t2_experiment(exp, iters=1, tolerance = 5, timeout=300):
                 raise e
     avg = np.average(times) if len(times) != 0 else 0
     std = np.std(times) if len(times) != 0 else 0
-    if len(times) == 0:
+    if len(times) == 0 or times.count(timeout) > iters // 2:
         print(f"--- Experiment {exp} - No runs were successful.")
         print("")
         raise T2Exception(f"Experiment {exp} was not successful. No runs were successful.")

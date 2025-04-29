@@ -2,7 +2,7 @@
 
 T2 is included as a baseline tool for CTL/CTL* verification of infinite-state systems. However, please note that T2 has not been actively maintained for approximately seven years ([see this repository](https://github.com/mmjb/T2)) and depends on legacy libraries and software versions. Despite this, we include it as it remains the only available tool supporting CTL/CTL* verification for infinite-state systems.
 
-To accommodate the legacy dependencies, we provide a separate Dockerfile and Docker image. The Dockerfile was sourced from https://github.com/Marti2203/T2-temporal. As this Dockerfile is external to our work, we cannot guarantee the full functionality or stability of the T2 setup. However, we have made every effort to streamline its usage by supplying convenient wrapper scripts.
+To accommodate the legacy dependencies, we provide a separate Dockerfile and Docker image. The Dockerfile was sourced from https://github.com/Marti2203/T2-temporal. Since T2 is not actively maintained, we cannot guarantee the full functionality or stability of the T2 setup. However, we have made every effort to streamline its usage by supplying convenient wrapper scripts.
 
 ---
 
