@@ -28,6 +28,20 @@ in this directory. The image can be run in a container by executing:
 docker run --name=t2-benchmarks -it t2-benchmarks 
 ```
 
+### New!
+---
+We provide a pre-built Docker image as a compressed .tar archive, in line with artifact submission requirements and to help avoid potential build issues. The image was built on an Ubuntu 22.04 x86_64 machine.
+
+To load the image, decompress and import it using:
+```
+gunzip -c t2-benchmarks.tar.gz 
+
+docker load < t2-benchmarks.tar
+```
+
+Once loaded, the image should behave identically to one built from the provided Dockerfile.
+
+
 ## Run T2 / Smoke test
 
 The `T2.exe` should be built in debug mode. To verify it, go in the `/opt/T2` folder and run:
@@ -50,16 +64,18 @@ python3 benchmarks.py [-arg1 ...]
 ```
 
 The available arguments are:
+ - ` -i ITERS, --iters ITERS` :The number of times to repeat the benchmarks. Default is 5
+  - `--timeout TIMEOUT`:     The allowed maximun running time. Default is 300
+  - `-t TOLERANCE, --tolerance TOLERANCE`:
+                        The maximum number of times that a benchmark can break (T2 internally) before being excluded from the report. Default is 5
+  - `-v, --verbose `:        Prints additional information during execution
 
-```
-```
-
-The test bench should take around half an hour to complete. If that's too long, you can adjust iteration and timeout settings:
+The test bench should take around an hour to complete. If that's too long, you can adjust iteration and timeout settings:
 
 ```bash
 python3 benchmarks.py -i 5 --timeout 60
 ```
-This command will run five times each experiment with a timeout of 60 seconds. The expected total runtime for this is in the range of 3-4 hours.
+This command will run five times each experiment with a timeout of 60 seconds. 
 
 ## Disclaimer on T2 usability and error messages
 
