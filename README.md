@@ -95,24 +95,21 @@ The image can be run in a container by executing:
 docker run --name=bisimulation-learning -it bisimulation-learning 
 ```
 
+After the setup, the container should start in the `CAV25/Branching-Bisimulation-Learning/src` folder, whose structure is described in the **Structure and Content** section.
+
 ### New!
 ---
 We provide a pre-built Docker image as a compressed .tar archive, in line with artifact submission requirements and to help avoid potential build issues. The image was built on an Ubuntu 22.04 x86_64 machine.
 
 To load the image, decompress and import it using:
 ```
-gunzip -c bisimulation-learning.tar.gz 
-
-docker load < bisimulation-learning.tar
+docker load -i bisimulation-learning.tar
 ```
 
 Once loaded, the image should behave identically to one built from the provided Dockerfile.
 
 ---
 
-After the setup, the container should start in the `CAV25/Branching-Bisimulation-Learning/src` folder, whose structure is described in the **Structure and Content** section.
-
----
 
 The main file for running all experiments is `CAV25/Branching-Bisimulation-Learning/src/run.py`, which can be run from the `src` directory with:
 ```bash
