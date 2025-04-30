@@ -202,7 +202,7 @@ Ultimate requires Java 1.21. So in case you experience strange errors when runni
 sudo update-java-alternatives --set java-1.21.0-openjdk-amd64
 ```
 
-to swtich to the correct version, which you can check with `java --version`. 
+to switch to the correct version, which you can check with `java --version`. 
 
 The CPAChecker requires Java 1.17, to switch please run:
 
@@ -257,7 +257,7 @@ This command will produce numbers for the Branching Bisimulation Learning column
 ```
 This command will produce numbers for the Bisimulation Learning column in Table 4.
 
-**T2 has specific dependency needs in contrast with other tool's. For this reason, it is provided within a different container. You find the related manual on how to get the numbers for the T2 column in the `src/t2-prover` folder.**
+**T2 has specific dependency needs in contrast with other tools. For this reason, it is provided within a different container. You find the related manual on how to get the numbers for the T2 column in the `src/t2-prover` folder.**
 
 **Non-Deterministic Finite State base (Table 5)**:
 ```bash

@@ -7,7 +7,7 @@ To accommodate the legacy dependencies, we provide a separate Dockerfile and Doc
 ---
 
 **Disclaimer on usablity of T2**: 
-Given the lack of recent maintenance, T2 is currently not fully reliable, especially for CTL* formula verification. In our experience, the tool may occasionally crash internally or fail to produce a result, sometimes in a non-deterministic manner. To mitigate this, we automatically retry the command execution several times until either a valid result is obtained or a maximum number of retries or a timeout is reached.
+Given the lack of recent maintenance, T2 is currently not fully reliable, especially for CTL* formula verification. In our experience, the tool may occasionally crash internally or fail to produce a result, sometimes in a non-deterministic manner (probably some internal concurrency problems). To mitigate this, we automatically retry the command execution several times until either a valid result is obtained or a maximum number of retries or a timeout is reached.
 
 If you observe errors being printed, these originate from T2 itself and are part of the expected behavior within our retry mechanism; they are not indicative of issues with the artifact itself.
 
@@ -46,7 +46,7 @@ Temporal proof succeeded
 
 Bisimulation Learning benchmarks are defined in the `benchmarks.py` file. You can run them with:
 ```bash
-python3 benchmarks.py
+python3 benchmarks.py [-arg1 ...]
 ```
 
 The available arguments are:
@@ -59,4 +59,12 @@ The test bench should take around half an hour to complete. If that's too long, 
 ```bash
 python3 benchmarks.py -i 5 --timeout 60
 ```
-This command will run five times each experiment with a timeout of 60 seconds.
+This command will run five times each experiment with a timeout of 60 seconds. The expected total runtime for this is in the range of 3-4 hours.
+
+## Disclaimer on T2 usability and error messages
+
+As noted in the preamble, T2 is no longer actively maintained and may fail to reliably produce results due to internal errors. These failures tend to occur in a non-deterministic manner, making them difficult to reproduce or diagnose consistently. Nevertheless, we include T2 in our artifact as it remains the only available tool supporting CTL/CTL* verification for infinite-state systems.
+
+To mitigate these issues, we have made our execution scripts more robust. When a T2 error occurs, it is reported explicitly; such errors are due to limitations of the tool itself and not of the artifact. In response, we automatically rerun the failed execution up to a specified number of retries or until a timeout is reached.
+
+Since the errors are non-deterministic, they may not manifest in the same way across different environments or reruns. We have made every effort to ensure our reporting is fair and transparent, reflecting the behavior observed during our experiments.
