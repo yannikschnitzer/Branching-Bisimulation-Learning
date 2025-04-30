@@ -103,7 +103,7 @@ We provide a pre-built Docker image as a compressed .tar archive, in line with a
 
 To load the image, decompress and import it using:
 ```
-docker load -i bisimulation-learning.tar
+docker load -i bisimulation-learning.tar.gz
 ```
 
 Once loaded, the image should behave identically to one built from the provided Dockerfile.
